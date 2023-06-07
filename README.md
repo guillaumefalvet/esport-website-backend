@@ -33,3 +33,66 @@ Le projet comprendra les fonctionnalités suivantes :
    - Système de mailing de newsletter : créer un champ de formulaire pour enregistrer son adresse mail et recevoir les news de l’équipe et une alerte pour les tournois et lives.
    
    - Ajouter une page dédiée “About Us”.
+
+
+```
+- app
+   - controllers
+      articleController.js
+      calendarController.js
+      teamController.js
+      loginController.js
+      mediaController.js
+      recruitmentController.js
+      index.js
+   - routers
+      - api
+         - article
+            index.js
+         - calendar
+            index.js
+         - team
+            index.js
+         - login
+            index.js
+         - media
+            index.js
+         - recruitment
+         index.js
+      -index.js
+   - validations
+      validate.js
+      schemas.js
+   - middlewares
+      auth.js
+      controllerHandler.js
+      error.js
+   - models
+      dataMapper.js
+      client.js
+- data
+   seeding.sql
+- migrations
+   -deploy
+      init.sql
+   -revert
+   -verify
+      init.sql
+   sqitch.plan
+index.js
+article.http
+team.http
+calendar.http
+homepage.http
+recruitment.http
+.editorconfig
+.eslintrc.js
+.gitgnore
+README.md
+package.json
+.env
+.env example
+sqitch.conf
+sqitch.conf example
+- ....
+```
