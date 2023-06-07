@@ -134,7 +134,7 @@ CREATE TABLE "article_has_category" (
 );
 -- table relationel entre article et calendar
 CREATE TABLE "article_has_calendar"(
-      "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "article_id" INT NOT NULL REFERENCES "article"("id"),
     "calendar_id" INT NOT NULL REFERENCES "calendar"("id"),
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),

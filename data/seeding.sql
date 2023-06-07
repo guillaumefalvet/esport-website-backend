@@ -140,3 +140,15 @@ INSERT INTO "article_has_category" ("article_id", "category_id") VALUES
 (8, 8),
 (9, 9),
 (10, 10);
+INSERT INTO "calendar" ("event_name", "event_date", "adversary_name", "adversary_name_short", "replay_link", "live_link", "score", "small_image", "medium_image", "large_image")
+VALUES
+    ('Event 1', '2023-06-10 18:00:00', 'Team A', 'A', 'replay_link_1', 'live_link_1', '1-0', 'small_image_url_1', 'medium_image_url_1', 'large_image_url_1'),
+    ('Event 2', '2023-06-12 20:00:00', 'Team B', 'B', 'replay_link_2', 'live_link_2', '2-2', 'small_image_url_2', 'medium_image_url_2', 'large_image_url_2'),
+    ('Event 3', '2023-06-15 16:30:00', 'Team C', 'C', 'replay_link_3', 'live_link_3', '3-1', 'small_image_url_3', 'medium_image_url_3', 'large_image_url_3');
+
+-- Seed data for table "article_has_calendar"
+INSERT INTO "article_has_calendar" ("article_id", "calendar_id")
+VALUES
+    (1, 1),
+    (2, 2),
+    (3, 3);
