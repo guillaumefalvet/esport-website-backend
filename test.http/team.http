@@ -28,7 +28,7 @@ PATCH  {{endpoint}}/team/slayer_back
 Content-Type: application/json
 
 {
-  "username": "jack_doe",
+  "user_name": "jack_doe",
   "first_name": "jack",
   "last_name": "does",
   "description":"best player of the world",
