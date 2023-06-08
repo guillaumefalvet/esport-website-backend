@@ -9,7 +9,7 @@
     "DBreset": "sqitch revert -y",
     "DBdeploy": "sqitch deploy",
     "DBseeding": "psql -d victoryzone -f ./data/seeding.sql",
-    "DBsetup":"npm run DBreset && npm run DBdeploy && npm run DBseeding"
+    "DBsetup": "npm run DBreset && npm run DBdeploy && npm run DBseeding"
   },
   "keywords": [],
   "author": "",
