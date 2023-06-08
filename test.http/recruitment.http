@@ -3,7 +3,7 @@
 ### Envoyer un formulaire de recrutement
 POST {{endpoint}}/recruitment/
 {
-  "username": "slayer",
+  "user_name": "slayer",
   "email": "slayer@example.com",
   "first_name":"robert",
   "last_name":"slayer",
