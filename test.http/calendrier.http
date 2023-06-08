@@ -6,24 +6,25 @@ GET {{ endpoint }}/calendrier
 ### Récupérer 1 match à venir et 1 passé pour la homepage
 GET {{ endpoint }}/calendrier?home=true
 
-### Récupérer un évent
-
-GET  {{ endpoint }}/calendrier/Event 1
-
 ### Création d'un évent
 
 POST {{ endpoint }}/calendrier/
 Content-Type: application/json
 
 {
-  "event_name": "tournoi world",
+  "event_name": "tournoi-world",
   "event_date": "2023-06-10 18:00:00",
   "adversary_name": "Team D",
   "adversary_name_short": "D"
 }
 
+### Récupérer un évent
+
+GET  {{ endpoint }}/calendrier/tournoi-world
+
+
 ### Modification d'un évent
-PATCH {{ endpoint }}/calendrier/Event 1
+PATCH {{ endpoint }}/calendrier/tournoi-world
 Content-Type: application/json
 
 {
@@ -32,4 +33,4 @@ Content-Type: application/json
 
 ### Suppression d'un évent
 
-DELETE {{ endpoint }}/calendrier/Event 1
+DELETE {{ endpoint }}/calendrier/tournoi-world

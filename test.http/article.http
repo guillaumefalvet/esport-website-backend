@@ -8,10 +8,6 @@ GET {{ endpoint }}/articles
 
 GET {{ endpoint }}/articles?home=true
 
-### Récupérer un article
-
-GET {{ endpoint }}/articles/article-1
-
 ### création d'un article
 
 POST {{ endpoint }}/articles/
@@ -21,13 +17,18 @@ Content-Type: application/json
   "slug": "nouvel-article",
   "title": "mon nouvel article",
   "content": "Ceci est le contenu de mon nouvel article",
-  "author": "jack",
+  "author": "jack"
 
 }
 
+### Récupérer un article
+
+GET {{ endpoint }}/articles/nouvel-article
+
+
 ### Modification d'un article
 
-PATCH {{endpoint}}/articles/article-1
+PATCH {{endpoint}}/articles/nouvel-article
 Content-Type: application/json
 
 {
@@ -36,4 +37,4 @@ Content-Type: application/json
 }
 
 ### Suppression d'un article
-DELETE {{endpoint}}/articles/article-1
+DELETE {{endpoint}}/articles/nouvel-article

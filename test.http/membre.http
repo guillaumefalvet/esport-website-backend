@@ -4,10 +4,6 @@
 ### Récupérer tous les membres
 GET {{ endpoint }}/team
 
-### Récupérer un joueur
-
-GET {{ endpoint }}/team/john_doe
-
 ### Création d'un joueur
 POST {{ endpoint }}/team/
 Content-Type: application/json
@@ -17,13 +13,18 @@ Content-Type: application/json
   "first_name": "slayer",
   "last_name": "back",
   "description":"best player of the world",
-  "role": "lead team",
+  "role": "lead team"
 
 }
 
+### Récupérer un joueur
+
+GET {{ endpoint }}/team/slayer_back
+
+
 ### Modification d'un joueur
 
-PATCH  {{endpoint}}/team/john_doe
+PATCH  {{endpoint}}/team/slayer_back
 Content-Type: application/json
 
 {
@@ -31,7 +32,7 @@ Content-Type: application/json
   "first_name": "jack",
   "last_name": "does",
   "description":"best player of the world",
-  "role": "lead team",
+  "role": "lead team"
 
 }
 

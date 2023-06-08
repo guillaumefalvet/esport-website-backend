@@ -7,5 +7,6 @@ POST {{endpoint}}/recrutement/
   "email": "slayer@mail.com",
   "first_name":"robert",
   "last_name":"slayer",
-  "message":"accepter ma demande",
+  "external_link": "external_link_url",
+  "message":"accepter ma demande je suis chaud"
 }
