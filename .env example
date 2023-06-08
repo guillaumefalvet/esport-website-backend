@@ -1,0 +1,5 @@
+PORT=3000
+PGHOST=localhost
+PGDATABASE=victoryzone
+PGPASSWORD=null
+PGPORT=5432
