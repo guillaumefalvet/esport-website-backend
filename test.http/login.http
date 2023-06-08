@@ -4,7 +4,7 @@
 
 POST {{ endpoint }}/auth/login/
 {
-  "username": "admin",
+  "user_name": "admin",
   "password": "admin1234"
 }
 
