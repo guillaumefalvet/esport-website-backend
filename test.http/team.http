@@ -9,7 +9,7 @@ POST {{ endpoint }}/team/
 Content-Type: application/json
 
 {
-    "username": "slayer_back",
+  "username": "slayer_back",
   "first_name": "slayer",
   "last_name": "back",
   "description":"best player of the world",
