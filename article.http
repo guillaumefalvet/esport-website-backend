@@ -1,0 +1,39 @@
+@endpoint = http://localhost:{{$dotenv PORT}}/api
+
+## Récupérer tous les articles
+
+GET {{ endpoint }}/articles
+
+### Récupérer les 3 derniers articles
+
+GET {{ endpoint }}/articles?home=true
+
+### Récupérer un article
+
+GET {{ endpoint }}/articles/article-1
+
+### création d'un article
+
+POST {{ endpoint }}/articles
+Content-Type: application/json
+
+{
+  "slug": "nouvel-article",
+  "title": "mon nouvel article",
+  "content": "Ceci est le contenu de mon nouvel article",
+  "author": "jack",
+
+}
+
+### Modification d'un article
+
+PATCH {{endpoint}}/articles/article-1
+Content-Type: application/json
+
+{
+  "slug": "ca-trop-marche-bien",
+  "title": "Voyons si ça marche"
+}
+
+### Suppression d'un article
+DELETE {{endpoint}}/articles/article-1

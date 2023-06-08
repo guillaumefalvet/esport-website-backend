@@ -1,0 +1,23 @@
+@endpoint = http://localhost:{{$dotenv PORT}}/api
+
+
+### Récupérer tous les membres
+GET {{ endpoint }}/team
+
+### Récupérer un joueur
+
+GET {{ endpoint }}/team/john_doe
+
+### Modification d'un joueur
+
+PATCH  {{endpoint}}/team/john_doe
+Content-Type: application/json
+
+{
+  "username": "jack_doe",
+  "first_name": "jack",
+  "last_name": "does",
+  "description":"best player of the world",
+  "role": "lead team",
+
+}
