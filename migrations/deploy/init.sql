@@ -32,7 +32,7 @@ CREATE TABLE "permission" (
 -- table "user"
 CREATE TABLE "user" (
     "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "username" TEXT NOT NULL UNIQUE,
+    "user_name" TEXT NOT NULL UNIQUE,
     "email" TEXT NOT NULL UNIQUE,
     "password" TEXT NOT NULL,
     "user_permission" INT NOT NULL REFERENCES "permission"("id"), 
@@ -42,7 +42,7 @@ CREATE TABLE "user" (
 -- table recruitment
 CREATE TABLE "recruitment" (
     "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "username" TEXT NOT NULL UNIQUE,
+    "user_name" TEXT NOT NULL UNIQUE,
     "email" TEXT NOT NULL UNIQUE,
     "first_name" TEXT NOT NULL,
     "last_name" TEXT NOT NULL,
