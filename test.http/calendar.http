@@ -1,17 +1,18 @@
 @endpoint = http://localhost:{{$dotenv PORT}}/api
 
 ### Récupérer tous les évents/calendrier/match
-GET {{ endpoint }}/calendrier
+GET {{ endpoint }}/calendar
 
 ### Récupérer 1 match à venir et 1 passé pour la homepage
-GET {{ endpoint }}/calendrier?home=true
+GET {{ endpoint }}/calendar?home=true
 
 ### Création d'un évent
 
-POST {{ endpoint }}/calendrier/
+POST {{ endpoint }}/calendar/
 Content-Type: application/json
 
 {
+  "calendar_id": 7,
   "event_name": "tournoi-world",
   "event_date": "2023-06-10 18:00:00",
   "adversary_name": "Team D",
@@ -20,11 +21,11 @@ Content-Type: application/json
 
 ### Récupérer un évent
 
-GET  {{ endpoint }}/calendrier/tournoi-world
+GET  {{ endpoint }}/calendar/7
 
 
 ### Modification d'un évent
-PATCH {{ endpoint }}/calendrier/tournoi-world
+PATCH {{ endpoint }}/calendar/7
 Content-Type: application/json
 
 {
@@ -33,4 +34,4 @@ Content-Type: application/json
 
 ### Suppression d'un évent
 
-DELETE {{ endpoint }}/calendrier/tournoi-world
+DELETE {{ endpoint }}/calendar/7

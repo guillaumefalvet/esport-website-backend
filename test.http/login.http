@@ -2,7 +2,7 @@
 
 ### Connexion utilisateur (admin en mvp)
 
-POST {{ endpoint }}/login/
+POST {{ endpoint }}/auth/login/
 {
   "username": "admin",
   "password": "admin1234"
@@ -10,4 +10,4 @@ POST {{ endpoint }}/login/
 
 ### Déconnexion utilisateur (admin en mvp)
 
-GET {{endpoint}}/logout
+GET {{endpoint}}/auth/logout
