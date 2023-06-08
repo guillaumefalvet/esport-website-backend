@@ -8,6 +8,19 @@ GET {{ endpoint }}/team
 
 GET {{ endpoint }}/team/john_doe
 
+### Création d'un joueur
+POST {{ endpoint }}/team
+Content-Type: application/json
+
+{
+    "username": "slayer_back",
+  "first_name": "slayer",
+  "last_name": "back",
+  "description":"best player of the world",
+  "role": "lead team",
+
+}
+
 ### Modification d'un joueur
 
 PATCH  {{endpoint}}/team/john_doe
@@ -21,3 +34,7 @@ Content-Type: application/json
   "role": "lead team",
 
 }
+
+### Suppression d'un joueur
+
+DELETE {{ endpoint }}/team/slayer_back
