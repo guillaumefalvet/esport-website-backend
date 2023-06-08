@@ -9,7 +9,7 @@ GET {{ endpoint }}/team
 GET {{ endpoint }}/team/john_doe
 
 ### Création d'un joueur
-POST {{ endpoint }}/team
+POST {{ endpoint }}/team/
 Content-Type: application/json
 
 {

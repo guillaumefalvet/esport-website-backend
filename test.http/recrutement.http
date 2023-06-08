@@ -1,7 +1,7 @@
 @endpoint = http://localhost:{{$dotenv PORT}}/api
 
 ### Envoyer un formulaire de recrutement
-POST {{endpoint}}/recrutement
+POST {{endpoint}}/recrutement/
 {
   "username": "slayer",
   "email": "slayer@mail.com",

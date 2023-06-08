@@ -14,7 +14,7 @@ GET {{ endpoint }}/articles/article-1
 
 ### création d'un article
 
-POST {{ endpoint }}/articles
+POST {{ endpoint }}/articles/
 Content-Type: application/json
 
 {

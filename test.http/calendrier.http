@@ -12,7 +12,7 @@ GET  {{ endpoint }}/calendrier/Event 1
 
 ### Création d'un évent
 
-POST {{ endpoint }}/calendrier
+POST {{ endpoint }}/calendrier/
 Content-Type: application/json
 
 {

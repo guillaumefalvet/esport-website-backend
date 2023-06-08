@@ -1,0 +1,13 @@
+@endpoint = http://localhost:{{$dotenv PORT}}/api
+
+### Connexion utilisateur (admin en mvp)
+
+POST {{ endpoint }}/login/
+{
+  "username": "admin",
+  "password": "admin1234"
+}
+
+### Déconnexion utilisateur (admin en mvp)
+
+GET {{endpoint}}/logout
