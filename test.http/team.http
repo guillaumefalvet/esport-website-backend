@@ -1,0 +1,41 @@
+@endpoint = http://localhost:{{$dotenv PORT}}/api
+
+
+### Récupérer tous les membres
+GET {{ endpoint }}/team
+
+### Création d'un joueur
+POST {{ endpoint }}/team/
+Content-Type: application/json
+
+{
+  "user_name": "slayer_back",
+  "first_name": "slayer",
+  "last_name": "back",
+  "description":"best player of the world",
+  "role": "lead team"
+
+}
+
+### Récupérer un joueur
+
+GET {{ endpoint }}/team/slayer_back
+
+
+### Modification d'un joueur
+
+PATCH  {{endpoint}}/team/slayer_back
+Content-Type: application/json
+
+{
+  "user_name": "jack_doe",
+  "first_name": "jack",
+  "last_name": "does",
+  "description":"best player of the world",
+  "role": "lead team"
+
+}
+
+### Suppression d'un joueur
+
+DELETE {{ endpoint }}/team/slayer_back

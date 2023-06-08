@@ -1,0 +1,8 @@
+@endpoint = http://localhost:{{$dotenv PORT}}/api
+
+### Récupérer toutes les photos pour le carrousel
+GET {{ endpoint }}/media/?type=photo
+
+### Récupérer toutes les vidéos pour la section vidéos
+
+GET {{ endpoint }}/media/?type=video
