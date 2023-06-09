@@ -8,6 +8,7 @@ const router = express.Router();
 /**
  * a recruitment type
  * @typedef {object} Recruitment
+ * @property {number} id - a recruitment id
  * @property {string} user_name - recruitment user_name
  * @property {string} email - recruitment email
  * @property {string} first_name - recruitment first name
