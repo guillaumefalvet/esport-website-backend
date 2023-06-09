@@ -30,12 +30,10 @@ FROM article
 JOIN article_has_calendar ON article.id = article_has_calendar.article_id
 JOIN calendar ON article_has_calendar.calendar_id = calendar.id
 GROUP BY article.id;
+
 CREATE VIEW player_view AS
 SELECT
-  -- DEBUT PLAYER
   player.*,
-  -- FIN PLAYER
-  -- PARTIE SETUP
   array_agg(json_build_object(
     'id', setup.id,
     'name', setup.name,
@@ -43,7 +41,6 @@ SELECT
     'created_at', setup.created_at,
     'updated_at', setup.updated_at
   )) AS setup,
-  -- FIN SETUP
   array_agg(json_build_object(
     'id', media.id,
     'link', media.link,
@@ -62,6 +59,9 @@ LEFT JOIN media ON player_has_media.media_id = media.id
 GROUP BY player.id
 ORDER BY player.id;
 
--- XXX Add DDLs here.
+CREATE VIEW last_article AS
+SELECT "article"."slug", "article"."title", "article"."small_image" FROM article WHERE publication_date <= now() ORDER BY article.id DESC limit 3;
+
+
 
 COMMIT;
