@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 const CreateArticle = Joi.object({
-  slug: Joi.string(),
+  slug: Joi.string().pattern(/^[a-z-]+$/),
   title: Joi.string(),
   content: Joi.string(),
   author: Joi.string(),
@@ -12,7 +12,7 @@ const CreateArticle = Joi.object({
 }).require();
 
 const ModifyArticle = Joi.object({
-  slug: Joi.string(),
+  slug: Joi.string().pattern(/^[a-z-]+$/),
   title: Joi.string(),
   content: Joi.string(),
   author: Joi.string(),
