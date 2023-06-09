@@ -21,6 +21,10 @@ module.exports = {
     const { rows } = await client.query(`SELECT * FROM ${table} WHERE user_name = '$1';`, [userName]);
     return rows;
   },
+  async getByEmail(email) {
+    const { rows } = await client.query('SELECT "user"."id", "user"."user_name", "user"."password", "permission"."name" AS permission_name, "permission"."level" AS permission_level ,"user"."created_at", "user"."updated_at" FROM "user" JOIN "permission" ON "permission"."id" = "user"."user_permission" WHERE "user"."email" = $1;', [email]);
+    return rows;
+  },
   async createOne(table, data) {
     const { rows } = await client.query(`SELECT * FROM insert_${table}($1);`, [JSON.stringify(data)]);
     return rows[0];

@@ -1,5 +1,12 @@
 PORT=3000
-PGHOST=localhost
+# if http MODE
+# DEV=anything
+# if https MODE
+# PROD=anything
 PGDATABASE=victoryzone
-PGPASSWORD=null
+PGHOST=localhost
 PGPORT=5432
+PGUSER=victoryzone
+PGPASSWORD=victoryzone
+SESSION_NAME=vz
+SESSION_SECRET=starship
