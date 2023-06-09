@@ -1,4 +1,8 @@
 PORT=3000
+# if http MODE
+# DEV=anything
+# if https MODE
+# PROD=anything
 PGDATABASE=victoryzone
 PGHOST=localhost
 PGPORT=5432
