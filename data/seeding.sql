@@ -25,7 +25,7 @@ INSERT INTO "permission" ("name", "level") VALUES
 ('developer', 10);
 
 -- Seeding pour la table "user"
-INSERT INTO "user" ("username", "email", "password", "user_permission") VALUES
+INSERT INTO "user" ("user_name", "email", "password", "user_permission") VALUES
 ('john_doe', 'john@example.com', 'password123', 3),
 ('jane_smith', 'jane@example.com', 'password123', 3),
 ('alex_ross', 'alex@example.com', 'password123', 3),
@@ -38,7 +38,7 @@ INSERT INTO "user" ("username", "email", "password", "user_permission") VALUES
 ('michael_clark', 'michael@example.com', 'password123', 3);
 
 -- Seeding pour la table "recruitment"
-INSERT INTO "recruitment" ("username", "email", "first_name", "last_name", "message", "external_link") VALUES
+INSERT INTO "recruitment" ("user_name", "email", "first_name", "last_name", "message", "external_link") VALUES
 ('john_doe', 'john@example.com', 'John', 'Doe', 'I am interested in joining the team.', 'external_link_url'),
 ('jane_smith', 'jane@example.com', 'Jane', 'Smith', 'I would love to be part of this community.', 'external_link_url'),
 ('alex_ross', 'alex@example.com', 'Alex', 'Ross', 'I have been following your progress for a while.', 'external_link_url'),
