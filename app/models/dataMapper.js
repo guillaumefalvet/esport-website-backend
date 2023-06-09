@@ -2,7 +2,7 @@ const client = require('./clients');
 
 module.exports = {
   async getUser(userName) {
-    const { rows } = await client.query('SELECT * FROM user WHERE user_name = $1', [userName]);
+    const { rows } = await client.query('SELECT * FROM "user" WHERE user_name = $1', [userName]);
     return rows;
   },
   async getAll(table) {
@@ -14,7 +14,7 @@ module.exports = {
     return rows;
   },
   async getBySlug(slug) {
-    const { rows } = await client.query('SELECT * FROM article WHERE slug = \'$1\';', [slug]);
+    const { rows } = await client.query('SELECT * FROM article WHERE slug = $1;', [slug]);
     return rows;
   },
   async getByUserName(table, userName) {
@@ -41,7 +41,7 @@ module.exports = {
     await client.query(`DELETE FROM ${table} WHERE id = $1;`, [id]);
   },
   async deleteBySlug(slug) {
-    await client.query('DELETE FROM article WHERE id = \'$1\';', [slug]);
+    await client.query('DELETE FROM article WHERE slug = $1;', [slug]);
   },
   async deleteByUserName(table, userName) {
     await client.query(`DELETE FROM ${table} WHERE user_name = $1;`, [userName]);
