@@ -7,6 +7,7 @@ const recruitmentRouter = require('./recruitmentRouter');
 const authRouter = require('./authRouter');
 
 const router = express.Router();
+
 router.use('/media', mediaRouter);
 router.use('/articles', articleRouter);
 router.use('/team', teamRouter);
