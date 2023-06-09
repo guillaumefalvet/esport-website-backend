@@ -37,7 +37,7 @@ CREATE FUNCTION update_player(json_data json) RETURNS "player" AS $$
     "twitch_link" = COALESCE((json_data->>'twitch_link')::text, "twitch_link"),
     "twitter_link" = COALESCE((json_data->>'twitter_link')::text, "twitter_link"),
     "updated_at" = now()
-  WHERE "id" = (json_data->>'id')::int
+  WHERE "user_name" = (json_data->>'user_name')::text
   RETURNING *;
 $$ LANGUAGE sql;
 
@@ -58,7 +58,7 @@ CREATE FUNCTION update_user(json_data json) RETURNS "user" AS $$
     "password" = COALESCE((json_data->>'password')::text, "password"),
     "user_permission" = COALESCE((json_data->>'user_permission')::int, "user_permission"),
     "updated_at" = now()
-  WHERE "id" = (json_data->>'id')::int
+  WHERE "user_name" = (json_data->>'user_name')::text
   RETURNING *;
 $$ LANGUAGE sql;
 
@@ -113,7 +113,7 @@ CREATE FUNCTION insert_article(json_data json) RETURNS "article" AS $$
       (json_data->>'figcaption')::text,
       (json_data->>'publication_date')::TIMESTAMPTZ
     ) RETURNING *;
-  $$ LANGUAGE sql; 
+  $$ LANGUAGE sql;
 
   CREATE FUNCTION update_article(json_data json) RETURNS "article" AS $$
     UPDATE "article" SET
@@ -127,7 +127,7 @@ CREATE FUNCTION insert_article(json_data json) RETURNS "article" AS $$
       "figcaption" = COALESCE((json_data->>'figcaption')::text, "figcaption"),
       "publication_date" = COALESCE((json_data->>'publication_date')::TIMESTAMPTZ, "publication_date"),
       "updated_at" = now()
-    WHERE "id" = (json_data->>'id')::int
+    WHERE "slug" = (json_data->>'slug')::text
     RETURNING *;
   $$ LANGUAGE sql;
 --calendar
@@ -147,7 +147,7 @@ CREATE FUNCTION insert_calendar(json_data json) RETURNS "calendar" AS $$
       (json_data->>'large_image')::text,
       (json_data->>'publication_date')::TIMESTAMPTZ
     ) RETURNING *;
-  $$ LANGUAGE sql; 
+  $$ LANGUAGE sql;
 
 CREATE FUNCTION update_calendar(json_data json) RETURNS "calendar" AS $$
   UPDATE "calendar" SET
