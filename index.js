@@ -8,6 +8,7 @@ const router = require('./app/routers');
 const port = process.env.PORT || 3000;
 
 const app = express();
+app.use(express.urlencoded({ extended: true }));
 app.use(session({
   name: process.env.SESSION_NAME,
   secret: process.env.SESSION_SECRET,
