@@ -35,7 +35,7 @@ app.use(session({
      *     secure: false
      */
     secure: !!process.env.PROD, // This will only work if you have https enabled!
-    maxAge: 60000, // 1 min for debugging
+    maxAge: 60000 * 15, // 1 min for debugging
   },
 }));
 debug(`Production mode ${!!process.env.PROD}`);
