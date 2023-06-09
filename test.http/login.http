@@ -3,9 +3,11 @@
 ### Connexion utilisateur (admin en mvp)
 
 POST {{ endpoint }}/auth/login/
+Content-Type: application/json
+
 {
-  "user_name": "admin",
-  "password": "admin1234"
+  "email": "john@example.com",
+  "password": "password123"
 }
 
 ### Déconnexion utilisateur (admin en mvp)
