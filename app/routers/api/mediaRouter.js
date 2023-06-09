@@ -6,6 +6,7 @@ const { mediaController } = require('../../controllers');
 const router = express.Router();
 /**
  * @typedef {object} Media
+ * @property {number} id - media id
  * @property {string} link - the media link
  * @property {boolean} is_active - a boolean to differentiate a video from photo
  * @property {string} created_at - date of creation
