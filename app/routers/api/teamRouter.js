@@ -70,7 +70,7 @@ router.post('/', auth, validate(createTeam), controllerHandler(teamController.cr
  * @returns {Array<Team>} 200 - The updated player object
  * @returns {object} 500 - Internal server error
  */
-router.patch('/', auth, validate(modifyTeam), controllerHandler(teamController.updateOne));
+router.patch('/:user_name', auth, validate(modifyTeam), controllerHandler(teamController.updateOne));
 
 /**
  * DELETE /api/team
@@ -81,6 +81,6 @@ router.patch('/', auth, validate(modifyTeam), controllerHandler(teamController.u
  * @returns {object} 200 - Success message
  * @returns {object} 500 - Internal server error
  */
-router.delete('/', auth, controllerHandler(teamController.deleteOne));
+router.delete('/:user_name', auth, controllerHandler(teamController.deleteOne));
 
 module.exports = router;
