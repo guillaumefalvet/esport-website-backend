@@ -26,7 +26,7 @@ INSERT INTO "permission" ("name", "level") VALUES
 
 -- Seeding pour la table "user"
 INSERT INTO "user" ("user_name", "email", "password", "user_permission") VALUES
-('john_doe', 'john@example.com', 'password123', 3),
+('john_doe', 'john@example.com', 'password123', 1),
 ('jane_smith', 'jane@example.com', 'password123', 3),
 ('alex_ross', 'alex@example.com', 'password123', 3),
 ('mike_johnson', 'mike@example.com', 'password123', 3),
