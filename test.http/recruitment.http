@@ -2,6 +2,8 @@
 
 ### Envoyer un formulaire de recrutement
 POST {{endpoint}}/recruitment/
+Content-Type: application/json
+
 {
   "user_name": "slayer",
   "email": "slayer@example.com",
