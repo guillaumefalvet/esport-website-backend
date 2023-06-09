@@ -1,11 +1,9 @@
 const Joi = require('joi');
 
 const userValidation = Joi.object({
-  user_name: Joi.string().min(3).required(),
+  user_name: Joi.string().required(),
   email: Joi.string().email().required(),
-
-  // doit contenir au moins un chiffre, une lettre majuscule et une lettre minuscule//
-  password: Joi.string().min(8).pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/),
+  password: Joi.string().min(8).required(),
   user_permission: Joi.number().integer(),
 }).required();
 

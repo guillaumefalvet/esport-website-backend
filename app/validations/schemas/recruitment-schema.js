@@ -1,12 +1,12 @@
 const Joi = require('joi');
 
 const recruitmentValidation = Joi.object({
-  user_name: Joi.string(),
-  email: Joi.string().email(),
-  first_name: Joi.string(),
-  last_name: Joi.string(),
-  message: Joi.string(),
+  user_name: Joi.string().min(3).max(30).required(),
+  email: Joi.string().email().required(),
+  first_name: Joi.string().required(),
+  last_name: Joi.string().required(),
+  message: Joi.string().required(),
   external_link: Joi.string().uri(),
-}).required.min(6);
+}).required.min(5);
 
 module.exports = { recruitmentValidation };
