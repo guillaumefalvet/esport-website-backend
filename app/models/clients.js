@@ -1,10 +1,8 @@
 const debug = require('debug')('app:models:client');
 const { Pool } = require('pg');
 
-const pool = new Pool();
+const client = new Pool();
+debug('client connected');
+client.connect();
 
-pool.connect().then(() => {
-  debug('database client connected');
-});
-
-module.exports = pool;
+module.exports = client;
