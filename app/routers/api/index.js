@@ -1,9 +1,9 @@
 const express = require('express');
-const mediaRouter = require('./mediaRouter');
-const articleRouter = require('./articleRouter');
-const teamRouter = require('./teamRouter');
-const calendarRouter = require('./calendarRouter');
-const recruitmentRouter = require('./recruitmentRouter');
+// const mediaRouter = require('./mediaRouter');
+// const articleRouter = require('./articleRouter');
+// const teamRouter = require('./teamRouter');
+// const calendarRouter = require('./calendarRouter');
+// const recruitmentRouter = require('./recruitmentRouter');
 const authRouter = require('./authRouter');
 
 const router = express.Router();
