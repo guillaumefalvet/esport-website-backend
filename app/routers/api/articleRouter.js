@@ -25,7 +25,7 @@ const router = express.Router();
 /**
  * GET /api/article/:slug
  * @summary Get a specific article by slug
- * @tags article
+ * @tags Article
  * @param {string} slug.path - The slug of the article to retrieve
  * @returns {Article} 200 - The article object
  * @returns {object} 500 - Internal server error
@@ -35,7 +35,7 @@ router.get('/:slug', controllerHandler(articleController.getOne));
 /**
  * POST /api/article
  * @summary Create a new article
- * @tags article
+ * @tags Article
  * @security BearerAuth
  * @param {Article} request.body - The article object to create
  * @returns {Article} 200 - The created article object
@@ -46,7 +46,7 @@ router.post('/', auth, validate(createArticle), controllerHandler(articleControl
 /**
  * PATCH /api/article/:slug
  * @summary Update an existing article by slug
- * @tags article
+ * @tags Article
  * @security BearerAuth
  * @param {string} slug.path - The slug of the article to update
  * @param {Article} request.body - The updated article object
@@ -58,7 +58,7 @@ router.patch('/:slug', auth, validate(modifyArticle), controllerHandler(articleC
 /**
  * DELETE /api/article/:slug
  * @summary Delete an article by slug
- * @tags article
+ * @tags Article
  * @security BearerAuth
  * @param {string} slug.path - The slug of the article to delete
  * @returns {object} 200 - Success message

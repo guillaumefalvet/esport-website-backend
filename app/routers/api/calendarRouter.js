@@ -27,7 +27,7 @@ const router = express.Router();
  * GET /api/calendar
  *
  * @summary get all calendar
- * @tags Calendar get all route
+ * @tags Calendar
  *
  * @returns {Array<Calendar>} 200 - success response
  * @returns {object} 500 - Internal server error
