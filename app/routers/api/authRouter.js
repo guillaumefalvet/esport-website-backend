@@ -1,8 +1,8 @@
 const express = require('express');
 const controllerHandler = require('../../middlewares/controllerHandler');
 const auth = require('../../middlewares/auth');
-// const { login } = require('../../validations/schemas');
-// const validate = require('../../validations');
+const { loginValidation } = require('../../validations/schemas/login-schema');
+const validate = require('../../validations/validate');
 const { authController } = require('../../controllers');
 
 const router = express.Router();
@@ -23,7 +23,8 @@ const router = express.Router();
  * @returns {object} 401 - invalid credentials
  */
 // router.post('/login', validate(login), controllerHandler(authController.login));
-router.post('/login', controllerHandler(authController.login));
+router.post('/login', validate(loginValidation), controllerHandler(authController.login));
+
 /**
  * GET /api/logout
  * @summary logout for an authentified user
