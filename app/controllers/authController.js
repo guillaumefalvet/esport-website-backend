@@ -8,20 +8,20 @@ module.exports = {
     const jsonRes = {
       status: '',
     };
-    // if there is no request email
-    if (!email) {
-      debug('no email');
-      jsonRes.status = 'error';
-      jsonRes.message = 'require an email';
-      return response.status(400).json(jsonRes);
-    }
-    // if there is no request password
-    if (!password) {
-      debug('no password');
-      jsonRes.status = 'error';
-      jsonRes.message = 'require a password';
-      return response.status(400).json(jsonRes);
-    }
+    //  if there is no request email
+    // if (!email) {
+    //   debug('no email');
+    //   jsonRes.status = 'error';
+    //   jsonRes.message = 'require an email';
+    //   return response.status(400).json(jsonRes);
+    // }
+    //  if there is no request password
+    // if (!password) {
+    //   debug('no password');
+    //   jsonRes.status = 'error';
+    //   jsonRes.message = 'require a password';
+    //   return response.status(400).json(jsonRes);
+    // }
 
     const result = await dataMapper.getByEmail(email);
     // if nothing was found in the database
