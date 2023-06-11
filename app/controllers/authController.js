@@ -58,6 +58,7 @@ module.exports = {
     // add session
   },
   async logout(request, response) {
+    // eslint-disable-next-line no-unused-vars
     request.session.destroy((err) => {
       debug('Destroyed session');
     });
