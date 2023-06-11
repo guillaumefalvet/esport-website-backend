@@ -22,7 +22,6 @@ const router = express.Router();
  * @returns {object} 200 - successful login
  * @returns {object} 401 - invalid credentials
  */
-// router.post('/login', validate(login), controllerHandler(authController.login));
 router.post('/login', validate(loginValidation), controllerHandler(authController.login));
 
 /**
