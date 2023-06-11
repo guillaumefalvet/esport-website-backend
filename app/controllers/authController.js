@@ -47,20 +47,13 @@ module.exports = {
       permission_name: result[0].permission_name,
       permission_level: result[0].permission_level,
     };
-    request.session.profile = {
-      id: result[0].id,
-      permission_level: result[0].permission_level,
-    };
-    debug(`session created id: ${request.session.profile.id}`);
-    debug(`session created permission_level: ${request.session.profile.permission_level}`);
+
     debug('successful login');
     return response.status(200).json(jsonRes);
     // add session
   },
   async logout(request, response) {
-    request.session.destroy((err) => {
-      debug('Destroyed session');
-    });
+    /* ADD THE DESTRUCTION OF THE LOGIN JWT */
     response.status(200).json({
       status: 'success',
     });
