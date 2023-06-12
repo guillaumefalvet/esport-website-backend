@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable max-len */
 const debug = require('debug')('app:server');
 require('dotenv').config();
