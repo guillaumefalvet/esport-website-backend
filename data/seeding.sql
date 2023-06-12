@@ -26,16 +26,8 @@ INSERT INTO "permission" ("name", "level") VALUES
 
 -- Seeding pour la table "user"
 INSERT INTO "user" ("user_name", "email", "password", "user_permission") VALUES
-('john_doe', 'john@example.com', 'password123', 1),
-('jane_smith', 'jane@example.com', 'password123', 3),
-('alex_ross', 'alex@example.com', 'password123', 3),
-('mike_johnson', 'mike@example.com', 'password123', 3),
-('sarah_miller', 'sarah@example.com', 'password123', 3),
-('david_wilson', 'david@example.com', 'password123', 3),
-('emily_jones', 'emily@example.com', 'password123', 3),
-('peter_anderson', 'peter@example.com', 'password123', 3),
-('lisa_brown', 'lisa@example.com', 'password123', 3),
-('michael_clark', 'michael@example.com', 'password123', 3);
+('john_doe', 'john@example.com', '$2b$10$/by8W/BetZSETyF6OlSH4.CwX0szBcOMgENI1fLVcPYlK3x3crW7O', 1),
+('michael_clark', 'michael@example.com', '$2b$10$/by8W/BetZSETyF6OlSH4.CwX0szBcOMgENI1fLVcPYlK3x3crW7O', 3);
 
 -- Seeding pour la table "recruitment"
 INSERT INTO "recruitment" ("user_name", "email", "first_name", "last_name", "message", "external_link") VALUES
