@@ -30,7 +30,7 @@ const options = {
 };
 const corsOptions = {
   origine: '*', // Autoriser toutes les origines (vous pouvez spécifier des origines spécifiques si nécessaire)
-  methode: ['GET', 'POST', 'PUT', 'DELETE'], // Autoriser les méthodes HTTP spécifiées
+  methode: ['GET', 'POST', 'PATCH', 'DELETE'], // Autoriser les méthodes HTTP spécifiées
   allowedHeader: ['Content-Type', 'Authorization'], // Autoriser les en-têtes spécifiés
 
 };
