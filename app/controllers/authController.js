@@ -1,4 +1,5 @@
 const debug = require('debug')('app:controllers:authController');
+const bcrypt = require('bcrypt');
 const dataMapper = require('../models/dataMapper');
 const authHandler = require('../middlewares/authHandler');
 
@@ -9,27 +10,22 @@ const authController = {
     const jsonRes = {
       status: '',
     };
-
     const result = await dataMapper.getByEmail(email);
-    // if nothing was found in the database
     if (!result[0]) {
       debug('database: email not matching');
       jsonRes.status = 'error';
-      jsonRes.message = 'wrong credentials';
+      jsonRes.message = 'wrong credentials email';
       return response.status(400).json(jsonRes);
     }
-    // add bcrypt here
-    // if password and database password don't match
-    if (password === result[0].password) {
-      debug(`user email: ${result[0].email}`);
-      debug(`user id: ${result[0].id}`);
-      debug(`user ip: ${request.ip}`);
-      debug(`user permission_name: ${result[0].permission_name}`);
-      debug(`user permission_level: ${result[0].permission_level}`);
-      const user = result[0];
+
+    debug('Comparing password with hashed password...');
+    const dbPassword = result[0].password;
+    debug('match is : '+ await bcrypt.compare(password, dbPassword));
+    if (await bcrypt.compare(password, dbPassword)) {
       return authController.sendTokens(response, request.ip, user);
     }
-    return next(new Error('Unauthorized'));
+    jsonRes.message = 'wrong credentials password';
+    return response.status(400).json(jsonRes);
   },
   async logout(request, response) {
     /* ADD THE DESTRUCTION OF THE LOGIN JWT */

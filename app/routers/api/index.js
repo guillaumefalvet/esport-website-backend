@@ -3,7 +3,7 @@ const express = require('express');
 const articleRouter = require('./articleRouter');
 // const teamRouter = require('./teamRouter');
 // const calendarRouter = require('./calendarRouter');
-// const recruitmentRouter = require('./recruitmentRouter');
+const recruitmentRouter = require('./recruitmentRouter');
 const authRouter = require('./authRouter');
 
 const router = express.Router();
@@ -12,7 +12,8 @@ const router = express.Router();
 router.use('/articles', articleRouter);
 // router.use('/team', teamRouter);
 // router.use('/calendrier', calendarRouter);
-// router.use('/recruitment', recruitmentRouter);
+// eslint-disable-next-line no-undef
+router.use('/', recruitmentRouter);
 router.use('/auth', authRouter);
 /**
  * error handlers for 404 here
