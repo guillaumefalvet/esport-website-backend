@@ -17,7 +17,7 @@ const authController = {
    * @param {Function} next - The next middleware function.
    * @returns {Promise<void>} A promise that resolves once the login process is complete.
    */
-  async login(request, response, next) {
+  async login(request, response) {
     debug('login');
     const { email, password } = request.body;
     const jsonRes = {
@@ -27,17 +27,18 @@ const authController = {
     if (!result[0]) {
       debug('database: email not matching');
       jsonRes.status = 'error';
-      jsonRes.message = 'wrong credentials email';
-      return response.status(400).json(jsonRes);
+      jsonRes.message = 'wrong credentials';
+      return response.status(403).json(jsonRes);
     }
 
-    debug('Comparing password with hashed password...');
+    debug('Comparing request.bodypassword with hashed db password...');
     const dbPassword = result[0].password;
     if (await bcrypt.compare(password, dbPassword)) {
+      debug('✅ successfull login');
       return authController.sendTokens(response, request.ip, result[0]);
     }
-    jsonRes.message = 'wrong credentials password';
-    return response.status(400).json(jsonRes);
+    jsonRes.message = 'wrong credentials';
+    return response.status(403).json(jsonRes);
   },
 
   /**
@@ -76,8 +77,7 @@ const authController = {
   async sendTokens(response, ip, user) {
     const accessToken = authHandler.generateAccessToken(ip, user);
     const refreshToken = authHandler.generateRefreshToken(user.id);
-    const result = await dataMapper.setRefreshToken(user.id, refreshToken);
-    debug(result);
+    debug('SET REFRESH TOKEN');
     await dataMapper.setRefreshToken(user.id, refreshToken);
     return response.status(200).json({
       status: 'success',

@@ -44,6 +44,9 @@ module.exports = {
    */
   generateRefreshToken(id) {
     debug(`generateRefreshToken for id :${id}`);
+    debug(jwt.sign({ id }, JWT_REFRESH_SECRET, {
+      expiresIn: REFRESH_TOKEN_EXPIRATION,
+    }));
     return jwt.sign({ id }, JWT_REFRESH_SECRET, {
       expiresIn: REFRESH_TOKEN_EXPIRATION,
     });
@@ -62,20 +65,21 @@ module.exports = {
         const authHeader = request.headers.authorization;
         debug(`authHeader: ${authHeader}`);
         if (!authHeader) {
+          debug('❌ no header found');
           return next(new Error('no header found'));
         }
         const token = authHeader.split('Bearer ')[1];
         const decoded = jwt.verify(token, JWT_SECRET);
         if (decoded.data.ip !== request.ip) {
-          return next(new Error('different ip'));
+          return next(new Error('401 different ip'));
         }
         if (decoded.data.permission_level !== permissionLevelRequired) {
-          return next(new Error('insufficient permission'));
+          return next(new Error('401 insufficient permission'));
         }
-        debug('next step');
+        debug('✅ authorize done');
         return next();
       } catch (error) {
-        debug(`no valid token to grant access to permission level: ${permissionLevelRequired}`);
+        debug(`❌no valid token to grant access to permission level: ${permissionLevelRequired}`);
         return next(error);
       }
     };
@@ -92,7 +96,7 @@ module.exports = {
     debug('decoded');
     debug(decodedToken);
     const storedToken = await dataMapper.getRefreshToken(decodedToken.id);
-    debug(`isValidRefreshToken:\n header token: ${token} \n database token: ${storedToken}`);
+    debug(`isValidRefreshToken:\n header token:   ${token} \n database token: ${storedToken}`);
     return token === storedToken;
   },
 
