@@ -1,10 +1,11 @@
 const debug = require('debug')('app:controllers:authController');
 const bcrypt = require('bcrypt');
 const dataMapper = require('../models/dataMapper');
+const authHandler = require('../middlewares/authHandler');
 
-module.exports = {
-  async login(request, response) {
-    debug('login controller');
+const authController = {
+  async login(request, response, next) {
+    debug('login');
     const { email, password } = request.body;
     const jsonRes = {
       status: '',
@@ -21,8 +22,7 @@ module.exports = {
     const dbPassword = result[0].password;
     debug('match is : '+ await bcrypt.compare(password, dbPassword));
     if (await bcrypt.compare(password, dbPassword)) {
-      jsonRes.status = 'success';
-      return response.status(200).json(jsonRes);
+      return authController.sendTokens(response, request.ip, user);
     }
     jsonRes.message = 'wrong credentials password';
     return response.status(400).json(jsonRes);
@@ -33,4 +33,32 @@ module.exports = {
       status: 'success',
     });
   },
+  async tokenRefresh(request, response, next) {
+    debug('token refreshed');
+    const { refreshToken } = request.body;
+    const authHeader = request.headers.authorization;
+    if (!authHeader || !refreshToken) {
+      return next(new Error('Unauthorized'));
+    }
+    if (await authHandler.isValidRefreshToken(refreshToken)) {
+      const token = authHeader.split('Bearer ')[1];
+      const user = await authHandler.getTokenUser(token);
+      return authController.sendTokens(response, request.ip, user);
+    }
+    return next(new Error('Unauthorized'));
+  },
+  async sendTokens(response, ip, user) {
+    const accessToken = authHandler.generateAccessToken(ip, user);
+    const refreshToken = authHandler.generateRefreshToken(user.id);
+    await dataMapper.setRefreshToken(user.id, refreshToken);
+    return response.status(200).json({
+      status: 'success',
+      data: {
+        accessToken,
+        refreshToken,
+      },
+    });
+  },
 };
+
+module.exports = authController;

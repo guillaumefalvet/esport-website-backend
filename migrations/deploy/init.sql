@@ -35,7 +35,8 @@ CREATE TABLE "user" (
     "user_name" TEXT NOT NULL UNIQUE,
     "email" TEXT NOT NULL UNIQUE,
     "password" TEXT NOT NULL,
-    "user_permission" INT NOT NULL REFERENCES "permission"("id"), 
+    "refresh_token" TEXT,
+    "user_permission" INT NOT NULL REFERENCES "permission"("id"),
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
     "updated_at" TIMESTAMPTZ
 );
