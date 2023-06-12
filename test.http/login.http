@@ -24,7 +24,8 @@ content-type: application/json
     "password": "secret"
 }
 
-### REFRESH TOKEN
+### REFRESH TOKEN FIRST TIME
+# @name login
 POST {{endpoint}}/auth/refresh-token
 content-type: application/json
 Authorization: Bearer {{accessToken}}
