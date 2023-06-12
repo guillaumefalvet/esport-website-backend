@@ -3,7 +3,7 @@ const debug = require('debug')('app:middleware:errorMiddleware');
 const error404 = (request, response) => {
   response.status(404).json({ status: 'error', message: 'invalid route' });
 };
-const errorHandler = (error, request, response, next) => {
+const errorHandler = (error, request, response) => {
   debug('error Handler');
   // logger.debug(error);
   // logger.error(error);
