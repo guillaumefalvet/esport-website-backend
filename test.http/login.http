@@ -1,15 +1,62 @@
 @endpoint = http://localhost:{{$dotenv PORT}}/api
+@accessToken = {{login.response.body.$.data.accessToken}}
+@refreshToken = {{login.response.body.$.data.refreshToken}}
 
-### Connexion utilisateur (admin en mvp)
-
-POST {{ endpoint }}/auth/login/
-Content-Type: application/json
+### Connexion ADMIN
+# @name login
+POST {{endpoint}}/auth/login
+content-type: application/json
 
 {
-  "email": "john@example.com",
-  "password": "password123"
+    "email": "john@example.com",
+    "password": "password123"
 }
 
-### Déconnexion utilisateur (admin en mvp)
+###
 
-GET {{endpoint}}/auth/logout
+### Connexion NON ADMIN
+# @name login
+POST {{endpoint}}/auth/login
+content-type: application/json
+
+{
+    "email": "michael@example.com",
+    "password": "password123"
+}
+
+###
+POST {{endpoint}}/auth/refresh-token
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "refreshToken": "{{refreshToken}}"
+}
+### CREATION ARTICLE
+POST {{ endpoint }}/articles/
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "slug": "nouvel-article",
+  "title": "mon nouvel article",
+  "content": "Ceci est le contenu de mon nouvel article",
+  "author": "jack",
+  "small_image": "test",
+  "medium_image": "test",
+  "large_image": "test",
+  "publication_date": "2023-06-12 11:37:59.04144"
+}
+
+### MODIFICATION D'UN ARTICLE
+PATCH {{ endpoint }}/articles/nouvel-article
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "content": "es"
+}
+
+### SUPPRESSION D'UN ARTICLE
+DELETE {{endpoint}}/articles/nouvel-article
+Authorization: Bearer {{accessToken}}
