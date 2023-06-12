@@ -23,7 +23,7 @@ const router = express.Router();
 /**
  * POST /api/recruitment
  * @summary insert recruitment
- * @tags recruitment
+ * @tags Recruitment
  * @returns {object} 200 - success message
  * @returns {object} 400 - bad request
  */

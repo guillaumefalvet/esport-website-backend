@@ -16,7 +16,7 @@ const router = express.Router();
 /**
  * GET /api/media
  * @summary Get all media
- * @tags media
+ * @tags Media
  * @param {string} [request.query.media] - Optional query param to filter media by type. Possible values: 'photo' or 'video'.
  * @returns {Array<Media>} 200 - Array of media objects matching the specified filter
  * @returns {object} 500 - Internal server error
