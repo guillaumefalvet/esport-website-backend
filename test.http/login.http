@@ -7,7 +7,7 @@ Content-Type: application/json
 
 {
   "email": "john@example.com",
-  "password": "password123"
+  "password": "secret"
 }
 
 ### Déconnexion utilisateur (admin en mvp)
