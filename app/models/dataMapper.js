@@ -6,16 +6,16 @@ module.exports = {
     return rows;
   },
   async getAll(table) {
-    const { rows } = await client.query(`SELECT * FROM ${table}`);
+    const { rows } = await client.query(`SELECT * FROM ${table} ORDER BY "id" DESC; `);
     return rows;
   },
   async getByPk(table, id) {
-    const { rows } = await client.query(`SELECT * FROM ${table} WHERE id = $1;`, [id]);
+    const { rows } = await client.query(`SELECT * FROM "${table}" WHERE id = $1;`, [id]);
     return rows;
   },
   async getBySlug(slug) {
-    const { rows } = await client.query('SELECT * FROM article WHERE slug = $1;', [slug]);
-    return rows;
+    const result = await client.query('SELECT * FROM article WHERE slug = $1;', [slug]);
+    return result;
   },
   async getByUserName(table, userName) {
     const { rows } = await client.query(`SELECT * FROM ${table} WHERE user_name = '$1';`, [userName]);
@@ -49,5 +49,21 @@ module.exports = {
   },
   async deleteByUserName(table, userName) {
     await client.query(`DELETE FROM ${table} WHERE user_name = $1;`, [userName]);
+  },
+  async getRefreshToken(id) {
+    const preparedQuery = {
+      text: 'SELECT "refresh_token" FROM "user" WHERE "id" = $1',
+      values: [id],
+    };
+    const results = await client.query(preparedQuery);
+    return results.rows[0].refresh_token;
+  },
+  async setRefreshToken(id, token) {
+    const preparedQuery = {
+      text: 'UPDATE "user" SET "refresh_token" = $2 WHERE "id" = $1 RETURNING *',
+      values: [id, token],
+    };
+    const { rows } = await client.query(preparedQuery);
+    return rows;
   },
 };
