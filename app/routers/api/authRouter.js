@@ -23,12 +23,6 @@ const router = express.Router();
 
 router.post('/login', validate(loginValidation), controllerHandler(authController.login));
 
-/**
- * GET /api/auth/logout
- * @summary logout for an authentified user
- * @tags Login
- * @returns {object} 200 - successful logout
- * @returns {object} 404 - unsuccessful action
- */
-router.get('/logout', controllerHandler(authController.logout));
+router.post('/refresh-token', controllerHandler(authController.tokenRefresh));
+
 module.exports = router;
