@@ -3,7 +3,7 @@
 	top_dir = migrations
 	# plan_file = migrations/sqitch.plan
 [engine "pg"]
-	target = db:pg://postgres:XqutyJ8XmMgG8TMXq50W@containers-us-west-38.railway.app:7575/railway
+	# RAILWAY target = db:pg://postgres:XqutyJ8XmMgG8TMXq50W@containers-us-west-38.railway.app:7575/railway
   # LOCAL target = db:pg:victoryzone
 	# registry = sqitch
 	# client = psql
