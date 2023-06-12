@@ -12,8 +12,7 @@ const router = express.Router();
 router.use('/articles', articleRouter);
 // router.use('/team', teamRouter);
 // router.use('/calendrier', calendarRouter);
-// eslint-disable-next-line no-undef
-router.use('/', recruitmentRouter);
+router.use('/recruitment', recruitmentRouter);
 router.use('/auth', authRouter);
 /**
  * error handlers for 404 here
