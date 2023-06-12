@@ -1,7 +1,7 @@
 @endpoint = http://localhost:{{$dotenv PORT}}/api
 
 ### Envoyer un formulaire de recrutement
-POST {{endpoint}}/recruitment/
+POST {{endpoint}}/recruitment
 Content-Type: application/json
 
 {
