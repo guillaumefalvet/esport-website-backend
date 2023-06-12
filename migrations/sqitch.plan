@@ -4,4 +4,3 @@
 init 2023-06-06T12:18:04Z Guillaume Falvet <guillaume.falvet@gmail.com> # init
 views 2023-06-08T14:20:23Z Etudiant O'clock <student@teleporter> # view
 functions 2023-06-08T08:14:56Z Guillaume Falvet <guillaume.falvet@gmail.com> # functions
-refreshtoken 2023-06-12T07:20:54Z Guillaume Falvet <guillaume.falvet@gmail.com> # jwt refresh token field in user table
