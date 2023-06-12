@@ -23,7 +23,7 @@ const router = express.Router();
  */
 
 /**
- * GET /api/article/
+ * GET /api/articles/
  * @summary Get all articles
  * @tags Article
  * @returns {Article} 200 - The article object
@@ -31,7 +31,7 @@ const router = express.Router();
  */
 router.get('/', controllerHandler(articleController.getAll));
 /**
- * GET /api/article/:slug
+ * GET /api/articles/:slug
  * @summary Get a specific article by slug
  * @tags Article
  * @param {string} slug.path - The slug of the article to retrieve
@@ -41,7 +41,7 @@ router.get('/', controllerHandler(articleController.getAll));
 router.get('/:slug', controllerHandler(articleController.getOne));
 
 /**
- * POST /api/article
+ * POST /api/articles
  * @summary Create a new article
  * @tags Article
  * @security BearerAuth
@@ -52,7 +52,7 @@ router.get('/:slug', controllerHandler(articleController.getOne));
 router.post('/', authorize(1), validate(createArticle), controllerHandler(articleController.insertOne));
 
 /**
- * PATCH /api/article/:slug
+ * PATCH /api/articles/:slug
  * @summary Update an existing article by slug
  * @tags Article
  * @security BearerAuth
@@ -64,7 +64,7 @@ router.post('/', authorize(1), validate(createArticle), controllerHandler(articl
 router.patch('/:slug', authorize(1), validate(modifyArticle), controllerHandler(articleController.updateOne));
 
 /**
- * DELETE /api/article/:slug
+ * DELETE /api/articles/:slug
  * @summary Delete an article by slug
  * @tags Article
  * @security BearerAuth
