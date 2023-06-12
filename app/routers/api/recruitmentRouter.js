@@ -1,8 +1,9 @@
 const express = require('express');
 const controllerHandler = require('../../middlewares/controllerHandler');
-const { createRecruitement } = require('../../validations/schemas');
-const validate = require('../../validations');
-const { recruitmentController } = require('../../controllers');
+// const { createRecruitement } = require('../../validations/schemas');
+// const validate = require('../../validations');
+// const { recruitmentController } = require('../../controllers');
+const mailService = require('../../services/recruitMailing');
 
 const router = express.Router();
 /**
@@ -27,6 +28,6 @@ const router = express.Router();
  * @returns {object} 400 - bad request
  */
 
-router.post('/recruitment', validate(createRecruitement), controllerHandler(recruitmentController.createOne));
+router.post('/recruitment', controllerHandler(mailService));
 
 module.exports = router;
