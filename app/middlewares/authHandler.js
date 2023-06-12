@@ -2,6 +2,9 @@ const debug = require('debug')('app:middlewares:authHandler');
 const jwt = require('jsonwebtoken');
 const dataMapper = require('../models/dataMapper');
 
+const { JWT_SECRET, JWT_REFRESH_SECRET } = process.env;
+const ACCESS_TOKEN_EXPIRATION = process.env.ACCESS_TOKEN_EXPIRATION ?? '15m';
+const REFRESH_TOKEN_EXPIRATION = process.env.REFRESH_TOKEN_EXPIRATION ?? '7d';
 /**
  * Middleware functions related to authentication and authorization.
  * @module authHandler
@@ -28,8 +31,8 @@ module.exports = {
           permission_level: user.permission_level,
         },
       },
-      process.env.JWT_SECRET,
-      { expiresIn: process.env.ACCESS_TOKEN_EXPIRATION },
+      JWT_SECRET,
+      { expiresIn: ACCESS_TOKEN_EXPIRATION },
     );
   },
 
@@ -41,8 +44,8 @@ module.exports = {
    */
   generateRefreshToken(id) {
     debug(`generateRefreshToken for id :${id}`);
-    return jwt.sign({ id }, process.env.JWT_REFRESH_SECRET, {
-      expiresIn: process.env.REFRESH_TOKEN_EXPIRATION,
+    return jwt.sign({ id }, JWT_REFRESH_SECRET, {
+      expiresIn: REFRESH_TOKEN_EXPIRATION,
     });
   },
 
@@ -62,7 +65,7 @@ module.exports = {
           return next(new Error('no header found'));
         }
         const token = authHeader.split('Bearer ')[1];
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, JWT_SECRET);
         if (decoded.data.ip !== request.ip) {
           return next(new Error('different ip'));
         }
@@ -85,8 +88,11 @@ module.exports = {
    * @returns {Promise<boolean>} A promise resolving to `true` if the token is valid, or `false` otherwise.
    */
   async isValidRefreshToken(token) {
-    const decodedToken = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+    const decodedToken = jwt.verify(token, JWT_REFRESH_SECRET);
+    debug('decoded');
+    debug(decodedToken);
     const storedToken = await dataMapper.getRefreshToken(decodedToken.id);
+    debug(`isValidRefreshToken:\n header token: ${token} \n database token: ${storedToken}`);
     return token === storedToken;
   },
 
@@ -99,9 +105,10 @@ module.exports = {
   async getTokenUser(token) {
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET,
+      JWT_SECRET,
       { ignoreExpiration: true },
     );
+    debug(`getTokenUser ${decoded.data.email}`);
     return dataMapper.getByEmail(decoded.data.email);
   },
 };

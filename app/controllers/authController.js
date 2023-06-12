@@ -49,18 +49,20 @@ const authController = {
    * @returns {Promise<void>} A promise that resolves once the token refresh process is complete.
    */
   async tokenRefresh(request, response, next) {
-    debug('token refreshed');
     const { refreshToken } = request.body;
+    debug(`refresh token: ${refreshToken}`);
     const authHeader = request.headers.authorization;
+    debug(`authHeader: ${authHeader}`);
     if (!authHeader || !refreshToken) {
-      return next(new Error('Unauthorized'));
+      return next(new Error('Missing authHeader or refreshToken'));
     }
+    debug(`token refresh is valid: ${await authHandler.isValidRefreshToken(refreshToken)}`);
+    const token = authHeader.split('Bearer ')[1];
     if (await authHandler.isValidRefreshToken(refreshToken)) {
-      const token = authHeader.split('Bearer ')[1];
       const user = await authHandler.getTokenUser(token);
-      return authController.sendTokens(response, request.ip, user);
+      return authController.sendTokens(response, request.ip, user[0]);
     }
-    return next(new Error('Unauthorized'));
+    return next(new Error('isValidRefreshToken is not valid'));
   },
 
   /**
@@ -74,6 +76,8 @@ const authController = {
   async sendTokens(response, ip, user) {
     const accessToken = authHandler.generateAccessToken(ip, user);
     const refreshToken = authHandler.generateRefreshToken(user.id);
+    const result = await dataMapper.setRefreshToken(user.id, refreshToken);
+    debug(result);
     await dataMapper.setRefreshToken(user.id, refreshToken);
     return response.status(200).json({
       status: 'success',
