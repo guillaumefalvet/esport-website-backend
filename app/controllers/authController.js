@@ -17,7 +17,7 @@ const authController = {
    * @param {Function} next - The next middleware function.
    * @returns {Promise<void>} A promise that resolves once the login process is complete.
    */
-  async login(request, response) {
+  async handleLogin(request, response) {
     debug('login');
     const { email, password } = request.body;
     const jsonRes = {
@@ -35,7 +35,7 @@ const authController = {
     const dbPassword = result[0].password;
     if (await bcrypt.compare(password, dbPassword)) {
       debug('✅ successfull login');
-      return authController.sendTokens(response, request.ip, result[0]);
+      return authController.sendAuthTokens(response, request.ip, result[0]);
     }
     jsonRes.message = 'wrong credentials';
     return response.status(403).json(jsonRes);
@@ -49,21 +49,21 @@ const authController = {
    * @param {Function} next - The next middleware function.
    * @returns {Promise<void>} A promise that resolves once the token refresh process is complete.
    */
-  async tokenRefresh(request, response, next) {
+  async handleTokenRefresh(request, response, next) {
     const { refreshToken } = request.body;
-    debug(`refresh token: ${refreshToken}`);
+    debug(`handleTokenRefresh => refreshtoken: ${refreshToken}`);
     const authHeader = request.headers.authorization;
-    debug(`authHeader: ${authHeader}`);
+    debug(`handleTokenRefresh => authHeader: ${authHeader}`);
     if (!authHeader || !refreshToken) {
       return next(new Error('Missing authHeader or refreshToken'));
     }
-    debug(`token refresh is valid: ${await authHandler.isValidRefreshToken(refreshToken)}`);
+    debug(`isRefreshTokenValid valid ? : ${await authHandler.isRefreshTokenValid(refreshToken)}`);
     const token = authHeader.split('Bearer ')[1];
-    if (await authHandler.isValidRefreshToken(refreshToken)) {
-      const user = await authHandler.getTokenUser(token);
-      return authController.sendTokens(response, request.ip, user[0]);
+    if (await authHandler.isRefreshTokenValid(refreshToken)) {
+      const user = await authHandler.getUserFromToken(token);
+      return authController.sendAuthTokens(response, request.ip, user[0]);
     }
-    return next(new Error('isValidRefreshToken is not valid'));
+    return next(new Error('isRefreshTokenValid is not valid'));
   },
 
   /**
@@ -74,10 +74,10 @@ const authController = {
    * @param {Object} user - The user object containing user information.
    * @returns {Promise<void>} A promise that resolves once the tokens are sent.
    */
-  async sendTokens(response, ip, user) {
-    const accessToken = authHandler.generateAccessToken(ip, user);
-    const refreshToken = authHandler.generateRefreshToken(user.id);
-    debug('SET REFRESH TOKEN');
+  async sendAuthTokens(response, ip, user) {
+    const accessToken = authHandler.generateAccessTokenWithUser(ip, user);
+    const refreshToken = authHandler.generateRefreshTokenForUser(user.id);
+    debug('sendAuthTokens');
     await dataMapper.setRefreshToken(user.id, refreshToken);
     return response.status(200).json({
       status: 'success',

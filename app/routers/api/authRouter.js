@@ -24,7 +24,7 @@ const router = express.Router();
  * @returns {object} 400 - Invalid credentials (wrong email or password).
  * @returns {object} 500 - Internal server error.
  */
-router.post('/login', validate(loginValidation), controllerHandler(authController.login));
+router.post('/login', validate(loginValidation), controllerHandler(authController.handleLogin));
 
 /**
  * POST /api/auth/refresh-token
@@ -42,6 +42,6 @@ router.post('/login', validate(loginValidation), controllerHandler(authControlle
  * @returns {object} 401 - Unauthorized access.
  * @returns {object} 500 - Internal server error.
  */
-router.post('/refresh-token', controllerHandler(authController.tokenRefresh));
+router.post('/refresh-token', controllerHandler(authController.handleTokenRefresh));
 
 module.exports = router;

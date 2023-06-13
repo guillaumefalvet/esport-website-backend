@@ -18,8 +18,8 @@ module.exports = {
    * @param {Object} user - The user object containing user information.
    * @returns {string} The generated access token.
    */
-  generateAccessToken(ip, user) {
-    debug(`generateAccessToken, ip:${ip},user: ${user}`);
+  generateAccessTokenWithUser(ip, user) {
+    debug(`generateAccessTokenWithUser, ip:${ip},user: ${user}`);
     return jwt.sign(
       {
         data: {
@@ -42,8 +42,8 @@ module.exports = {
    * @param {string} id - The user ID.
    * @returns {string} The generated refresh token.
    */
-  generateRefreshToken(id) {
-    debug(`generateRefreshToken for id :${id}`);
+  generateRefreshTokenForUser(id) {
+    debug(`generateRefreshTokenForUser for id :${id}`);
     debug(jwt.sign({ id }, JWT_REFRESH_SECRET, {
       expiresIn: REFRESH_TOKEN_EXPIRATION,
     }));
@@ -58,7 +58,7 @@ module.exports = {
    * @param {number} permissionLevelRequired - The required permission level.
    * @returns {Function} The authorization middleware function.
    */
-  authorize(permissionLevelRequired) {
+  authorizeAccess(permissionLevelRequired) {
     return async (request, _, next) => {
       debug(`authorize middleware for level: ${permissionLevelRequired}`);
       try {
@@ -91,12 +91,10 @@ module.exports = {
    * @param {string} token - The refresh token to validate.
    * @returns {Promise<boolean>} A promise resolving to `true` if the token is valid, or `false` otherwise.
    */
-  async isValidRefreshToken(token) {
+  async isRefreshTokenValid(token) {
     const decodedToken = jwt.verify(token, JWT_REFRESH_SECRET);
-    debug('decoded');
-    debug(decodedToken);
     const storedToken = await dataMapper.getRefreshToken(decodedToken.id);
-    debug(`isValidRefreshToken:\n header token:   ${token} \n database token: ${storedToken}`);
+    debug(`isRefreshTokenValid:\n header token:   ${token} \n database token: ${storedToken}`);
     return token === storedToken;
   },
 
@@ -106,13 +104,13 @@ module.exports = {
    * @param {string} token - The token containing user information.
    * @returns {Promise<Object>} A promise resolving to the user object.
    */
-  async getTokenUser(token) {
+  async getUserFromToken(token) {
     const decoded = jwt.verify(
       token,
       JWT_SECRET,
       { ignoreExpiration: true },
     );
-    debug(`getTokenUser ${decoded.data.email}`);
+    debug(`getUserFromToken: ${decoded.data.email}`);
     return dataMapper.getByEmail(decoded.data.email);
   },
 };

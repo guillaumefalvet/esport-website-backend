@@ -1,6 +1,6 @@
 const express = require('express');
 const controllerHandler = require('../../middlewares/controllerHandler');
-const { authorize } = require('../../middlewares/authHandler');
+const { authorizeAccess } = require('../../middlewares/authHandler');
 const { createArticle, modifyArticle } = require('../../validations/schemas/article-schema');
 const validate = require('../../validations/validate');
 const articleController = require('../../controllers/articleController');
@@ -49,7 +49,7 @@ router.get('/:slug', controllerHandler(articleController.getOne));
  * @returns {Article} 200 - The created article object
  * @returns {object} 500 - Internal server error
  */
-router.post('/', authorize(1), validate(createArticle), controllerHandler(articleController.insertOne));
+router.post('/', authorizeAccess(1), validate(createArticle), controllerHandler(articleController.insertOne));
 
 /**
  * PATCH /api/articles/:slug
@@ -61,7 +61,7 @@ router.post('/', authorize(1), validate(createArticle), controllerHandler(articl
  * @returns {Article} 200 - The updated article object
  * @returns {object} 500 - Internal server error
  */
-router.patch('/:slug', authorize(1), validate(modifyArticle), controllerHandler(articleController.updateOne));
+router.patch('/:slug', authorizeAccess(1), validate(modifyArticle), controllerHandler(articleController.updateOne));
 
 /**
  * DELETE /api/articles/:slug
@@ -72,6 +72,6 @@ router.patch('/:slug', authorize(1), validate(modifyArticle), controllerHandler(
  * @returns {object} 200 - Success message
  * @returns {object} 500 - Internal server error
  */
-router.delete('/:slug', authorize(1), controllerHandler(articleController.deleteOne));
+router.delete('/:slug', authorizeAccess(1), controllerHandler(articleController.deleteOne));
 
 module.exports = router;
