@@ -29,9 +29,9 @@ const options = {
   exposeSwaggerUI: true,
 };
 const corsOptions = {
-  origine: 'https://petite-hands-production.up.railway.app/', // Autoriser toutes les origines (vous pouvez spécifier des origines spécifiques si nécessaire)
-  methode: ['GET', 'POST', 'PATCH', 'DELETE'], // Autoriser les méthodes HTTP spécifiées
-  allowedHeader: ['Content-Type', 'Authorization'], // Autoriser les en-têtes spécifiés
+  origin: 'https://petite-hands-production.up.railway.app/', // Autoriser toutes les origines (vous pouvez spécifier des origines spécifiques si nécessaire)
+  methods: ['GET', 'POST', 'PATCH', 'DELETE'], // Autoriser les méthodes HTTP spécifiées
+  allowedHeaders: ['Content-Type', 'Authorization'], // Autoriser les en-têtes spécifiés
 
 };
 app.use(express.urlencoded({ extended: true }));
