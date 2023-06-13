@@ -20,7 +20,6 @@ module.exports = {
       jsend.message = 'not found';
       return response.status(404).json(jsend);
     }
-    debug(result);
     jsend.status = 'success';
     jsend.data = result.rows[0];
     return response.status(200).json(jsend);

@@ -2,6 +2,9 @@ const debug = require('debug')('app:middlewares:authHandler');
 const jwt = require('jsonwebtoken');
 const dataMapper = require('../models/dataMapper');
 
+const { JWT_SECRET, JWT_REFRESH_SECRET } = process.env;
+const ACCESS_TOKEN_EXPIRATION = process.env.ACCESS_TOKEN_EXPIRATION ?? '15m';
+const REFRESH_TOKEN_EXPIRATION = process.env.REFRESH_TOKEN_EXPIRATION ?? '7d';
 /**
  * Middleware functions related to authentication and authorization.
  * @module authHandler
@@ -15,8 +18,8 @@ module.exports = {
    * @param {Object} user - The user object containing user information.
    * @returns {string} The generated access token.
    */
-  generateAccessToken(ip, user) {
-    debug(`generateAccessToken, ip:${ip},user: ${user}`);
+  generateAccessTokenWithUser(ip, user) {
+    debug(`generateAccessTokenWithUser, ip:${ip},user: ${user}`);
     return jwt.sign(
       {
         data: {
@@ -28,8 +31,8 @@ module.exports = {
           permission_level: user.permission_level,
         },
       },
-      process.env.JWT_SECRET,
-      { expiresIn: process.env.ACCESS_TOKEN_EXPIRATION },
+      JWT_SECRET,
+      { expiresIn: ACCESS_TOKEN_EXPIRATION },
     );
   },
 
@@ -39,10 +42,13 @@ module.exports = {
    * @param {string} id - The user ID.
    * @returns {string} The generated refresh token.
    */
-  generateRefreshToken(id) {
-    debug(`generateRefreshToken for id :${id}`);
-    return jwt.sign({ id }, process.env.JWT_REFRESH_SECRET, {
-      expiresIn: process.env.REFRESH_TOKEN_EXPIRATION,
+  generateRefreshTokenForUser(id) {
+    debug(`generateRefreshTokenForUser for id :${id}`);
+    debug(jwt.sign({ id }, JWT_REFRESH_SECRET, {
+      expiresIn: REFRESH_TOKEN_EXPIRATION,
+    }));
+    return jwt.sign({ id }, JWT_REFRESH_SECRET, {
+      expiresIn: REFRESH_TOKEN_EXPIRATION,
     });
   },
 
@@ -52,27 +58,28 @@ module.exports = {
    * @param {number} permissionLevelRequired - The required permission level.
    * @returns {Function} The authorization middleware function.
    */
-  authorize(permissionLevelRequired) {
+  authorizeAccess(permissionLevelRequired) {
     return async (request, _, next) => {
       debug(`authorize middleware for level: ${permissionLevelRequired}`);
       try {
         const authHeader = request.headers.authorization;
         debug(`authHeader: ${authHeader}`);
         if (!authHeader) {
+          debug('❌ no header found');
           return next(new Error('no header found'));
         }
         const token = authHeader.split('Bearer ')[1];
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, JWT_SECRET);
         if (decoded.data.ip !== request.ip) {
-          return next(new Error('different ip'));
+          return next(new Error('401 different ip'));
         }
         if (decoded.data.permission_level !== permissionLevelRequired) {
-          return next(new Error('insufficient permission'));
+          return next(new Error('401 insufficient permission'));
         }
-        debug('next step');
+        debug('✅ authorize done');
         return next();
       } catch (error) {
-        debug(`no valid token to grant access to permission level: ${permissionLevelRequired}`);
+        debug(`❌no valid token to grant access to permission level: ${permissionLevelRequired}`);
         return next(error);
       }
     };
@@ -84,9 +91,10 @@ module.exports = {
    * @param {string} token - The refresh token to validate.
    * @returns {Promise<boolean>} A promise resolving to `true` if the token is valid, or `false` otherwise.
    */
-  async isValidRefreshToken(token) {
-    const decodedToken = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+  async isRefreshTokenValid(token) {
+    const decodedToken = jwt.verify(token, JWT_REFRESH_SECRET);
     const storedToken = await dataMapper.getRefreshToken(decodedToken.id);
+    debug(`isRefreshTokenValid:\n header token:   ${token} \n database token: ${storedToken}`);
     return token === storedToken;
   },
 
@@ -96,12 +104,13 @@ module.exports = {
    * @param {string} token - The token containing user information.
    * @returns {Promise<Object>} A promise resolving to the user object.
    */
-  async getTokenUser(token) {
+  async getUserFromToken(token) {
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET,
+      JWT_SECRET,
       { ignoreExpiration: true },
     );
+    debug(`getUserFromToken: ${decoded.data.email}`);
     return dataMapper.getByEmail(decoded.data.email);
   },
 };

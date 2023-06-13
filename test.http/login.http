@@ -24,7 +24,8 @@ content-type: application/json
     "password": "secret"
 }
 
-###
+### REFRESH TOKEN FIRST TIME
+# @name login
 POST {{endpoint}}/auth/refresh-token
 content-type: application/json
 Authorization: Bearer {{accessToken}}
@@ -32,6 +33,14 @@ Authorization: Bearer {{accessToken}}
 {
     "refreshToken": "{{refreshToken}}"
 }
+
+### Récupérer tous les article
+GET {{ endpoint }}/articles
+
+### Récupérer un article
+GET {{ endpoint }}/articles/nouvel-article
+
+
 ### CREATION ARTICLE
 POST {{ endpoint }}/articles/
 content-type: application/json
@@ -54,7 +63,7 @@ content-type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-  "content": "es"
+  "content": "esss"
 }
 
 ### SUPPRESSION D'UN ARTICLE

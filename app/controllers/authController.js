@@ -17,7 +17,7 @@ const authController = {
    * @param {Function} next - The next middleware function.
    * @returns {Promise<void>} A promise that resolves once the login process is complete.
    */
-  async login(request, response, next) {
+  async handleLogin(request, response) {
     debug('login');
     const { email, password } = request.body;
     const jsonRes = {
@@ -27,17 +27,18 @@ const authController = {
     if (!result[0]) {
       debug('database: email not matching');
       jsonRes.status = 'error';
-      jsonRes.message = 'wrong credentials email';
-      return response.status(400).json(jsonRes);
+      jsonRes.message = 'wrong credentials';
+      return response.status(403).json(jsonRes);
     }
 
-    debug('Comparing password with hashed password...');
+    debug('Comparing request.bodypassword with hashed db password...');
     const dbPassword = result[0].password;
     if (await bcrypt.compare(password, dbPassword)) {
-      return authController.sendTokens(response, request.ip, result[0]);
+      debug('✅ successfull login');
+      return authController.sendAuthTokens(response, request.ip, result[0]);
     }
-    jsonRes.message = 'wrong credentials password';
-    return response.status(400).json(jsonRes);
+    jsonRes.message = 'wrong credentials';
+    return response.status(403).json(jsonRes);
   },
 
   /**
@@ -48,19 +49,21 @@ const authController = {
    * @param {Function} next - The next middleware function.
    * @returns {Promise<void>} A promise that resolves once the token refresh process is complete.
    */
-  async tokenRefresh(request, response, next) {
-    debug('token refreshed');
+  async handleTokenRefresh(request, response, next) {
     const { refreshToken } = request.body;
+    debug(`handleTokenRefresh => refreshtoken: ${refreshToken}`);
     const authHeader = request.headers.authorization;
+    debug(`handleTokenRefresh => authHeader: ${authHeader}`);
     if (!authHeader || !refreshToken) {
-      return next(new Error('Unauthorized'));
+      return next(new Error('Missing authHeader or refreshToken'));
     }
-    if (await authHandler.isValidRefreshToken(refreshToken)) {
-      const token = authHeader.split('Bearer ')[1];
-      const user = await authHandler.getTokenUser(token);
-      return authController.sendTokens(response, request.ip, user);
+    debug(`isRefreshTokenValid valid ? : ${await authHandler.isRefreshTokenValid(refreshToken)}`);
+    const token = authHeader.split('Bearer ')[1];
+    if (await authHandler.isRefreshTokenValid(refreshToken)) {
+      const user = await authHandler.getUserFromToken(token);
+      return authController.sendAuthTokens(response, request.ip, user[0]);
     }
-    return next(new Error('Unauthorized'));
+    return next(new Error('isRefreshTokenValid is not valid'));
   },
 
   /**
@@ -71,9 +74,10 @@ const authController = {
    * @param {Object} user - The user object containing user information.
    * @returns {Promise<void>} A promise that resolves once the tokens are sent.
    */
-  async sendTokens(response, ip, user) {
-    const accessToken = authHandler.generateAccessToken(ip, user);
-    const refreshToken = authHandler.generateRefreshToken(user.id);
+  async sendAuthTokens(response, ip, user) {
+    const accessToken = authHandler.generateAccessTokenWithUser(ip, user);
+    const refreshToken = authHandler.generateRefreshTokenForUser(user.id);
+    debug('sendAuthTokens');
     await dataMapper.setRefreshToken(user.id, refreshToken);
     return response.status(200).json({
       status: 'success',
