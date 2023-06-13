@@ -29,7 +29,7 @@ const options = {
   exposeSwaggerUI: true,
 };
 const corsOptions = {
-  origine: '*', // Autoriser toutes les origines (vous pouvez spécifier des origines spécifiques si nécessaire)
+  origine: 'https://petite-hands-production.up.railway.app/', // Autoriser toutes les origines (vous pouvez spécifier des origines spécifiques si nécessaire)
   methode: ['GET', 'POST', 'PATCH', 'DELETE'], // Autoriser les méthodes HTTP spécifiées
   allowedHeader: ['Content-Type', 'Authorization'], // Autoriser les en-têtes spécifiés
 
