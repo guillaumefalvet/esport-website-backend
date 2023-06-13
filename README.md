@@ -1,4 +1,4 @@
-### DEV BRANCH: HOW TO GET STARTED
+### MAIN BRANCH: HOW TO GET STARTED
 1. Create a database and name it victoryzone:
   `createdb victoryzone`
 2. do a first deployement with sqitch:
