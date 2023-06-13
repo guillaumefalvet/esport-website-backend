@@ -46,10 +46,16 @@ module.exports = {
     jsend.data = result;
     return response.status(201).json(jsend);
   },
-  async deleteOne(request, response) {
+  async deleteOne(request, response, next) {
     debug(`deleteOne: ${tableName}`);
     const { slug } = request.params;
+    const findArticle = await dataMapper.getBySlug(slug);
+    if (findArticle.rowCount === 0) {
+      const error = new Error();
+      error.code = 404;
+      return next(error);
+    }
     await dataMapper.deleteBySlug(slug);
-    response.status(204);
+    return response.status(204);
   },
 };
