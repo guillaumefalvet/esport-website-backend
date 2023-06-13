@@ -10,7 +10,7 @@ const errorHandler = (error, request, response, next) => {
     return response.status(400).json({ status: 'error', message: 'Bad Request: You are trying to send that data that already exist' });
   }
   if (error.code === 404) {
-    return response.status(error.code).json({ status: 'error', message: error.message });
+    return response.status(error.code).json({ status: 'error', message: 'Not Found: The requested resource could not be found.' });
   }
   if (error.code === 401) {
     return response.status(error.code).json({ status: 'error', message: 'Unauthorized: The request requires authentication, and the user is not authenticated or lacks valid credentials' });
