@@ -86,7 +86,7 @@ module.exports = {
         return next();
       } catch (error) {
         debug(`❌no valid token to grant access to permission level: ${permissionLevelRequired}`);
-        error.code = 401;
+        error.name = 'jwt expired';
         return next(error);
       }
     };
