@@ -4,7 +4,7 @@ const articleRouter = require('./articleRouter');
 // const teamRouter = require('./teamRouter');
 // const calendarRouter = require('./calendarRouter');
 const recruitmentRouter = require('./recruitmentRouter');
-const { error404, errorHandler } = require('../../middlewares/error');
+const { error404, errorHandler } = require('../../middlewares/errorHandler');
 const authRouter = require('./authRouter');
 
 const router = express.Router();

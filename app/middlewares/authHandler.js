@@ -66,20 +66,27 @@ module.exports = {
         debug(`authHeader: ${authHeader}`);
         if (!authHeader) {
           debug('❌ no header found');
-          return next(new Error('no header found'));
+          const error = new Error();
+          error.code = 401;
+          return next(error);
         }
         const token = authHeader.split('Bearer ')[1];
         const decoded = jwt.verify(token, JWT_SECRET);
         if (decoded.data.ip !== request.ip) {
-          return next(new Error('401 different ip'));
+          const error = new Error();
+          error.code = 401;
+          return next(error);
         }
         if (decoded.data.permission_level !== permissionLevelRequired) {
-          return next(new Error('401 insufficient permission'));
+          const error = new Error();
+          error.code = 403;
+          return next(error);
         }
         debug('✅ authorize done');
         return next();
       } catch (error) {
         debug(`❌no valid token to grant access to permission level: ${permissionLevelRequired}`);
+        error.name = 'jwt expired';
         return next(error);
       }
     };
