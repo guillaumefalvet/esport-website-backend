@@ -72,16 +72,16 @@ CREATE TABLE "media" (
 -- table relationel entre player et setup
 CREATE TABLE "player_has_setup" (
     "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "player_id" INT NOT NULL REFERENCES "player"("id"),
-    "setup_id" INT NOT NULL REFERENCES "setup"("id"),
+    "player_id" INT NOT NULL REFERENCES "player"("id") ON DELETE CASCADE,
+    "setup_id" INT NOT NULL REFERENCES "setup"("id") ON DELETE CASCADE,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
     "updated_at" TIMESTAMPTZ
 );
 -- table relationel entre player et media
 CREATE TABLE "player_has_media" (
     "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "player_id" INT NOT NULL REFERENCES "player"("id"),
-    "media_id" INT NOT NULL REFERENCES "media"("id"),
+    "player_id" INT NOT NULL REFERENCES "player"("id") ON DELETE CASCADE,
+    "media_id" INT NOT NULL REFERENCES "media"("id") ON DELETE CASCADE,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
     "updated_at" TIMESTAMPTZ
 );
@@ -128,16 +128,16 @@ CREATE TABLE "calendar" (
 -- table relationel entre article et category
 CREATE TABLE "article_has_category" (
     "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "article_id" INT NOT NULL REFERENCES "article"("id"),
-    "category_id" INT NOT NULL REFERENCES "category"("id"),
+    "article_id" INT NOT NULL REFERENCES "article"("id") ON DELETE CASCADE,
+    "category_id" INT NOT NULL REFERENCES "category"("id") ON DELETE CASCADE,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
     "updated_at" TIMESTAMPTZ
 );
 -- table relationel entre article et calendar
 CREATE TABLE "article_has_calendar"(
     "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "article_id" INT NOT NULL REFERENCES "article"("id"),
-    "calendar_id" INT NOT NULL REFERENCES "calendar"("id"),
+    "article_id" INT NOT NULL REFERENCES "article"("id") ON DELETE CASCADE,
+    "calendar_id" INT NOT NULL REFERENCES "calendar"("id") ON DELETE CASCADE,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
     "updated_at" TIMESTAMPTZ
 );
