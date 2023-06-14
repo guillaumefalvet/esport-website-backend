@@ -18,7 +18,7 @@ module.exports = {
     return result;
   },
   async getByUserName(table, userName) {
-    const { rows } = await client.query(`SELECT * FROM ${table} WHERE user_name = '$1';`, [userName]);
+    const { rows } = await client.query(`SELECT * FROM ${table} WHERE user_name = $1;`, [userName]);
     return rows;
   },
   async getByEmail(email) {
