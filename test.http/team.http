@@ -28,6 +28,7 @@ Authorization: Bearer {{accessToken}}
 GET {{ endpoint }}/team
 
 ### Création d'un joueur
+
 POST {{ endpoint }}/team/
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
@@ -67,4 +68,24 @@ Authorization: Bearer {{accessToken}}
 ### Suppression d'un joueur
 
 DELETE {{ endpoint }}/team/slayer_back
+Authorization: Bearer {{accessToken}}
+
+
+### CREATION D'un lien entre un joueur et un media
+
+POST {{ endpoint }}/team/joueur2/media/2
+Authorization: Bearer {{accessToken}}
+
+### CREATION D'un lien entre un joueur et un media
+
+POST {{ endpoint }}/team/joueur2/setup/2
+Authorization: Bearer {{accessToken}}
+
+### SUPPRESSION D'un lien entre un joueur et un media
+
+DELETE {{ endpoint }}/team/joueur2/media/2
+Authorization: Bearer {{accessToken}}
+
+### SUPPRESSION D'un lien entre un joueur et un setup
+DELETE {{ endpoint }}/team/joueur2/setup/2
 Authorization: Bearer {{accessToken}}
