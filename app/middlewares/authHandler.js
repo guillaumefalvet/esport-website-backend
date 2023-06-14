@@ -77,6 +77,6 @@ module.exports = {
       { ignoreExpiration: true },
     );
     debug(`getUserFromToken: ${decoded.data.id}`);
-    return dataMapper.getByPk('user', decoded.data.id);
+    return dataMapper.getByPk('get_user_view', decoded.data.id);
   },
 };
