@@ -66,3 +66,16 @@ INSERT INTO "article_has_calendar" ("article_id", "calendar_id")
 VALUES
   (1, 1),
   (2, 2);
+INSERT INTO "player_has_media" ("player_id", "media_id")
+VALUES
+  (1, 1),
+  (1, 2),
+  (2, 1),
+  (2, 2);
+
+INSERT INTO "player_has_setup" ("player_id", "setup_id")
+VALUES
+  (1, 1),
+  (1, 2),
+  (2, 1),
+  (2, 2);

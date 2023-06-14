@@ -1,9 +1,9 @@
 const express = require('express');
 const controllerHandler = require('../../middlewares/controllerHandler');
-const auth = require('../../middlewares/auth');
-const { createTeam, modifyTeam } = require('../../validations/schemas');
-const validate = require('../../validations');
-const { teamController } = require('../../controllers');
+const { authorizeAccess } = require('../../middlewares/authHandler');
+const { createPlayerValidation, modifyPlayerValidation } = require('../../validations/schemas/team-schema');
+const validate = require('../../validations/validate');
+const teamController = require('../../controllers/teamController');
 
 const router = express.Router();
 /**
@@ -30,13 +30,14 @@ const router = express.Router();
 /**
  * GET /api/team
  *
- * @summary get all players
- * @tags Team - get all players from the team
+ * @summary Get all players
+ * @tags Team
  *
- * @returns {Array<Team>} 200 - success response
+ * @returns {Array<Team>} 200 - Success response
  * @returns {object} 500 - Internal server error
  */
 router.get('/', controllerHandler(teamController.getAll));
+
 /**
  * GET /api/team/:user_name
  *
@@ -58,29 +59,83 @@ router.get('/:user_name', controllerHandler(teamController.getOne));
  * @returns {Array<Team>} 200 - The created player object
  * @returns {object} 500 - Internal server error
  */
-router.post('/', auth, validate(createTeam), controllerHandler(teamController.createOne));
+router.post('/', authorizeAccess(1), validate(createPlayerValidation), controllerHandler(teamController.insertOne));
 
 /**
- * PATCH /api/team
+ * POST /api/team/:user_name/setup/:id
+ *
+ * @summary Create a link between a player and a setup
+ * @tags Team
+ * @security BearerAuth
+ * @param {string} user_name.path - The user name of the player
+ * @param {string} id.path - The ID of the setup
+ * @returns {object} 200 - Success message
+ * @returns {object} 500 - Internal server error
+ */
+router.post('/:user_name/setup/:id', authorizeAccess(1), controllerHandler(teamController.insertSetup));
+
+/**
+ * POST /api/team/:user_name/media/:id
+ *
+ * @summary Create a link between a player and a media
+ * @tags Team
+ * @security BearerAuth
+ * @param {string} user_name.path - The user name of the player
+ * @param {string} id.path - The ID of the media
+ * @returns {object} 200 - Success message
+ * @returns {object} 500 - Internal server error
+ */
+router.post('/:user_name/media/:id', authorizeAccess(1), controllerHandler(teamController.insertMedia));
+
+/**
+ * PATCH /api/team/:user_name
  *
  * @summary Update an existing player
  * @tags Team
  * @security BearerAuth
+ * @param {string} user_name.path - The user name of the player to update
  * @param {Team} request.body - The updated player object
  * @returns {Array<Team>} 200 - The updated player object
  * @returns {object} 500 - Internal server error
  */
-router.patch('/:user_name', auth, validate(modifyTeam), controllerHandler(teamController.updateOne));
+router.patch('/:user_name', authorizeAccess(1), validate(modifyPlayerValidation), controllerHandler(teamController.updateOne));
 
 /**
- * DELETE /api/team
+ * DELETE /api/team/:user_name
  *
  * @summary Delete a player
  * @tags Team
  * @security BearerAuth
+ * @param {string} user_name.path - The user name of the player to delete
  * @returns {object} 200 - Success message
  * @returns {object} 500 - Internal server error
  */
-router.delete('/:user_name', auth, controllerHandler(teamController.deleteOne));
+router.delete('/:user_name', authorizeAccess(1), controllerHandler(teamController.deleteOne));
+
+/**
+ * DELETE /api/team/:user_name/setup/:id
+ *
+ * @summary Delete a link between a player and a setup
+ * @tags Team
+ * @security BearerAuth
+ * @param {string} user_name.path - The user name of the player
+ * @param {string} id.path - The ID of the setup to delete
+ * @returns {object} 200 - Success message
+ * @returns {object} 500 - Internal server error
+ */
+router.delete('/:user_name/setup/:id', authorizeAccess(1), controllerHandler(teamController.deleteSetup));
+
+/**
+ * DELETE /api/team/:user_name/media/:id
+ *
+ * @summary Delete a link between a player and a media
+ * @tags Team
+ * @security BearerAuth
+ * @param {string} user_name.path - The user name of the player
+ * @param {string} id.path - The ID of the media to delete
+ * @returns {object} 200 - Success message
+ * @returns {object} 500 - Internal server error
+ */
+router.delete('/:user_name/media/:id', authorizeAccess(1), controllerHandler(teamController.deleteMedia));
 
 module.exports = router;

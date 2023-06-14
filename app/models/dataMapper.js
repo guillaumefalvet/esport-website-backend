@@ -5,6 +5,10 @@ module.exports = {
     const { rows } = await client.query('SELECT * FROM "user" WHERE user_name = $1', [userName]);
     return rows;
   },
+  async getByType(boolean) {
+    const { rows } = await client.query('SELECT * FROM "media" WHERE is_active = $1', [boolean]);
+    return rows;
+  },
   async getAll(table) {
     const { rows } = await client.query(`SELECT * FROM ${table} ORDER BY "id" DESC; `);
     return rows;
@@ -18,7 +22,7 @@ module.exports = {
     return result;
   },
   async getByUserName(table, userName) {
-    const { rows } = await client.query(`SELECT * FROM ${table} WHERE user_name = '$1';`, [userName]);
+    const { rows } = await client.query(`SELECT * FROM ${table} WHERE user_name = $1;`, [userName]);
     return rows;
   },
   async getByEmail(email) {
@@ -27,6 +31,14 @@ module.exports = {
   },
   async createOne(table, data) {
     const { rows } = await client.query(`SELECT * FROM insert_${table}($1);`, [JSON.stringify(data)]);
+    return rows[0];
+  },
+  async getReferenceTable(parent, child, parentValue, childValue) {
+    const { rows } = await client.query(`SELECT * FROM ${parent}_has_${child} WHERE ${parent}_id = $1 AND ${child}_id = $2;`, [parentValue, childValue]);
+    return rows[0];
+  },
+  async insertReferenceTable(parent, child, parentValue, childValue) {
+    const { rows } = await client.query(`INSERT INTO ${parent}_has_${child}("${parent}_id", "${child}_id") VALUES ($1, $2) RETURNING *;`, [parentValue, childValue]);
     return rows[0];
   },
   async modifyByPk(table, data) {
