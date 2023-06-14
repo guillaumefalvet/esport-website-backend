@@ -44,13 +44,15 @@ ORDER BY article.publication_date DESC;
 CREATE VIEW player_view AS
 SELECT
   player.*,
-  array_agg(json_build_object(
-    'id', setup.id,
-    'name', setup.name,
-    'external_link', setup.external_link,
-    'created_at', setup.created_at,
-    'updated_at', setup.updated_at
-  )) AS setup,
+  CASE WHEN COUNT(setup.id) = 0 THEN NULL
+       ELSE array_agg(json_build_object(
+                'id', setup.id,
+                'name', setup.name,
+                'external_link', setup.external_link,
+                'created_at', setup.created_at,
+                'updated_at', setup.updated_at
+             ))
+  END AS setup,
   array_agg(json_build_object(
     'id', media.id,
     'link', media.link,
@@ -68,6 +70,7 @@ LEFT JOIN player_has_media ON player.id = player_has_media.player_id
 LEFT JOIN media ON player_has_media.media_id = media.id
 GROUP BY player.id
 ORDER BY player.id;
+
 
 CREATE VIEW last_article AS
 SELECT "article"."slug", "article"."title", "article"."small_image" FROM article WHERE publication_date <= now() ORDER BY article.id DESC limit 3;
