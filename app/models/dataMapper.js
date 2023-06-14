@@ -5,6 +5,10 @@ module.exports = {
     const { rows } = await client.query('SELECT * FROM "user" WHERE user_name = $1', [userName]);
     return rows;
   },
+  async getByType(boolean) {
+    const { rows } = await client.query('SELECT * FROM "media" WHERE is_active = $1', [boolean]);
+    return rows;
+  },
   async getAll(table) {
     const { rows } = await client.query(`SELECT * FROM ${table} ORDER BY "id" DESC; `);
     return rows;

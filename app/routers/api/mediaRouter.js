@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 const express = require('express');
 const controllerHandler = require('../../middlewares/controllerHandler');
-const { mediaController } = require('../../controllers');
+const mediaController = require('../../controllers/mediaController');
 
 const router = express.Router();
 /**
