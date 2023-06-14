@@ -1,9 +1,9 @@
 const express = require('express');
 const controllerHandler = require('../../middlewares/controllerHandler');
-const auth = require('../../middlewares/auth');
-const { createTeam, modifyTeam } = require('../../validations/schemas');
-const validate = require('../../validations');
-const { teamController } = require('../../controllers');
+const { authorizeAccess } = require('../../middlewares/authHandler');
+const { createPlayerValidation, modifyPlayerValidation } = require('../../validations/schemas/team-schema');
+const validate = require('../../validations/validate');
+const teamController = require('../../controllers/teamController');
 
 const router = express.Router();
 /**
@@ -58,7 +58,7 @@ router.get('/:user_name', controllerHandler(teamController.getOne));
  * @returns {Array<Team>} 200 - The created player object
  * @returns {object} 500 - Internal server error
  */
-router.post('/', auth, validate(createTeam), controllerHandler(teamController.createOne));
+router.post('/', authorizeAccess(1), validate(createPlayerValidation), controllerHandler(teamController.insertOne));
 
 /**
  * PATCH /api/team
@@ -70,7 +70,7 @@ router.post('/', auth, validate(createTeam), controllerHandler(teamController.cr
  * @returns {Array<Team>} 200 - The updated player object
  * @returns {object} 500 - Internal server error
  */
-router.patch('/:user_name', auth, validate(modifyTeam), controllerHandler(teamController.updateOne));
+router.patch('/:user_name', authorizeAccess(1), validate(modifyPlayerValidation), controllerHandler(teamController.updateOne));
 
 /**
  * DELETE /api/team
@@ -81,6 +81,6 @@ router.patch('/:user_name', auth, validate(modifyTeam), controllerHandler(teamCo
  * @returns {object} 200 - Success message
  * @returns {object} 500 - Internal server error
  */
-router.delete('/:user_name', auth, controllerHandler(teamController.deleteOne));
+router.delete('/:user_name', authorizeAccess(1), controllerHandler(teamController.deleteOne));
 
 module.exports = router;
