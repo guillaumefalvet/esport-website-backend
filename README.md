@@ -1,4 +1,4 @@
-### DEV BRANCH: HOW TO GET STARTED
+### HOW TO GET STARTED
 1. Create a database and name it victoryzone:
   `createdb victoryzone`
 2. do a first deployement with sqitch:
@@ -11,64 +11,75 @@
 
 ### ARCHITECTURE OF THE BACKEND
 ```
-- app
-   - controllers
-      articleController.js
-      calendarController.js
-      teamController.js
-      loginController.js
-      mediaController.js
-      recruitmentController.js
-      index.js
-   - routers
-      - api
-         - article
-            index.js
-         - calendar
-            index.js
-         - team
-            index.js
-         - login
-            index.js
-         - media
-            index.js
-         - recruitment
-         index.js
-      -index.js
-   - validations
-      validate.js
-      schemas.js
-   - middlewares
-      auth.js
-      controllerHandler.js
-      error.js
-   - models
-      dataMapper.js
-      client.js
-- data
-   seeding.sql
-- migrations
-   -deploy
-      init.sql
-   -revert
-   -verify
-      init.sql
-   sqitch.plan
-index.js
-article.http
-team.http
-calendar.http
-homepage.http
-recruitment.http
-.editorconfig
-.eslintrc.js
-.gitgnore
-README.md
-package-lock.json
-package.json
-.env
-.env example
-sqitch.conf
-sqitch.conf example
-
+projet-14-victory-zone-back/
+┣ app/
+┃ ┣ controllers/
+┃ ┃ ┣ articleController.js
+┃ ┃ ┣ authController.js
+┃ ┃ ┗ recruitmentController.js
+┃ ┣ middlewares/
+┃ ┃ ┣ authHandler.js
+┃ ┃ ┣ controllerHandler.js
+┃ ┃ ┗ errorHandler.js
+┃ ┣ models/
+┃ ┃ ┣ clients.js
+┃ ┃ ┗ dataMapper.js
+┃ ┣ routers/
+┃ ┃ ┣ api/
+┃ ┃ ┃ ┣ articleRouter.js
+┃ ┃ ┃ ┣ authRouter.js
+┃ ┃ ┃ ┣ calendarRouter.js
+┃ ┃ ┃ ┣ index.js
+┃ ┃ ┃ ┣ mediaRouter.js
+┃ ┃ ┃ ┣ recruitmentRouter.js
+┃ ┃ ┃ ┗ teamRouter.js
+┃ ┃ ┗ index.js
+┃ ┣ services/
+┃ ┃ ┗ recruitMailing.js
+┃ ┗ validations/
+┃   ┣ schemas/
+┃ ┃ ┃ ┣ article-schema.js
+┃ ┃ ┃ ┣ login-schema.js
+┃ ┃ ┃ ┣ recruitment-schema.js
+┃ ┃ ┃ ┗ team-schema.js
+┃   ┗ validate.js
+┣ data/
+┃ ┣ seeding.sql
+┃ ┗ seeding_2.sql
+┣ migrations/
+┃ ┣ deploy/
+┃ ┃ ┣ domains.sql
+┃ ┃ ┣ functions.sql
+┃ ┃ ┣ init.sql
+┃ ┃ ┗ views.sql
+┃ ┣ revert/
+┃ ┃ ┣ domains.sql
+┃ ┃ ┣ functions.sql
+┃ ┃ ┣ init.sql
+┃ ┃ ┗ views.sql
+┃ ┣ verify/
+┃ ┃ ┣ domains.sql
+┃ ┃ ┣ functions.sql
+┃ ┃ ┣ init.sql
+┃ ┃ ┗ views.sql
+┃ ┗ sqitch.plan
+┣ test sql/
+┃ ┗ dataMapper_test.js
+┣ test.http/
+┃ ┣ calendar.http
+┃ ┣ image.http
+┃ ┣ login.http
+┃ ┣ recruitment.http
+┃ ┗ team.http
+┣ .editorconfig
+┣ .env
+┣ .env example
+┣ .eslintrc.js
+┣ .gitignore
+┣ README.md
+┣ index.js
+┣ package-lock.json
+┣ package.json
+┣ sqitch.conf
+┗ sqitch.conf example
 ```
