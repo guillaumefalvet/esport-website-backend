@@ -47,6 +47,7 @@ module.exports = {
         }
         const token = authHeader.split('Bearer ')[1];
         const decoded = jwt.verify(token, JWT_SECRET);
+        debug(`level required :${permissionLevelRequired}\ndecoded lvl: ${decoded.data.permission_level}`);
         if (decoded.data.permission_level !== permissionLevelRequired) {
           const error = new Error();
           error.code = 403;
