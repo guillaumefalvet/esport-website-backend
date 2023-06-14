@@ -44,32 +44,40 @@ ORDER BY article.publication_date DESC;
 CREATE VIEW player_view AS
 SELECT
   player.*,
-  CASE WHEN COUNT(setup.id) = 0 THEN NULL
-       ELSE array_agg(json_build_object(
-                'id', setup.id,
-                'name', setup.name,
-                'external_link', setup.external_link,
-                'created_at', setup.created_at,
-                'updated_at', setup.updated_at
-             ))
-  END AS setup,
-  array_agg(json_build_object(
-    'id', media.id,
-    'link', media.link,
-    'is_video', media.is_active
-  )) FILTER (WHERE media.is_active = true) AS media_video,
-  array_agg(json_build_object(
-    'id', media.id,
-    'link', media.link,
-    'is_video', media.is_active
-  )) FILTER (WHERE media.is_active = false) AS media_photo
+  (SELECT CASE WHEN COUNT(DISTINCT setup.id) = 0 THEN NULL
+               ELSE json_agg(json_build_object(
+                        'id', setup.id,
+                        'name', setup.name,
+                        'external_link', setup.external_link,
+                        'created_at', setup.created_at,
+                        'updated_at', setup.updated_at
+                     ))
+          END
+   FROM setup
+   JOIN player_has_setup ON player_has_setup.setup_id = setup.id
+   WHERE player_has_setup.player_id = player.id
+  ) AS setup,
+  (SELECT json_agg(json_build_object(
+            'id', media.id,
+            'link', media.link,
+            'is_video', media.is_active
+          ))
+   FROM media
+   JOIN player_has_media ON player_has_media.media_id = media.id
+   WHERE player_has_media.player_id = player.id AND media.is_active = true
+  ) AS media_video,
+  (SELECT json_agg(json_build_object(
+            'id', media.id,
+            'link', media.link,
+            'is_video', media.is_active
+          ))
+   FROM media
+   JOIN player_has_media ON player_has_media.media_id = media.id
+   WHERE player_has_media.player_id = player.id AND media.is_active = false
+  ) AS media_photo
 FROM player
-LEFT JOIN player_has_setup ON player.id = player_has_setup.player_id
-LEFT JOIN setup ON player_has_setup.setup_id = setup.id
-LEFT JOIN player_has_media ON player.id = player_has_media.player_id
-LEFT JOIN media ON player_has_media.media_id = media.id
-GROUP BY player.id
 ORDER BY player.id;
+
 
 
 CREATE VIEW last_article AS
