@@ -49,7 +49,7 @@ POST {{endpoint}}/media/
 content-type: application/json
 Authorization: Bearer {{accessToken}}
 
-{"link" :"https://media3.com"}
+{"link" :"https://media4.com"}
 
 ### Modify media
 
@@ -57,9 +57,9 @@ PATCH  {{endpoint}}/media/1
 content-type: application/json
 Authorization: Bearer {{accessToken}}
 
-{"link" :"https://media3.com" }
+{"link" :"https://media6.com" }
 
 ### delete media
 
-DELETE {{endpoint}}/media/5
+DELETE {{endpoint}}/media/3
 Authorization: Bearer {{accessToken}}
