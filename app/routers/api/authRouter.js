@@ -5,42 +5,31 @@ const validate = require('../../validations/validate');
 const authController = require('../../controllers/authController');
 
 const router = express.Router();
-
 /**
- * @typedef {object} LoginRequestBody
- * @property {string} email - The email for login.
- * @property {string} password - The password for login.
+ * @typedef {object} LoginRequest
+ * @property {string} email - User's email
+ * @property {string} password - User's password
+ */
+/**
+ * @typedef {object} RefreshRequest
+ * @property {string} refreshToken -User's refresh Token
+
  */
 
 /**
  * POST /api/auth/login
- *
- * @summary Handles user login.
+ * @group Auth - Authentication
  * @tags Authentication
- *
- * @requestBody {LoginRequestBody} request.body - The login request body.
- *
- * @returns {object} 200 - Successful login.
- * @returns {object} 400 - Invalid credentials (wrong email or password).
- * @returns {object} 500 - Internal server error.
+ * @param {LoginRequest} request.body - User login credentials
+
  */
 router.post('/login', validate(loginValidation), controllerHandler(authController.handleLogin));
 
 /**
  * POST /api/auth/refresh-token
- *
- * @summary Refreshes the access token using a refresh token.
+ * @group Auth - Authentication
  * @tags Authentication
- *
- * @requestBody {object} Request body
- * @requestBodyExample {object} Example request body
- *     {
- *       "refreshToken": "your_refresh_token_here"
- *     }
- *
- * @returns {object} 200 - Success response with new access and refresh tokens.
- * @returns {object} 401 - Unauthorized access.
- * @returns {object} 500 - Internal server error.
+ * @param {RefreshRequest} request.body - Request body
  */
 router.post('/refresh-token', controllerHandler(authController.handleTokenRefresh));
 

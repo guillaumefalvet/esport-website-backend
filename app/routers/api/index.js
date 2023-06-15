@@ -6,6 +6,7 @@ const teamRouter = require('./teamRouter');
 const recruitmentRouter = require('./recruitmentRouter');
 const { error404, errorHandler } = require('../../middlewares/errorHandler');
 const authRouter = require('./authRouter');
+
 const router = express.Router();
 
 router.use('/media', mediaRouter);
