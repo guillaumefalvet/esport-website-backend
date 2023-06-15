@@ -23,8 +23,9 @@ const router = express.Router();
  */
 
 /**
- * Get all articles
- * @route GET /api/articles/
+ * GET /api/articles/
+ *
+ * @summary Get all articles
  * @tags Article
  * @returns {Array.<Article>} 200 - Array of article objects
  * @returns {object} 500 - Internal server error
@@ -32,8 +33,9 @@ const router = express.Router();
 router.get('/', controllerHandler(articleController.getAll));
 
 /**
- * Get all private articles (admin only)
- * @route GET /api/articles/admin
+ * GET /api/articles/admin
+ *
+ * @summary Get all private articles (admin only)
  * @tags Article
  * @security BearerAuth
  * @returns {Array.<Article>} 200 - Array of private article objects
@@ -42,8 +44,9 @@ router.get('/', controllerHandler(articleController.getAll));
 router.get('/admin', authorizeAccess(1), controllerHandler(articleController.getAllPrivate));
 
 /**
- * Get a specific article by slug
- * @route GET /api/articles/{slug}
+ * GET /api/articles/{slug}
+ *
+ * @summary Get a specific article by slug
  * @tags Article
  * @param {string} slug.path - The slug of the article to retrieve
  * @returns {Article} 200 - The article object
@@ -52,8 +55,9 @@ router.get('/admin', authorizeAccess(1), controllerHandler(articleController.get
 router.get('/:slug', controllerHandler(articleController.getOne));
 
 /**
- * Create a new article
- * @route POST /api/articles
+ * POST /api/articles
+ *
+ * @summary Create a new article
  * @tags Article
  * @security BearerAuth
  * @param {Article} request.body - The article object to create
@@ -63,9 +67,11 @@ router.get('/:slug', controllerHandler(articleController.getOne));
 router.post('/', authorizeAccess(1), validate(createArticle), controllerHandler(articleController.insertOne));
 
 /**
- * Add a category to an article
- * @route POST /api/articles/{slug}/category/{id}
+ * POST /api/articles/{slug}/category/{id}
+ *
+ * @summary Add a category to an article
  * @tags Article
+ * @security BearerAuth
  * @param {string} slug.path - The slug of the article
  * @param {number} id.path - The ID of the category to add
  * @returns {object} 200 - Success message
@@ -74,9 +80,11 @@ router.post('/', authorizeAccess(1), validate(createArticle), controllerHandler(
 router.post('/:slug/category/:id', authorizeAccess(1), controllerHandler(articleController.insertCategory));
 
 /**
- * Add a calendar event to an article
- * @route POST /api/articles/{slug}/calendar/{id}
+ * POST /api/articles/{slug}/calendar/{id}
+ *
+ * @summary Add a calendar event to an article
  * @tags Article
+ * @security BearerAuth
  * @param {string} slug.path - The slug of the article
  * @param {number} id.path - The ID of the calendar event to add
  * @returns {object} 200 - Success message
@@ -85,8 +93,9 @@ router.post('/:slug/category/:id', authorizeAccess(1), controllerHandler(article
 router.post('/:slug/calendar/:id', authorizeAccess(1), controllerHandler(articleController.insertCalendar));
 
 /**
- * Update an existing article by slug
- * @route PATCH /api/articles/{slug}
+ * PATCH /api/articles/{slug}
+ *
+ * @summary Update an existing article by slug
  * @tags Article
  * @security BearerAuth
  * @param {string} slug.path - The slug of the article to update
@@ -97,8 +106,9 @@ router.post('/:slug/calendar/:id', authorizeAccess(1), controllerHandler(article
 router.patch('/:slug', authorizeAccess(1), validate(modifyArticle), controllerHandler(articleController.updateOne));
 
 /**
- * Delete an article by slug
- * @route DELETE /api/articles/{slug}
+ * DELETE /api/articles/{slug}
+ *
+ * @summary Delete an article by slug
  * @tags Article
  * @security BearerAuth
  * @param {string} slug.path - The slug of the article to delete
@@ -108,9 +118,11 @@ router.patch('/:slug', authorizeAccess(1), validate(modifyArticle), controllerHa
 router.delete('/:slug', authorizeAccess(1), controllerHandler(articleController.deleteOne));
 
 /**
- * Remove a category from an article
- * @route DELETE /api/articles/{slug}/category/{id}
+ * DELETE /api/articles/{slug}/category/{id}
+ *
+ * @summary Remove a category from an article
  * @tags Article
+ * @security BearerAuth
  * @param {string} slug.path - The slug of the article
  * @param {number} id.path - The ID of the category to remove
  * @returns {object} 200 - Success message
@@ -119,9 +131,11 @@ router.delete('/:slug', authorizeAccess(1), controllerHandler(articleController.
 router.delete('/:slug/category/:id', authorizeAccess(1), controllerHandler(articleController.deleteCategory));
 
 /**
- * Remove a calendar event from an article
- * @route DELETE /api/articles/{slug}/calendar/{id}
+ * DELETE /api/articles/{slug}/calendar/{id}
+ *
+ * @summary Remove a calendar event from an article
  * @tags Article
+ * @security BearerAuth
  * @param {string} slug.path - The slug of the article
  * @param {number} id.path - The ID of the calendar event to remove
  * @returns {object} 200 - Success message
