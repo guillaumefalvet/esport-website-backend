@@ -3,6 +3,6 @@
 BEGIN;
 
 
-DROP FUNCTION public.update_media(json_data json) CASCADE;
+DROP FUNCTION public.update_media;
 
 COMMIT;
