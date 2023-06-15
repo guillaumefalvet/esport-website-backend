@@ -17,6 +17,10 @@ module.exports = {
     const { rows } = await client.query(`SELECT * FROM "${table}" WHERE id = $1;`, [id]);
     return rows;
   },
+  async getByLink(table, link) {
+    const { rows } = await client.query(`SELECT * FROM ${table} WHERE link = $1`, [link]);
+    return rows;
+  },
   async getBySlug(slug) {
     const result = await client.query('SELECT * FROM article_events_categories WHERE slug = $1;', [slug]);
     return result;
@@ -42,6 +46,10 @@ module.exports = {
     return rows[0];
   },
   async modifyByUserName(table, data) {
+    const { rows } = await client.query(`SELECT * FROM update_${table}($1);`, [JSON.stringify(data)]);
+    return rows[0];
+  },
+  async modifyByLink(table, data) {
     const { rows } = await client.query(`SELECT * FROM update_${table}($1);`, [JSON.stringify(data)]);
     return rows[0];
   },
