@@ -14,9 +14,9 @@ const options = {
     title: 'victoryzone',
   },
   security: {
-    BasicAuth: {
+    BearerAuth: {
       type: process.env.PROD ? 'https' : 'http',
-      scheme: 'basic',
+      scheme: 'bearer',
     },
   },
   // Base directory which we use to locate your JSDOC files
@@ -32,7 +32,6 @@ const corsOptions = {
   origin: '*', // Autoriser toutes les origines (vous pouvez spécifier des origines spécifiques si nécessaire)
   methods: ['GET', 'POST', 'PATCH', 'DELETE'], // Autoriser les méthodes HTTP spécifiées
   allowedHeaders: ['Content-Type', 'Authorization'], // Autoriser les en-têtes spécifiés
-
 };
 app.use(express.urlencoded({ extended: true }));
 
@@ -44,4 +43,5 @@ app.use(router);
 
 app.listen(port, () => {
   debug(`Server ready: http://localhost:${port}`);
+  debug(`📚 SwaggerUI: http://localhost:${port}/api-docs`);
 });

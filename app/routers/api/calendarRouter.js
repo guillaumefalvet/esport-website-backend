@@ -1,9 +1,9 @@
 const express = require('express');
 const controllerHandler = require('../../middlewares/controllerHandler');
-const auth = require('../../middlewares/auth');
-const { createCalendar, modifyCalendar } = require('../../validations/schemas');
-const validate = require('../../validations');
-const { calendarController } = require('../../controllers');
+const { authorizeAccess } = require('../../middlewares/authHandler');
+// const { createCalendar, modifyCalendar } = require('../../validations/schemas');
+// const validate = require('../../validations');
+const calendarController = require('../../controllers/calendarController');
 
 const router = express.Router();
 /**
@@ -54,7 +54,7 @@ router.get('/:id', controllerHandler(calendarController.getOne));
  * @returns {Array<Calendar>} 200 - The created calendar event object
  * @returns {object} 500 - Internal server error
  */
-router.post('/', auth, validate(createCalendar), controllerHandler(calendarController.createOne));
+router.post('/', authorizeAccess(1), controllerHandler(calendarController.insertOne));
 
 /**
  * PATCH /api/calendar/:id
@@ -67,7 +67,7 @@ router.post('/', auth, validate(createCalendar), controllerHandler(calendarContr
  * @returns {Array<Calendar>} 200 - The updated calendar event object
  * @returns {object} 500 - Internal server error
  */
-router.patch('/:id', auth, validate(modifyCalendar), controllerHandler(calendarController.updateOne));
+router.patch('/:id', authorizeAccess(1), controllerHandler(calendarController.updateOne));
 
 /**
  * DELETE /api/calendar/:id
@@ -79,6 +79,6 @@ router.patch('/:id', auth, validate(modifyCalendar), controllerHandler(calendarC
  * @returns {object} 200 - Success message
  * @returns {object} 500 - Internal server error
  */
-router.delete('/:id', auth, controllerHandler(calendarController.deleteOne));
+router.delete('/:id', authorizeAccess(1), controllerHandler(calendarController.deleteOne));
 
 module.exports = router;

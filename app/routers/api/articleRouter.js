@@ -8,30 +8,44 @@ const articleController = require('../../controllers/articleController');
 const router = express.Router();
 /**
  * @typedef {object} Article
- * @property {number} id - an article id
- * @property {string} slug - an article slug
- * @property {string} title - an article title
- * @property {string} content - an article content
- * @property {string} author - an article author
- * @property {string} small_image - an article small image
- * @property {string} medium_image - an article medium image
- * @property {string} large_image - an article large_image
- * @property {string} figcaption - an article figcaption
- * @property {string} publication_date - an article publication date
- * @property {string} created_at - date of creation
- * @property {string} updated_at - date of last update
+ * @property {number} id - The article ID
+ * @property {string} slug - The article slug
+ * @property {string} title - The article title
+ * @property {string} content - The article content
+ * @property {string} author - The article author
+ * @property {string} small_image - The URL of the article's small image
+ * @property {string} medium_image - The URL of the article's medium image
+ * @property {string} large_image - The URL of the article's large image
+ * @property {string} figcaption - The article figcaption
+ * @property {string} publication_date - The article publication date
+ * @property {string} created_at - The date of creation
+ * @property {string} updated_at - The date of last update
  */
 
 /**
  * GET /api/articles/
+ *
  * @summary Get all articles
  * @tags Article
- * @returns {Article} 200 - The article object
+ * @returns {Array.<Article>} 200 - Array of article objects
  * @returns {object} 500 - Internal server error
  */
 router.get('/', controllerHandler(articleController.getAll));
+
 /**
- * GET /api/articles/:slug
+ * GET /api/articles/admin
+ *
+ * @summary Get all private articles (admin only)
+ * @tags Article
+ * @security BearerAuth
+ * @returns {Array.<Article>} 200 - Array of private article objects
+ * @returns {object} 500 - Internal server error
+ */
+router.get('/admin', authorizeAccess(1), controllerHandler(articleController.getAllPrivate));
+
+/**
+ * GET /api/articles/{slug}
+ *
  * @summary Get a specific article by slug
  * @tags Article
  * @param {string} slug.path - The slug of the article to retrieve
@@ -42,6 +56,7 @@ router.get('/:slug', controllerHandler(articleController.getOne));
 
 /**
  * POST /api/articles
+ *
  * @summary Create a new article
  * @tags Article
  * @security BearerAuth
@@ -52,7 +67,34 @@ router.get('/:slug', controllerHandler(articleController.getOne));
 router.post('/', authorizeAccess(1), validate(createArticle), controllerHandler(articleController.insertOne));
 
 /**
- * PATCH /api/articles/:slug
+ * POST /api/articles/{slug}/category/{id}
+ *
+ * @summary Add a category to an article
+ * @tags Article
+ * @security BearerAuth
+ * @param {string} slug.path - The slug of the article
+ * @param {number} id.path - The ID of the category to add
+ * @returns {object} 200 - Success message
+ * @returns {object} 500 - Internal server error
+ */
+router.post('/:slug/category/:id', authorizeAccess(1), controllerHandler(articleController.insertCategory));
+
+/**
+ * POST /api/articles/{slug}/calendar/{id}
+ *
+ * @summary Add a calendar event to an article
+ * @tags Article
+ * @security BearerAuth
+ * @param {string} slug.path - The slug of the article
+ * @param {number} id.path - The ID of the calendar event to add
+ * @returns {object} 200 - Success message
+ * @returns {object} 500 - Internal server error
+ */
+router.post('/:slug/calendar/:id', authorizeAccess(1), controllerHandler(articleController.insertCalendar));
+
+/**
+ * PATCH /api/articles/{slug}
+ *
  * @summary Update an existing article by slug
  * @tags Article
  * @security BearerAuth
@@ -64,7 +106,8 @@ router.post('/', authorizeAccess(1), validate(createArticle), controllerHandler(
 router.patch('/:slug', authorizeAccess(1), validate(modifyArticle), controllerHandler(articleController.updateOne));
 
 /**
- * DELETE /api/articles/:slug
+ * DELETE /api/articles/{slug}
+ *
  * @summary Delete an article by slug
  * @tags Article
  * @security BearerAuth
@@ -73,5 +116,31 @@ router.patch('/:slug', authorizeAccess(1), validate(modifyArticle), controllerHa
  * @returns {object} 500 - Internal server error
  */
 router.delete('/:slug', authorizeAccess(1), controllerHandler(articleController.deleteOne));
+
+/**
+ * DELETE /api/articles/{slug}/category/{id}
+ *
+ * @summary Remove a category from an article
+ * @tags Article
+ * @security BearerAuth
+ * @param {string} slug.path - The slug of the article
+ * @param {number} id.path - The ID of the category to remove
+ * @returns {object} 200 - Success message
+ * @returns {object} 500 - Internal server error
+ */
+router.delete('/:slug/category/:id', authorizeAccess(1), controllerHandler(articleController.deleteCategory));
+
+/**
+ * DELETE /api/articles/{slug}/calendar/{id}
+ *
+ * @summary Remove a calendar event from an article
+ * @tags Article
+ * @security BearerAuth
+ * @param {string} slug.path - The slug of the article
+ * @param {number} id.path - The ID of the calendar event to remove
+ * @returns {object} 200 - Success message
+ * @returns {object} 500 - Internal server error
+ */
+router.delete('/:slug/calendar/:id', authorizeAccess(1), controllerHandler(articleController.deleteCalendar));
 
 module.exports = router;
