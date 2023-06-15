@@ -44,4 +44,5 @@ app.use(router);
 
 app.listen(port, () => {
   debug(`Server ready: http://localhost:${port}`);
+  debug(`📚 SwaggerUI: http://localhost:${port}/api-docs`);
 });
