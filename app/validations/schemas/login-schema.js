@@ -5,4 +5,8 @@ const loginValidation = Joi.object({
   password: Joi.string().required(),
 }).required();
 
-module.exports = { loginValidation };
+const refreshToken = Joi.object({
+  refreshToken: Joi.string().required(),
+}).required();
+
+module.exports = { loginValidation, refreshToken };

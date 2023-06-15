@@ -1,6 +1,6 @@
 const express = require('express');
 const controllerHandler = require('../../middlewares/controllerHandler');
-const { loginValidation } = require('../../validations/schemas/login-schema');
+const { loginValidation, refreshToken } = require('../../validations/schemas/login-schema');
 const validate = require('../../validations/validate');
 const authController = require('../../controllers/authController');
 
@@ -31,6 +31,6 @@ router.post('/login', validate(loginValidation), controllerHandler(authControlle
  * @tags Authentication
  * @param {RefreshRequest} request.body - Request body
  */
-router.post('/refresh-token', controllerHandler(authController.handleTokenRefresh));
+router.post('/refresh-token', validate(refreshToken), controllerHandler(authController.handleTokenRefresh));
 
 module.exports = router;
