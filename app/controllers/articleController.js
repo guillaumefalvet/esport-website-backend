@@ -1,9 +1,11 @@
 /* eslint-disable camelcase */
-const dataMapper = require('../models/dataMapper');
 const debug = require('debug')('app:controllers:articleController');
+const dataMapper = require('../models/dataMapper');
 
 const tableName = 'article';
 const jsend = {
+  status: '',
+  data: '',
 };
 module.exports = {
   async getAll(request, response) {
