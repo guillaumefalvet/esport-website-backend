@@ -120,8 +120,8 @@ ORDER BY player.id;
 
 
 
-CREATE VIEW last_article AS
-SELECT "article"."slug", "article"."title", "article"."small_image" FROM article WHERE publication_date <= now() ORDER BY article.id DESC limit 3;
+CREATE VIEW get_article_home AS
+SELECT "article"."id", "article"."slug", "article"."title", "article"."small_image", "article"."medium_image", "article"."large_image" FROM "article" WHERE "article"."publication_date" <= now() limit 3;
 
 CREATE VIEW get_user_view AS
 SELECT "user"."id", "user"."user_name", "user"."email", "user"."password", "user"."refresh_token", "permission"."name" AS permission_name, "permission"."level" AS permission_level ,"user"."created_at", "user"."updated_at" FROM "user" JOIN "permission" ON "permission"."id" = "user"."user_permission";
