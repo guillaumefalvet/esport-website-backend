@@ -5,9 +5,18 @@ const dataMapper = require('../models/dataMapper');
 const { JWT_SECRET, JWT_REFRESH_SECRET } = process.env;
 const ACCESS_TOKEN_EXPIRATION = process.env.ACCESS_TOKEN_EXPIRATION ?? '15m';
 const REFRESH_TOKEN_EXPIRATION = process.env.REFRESH_TOKEN_EXPIRATION ?? '7d';
-
-module.exports = {
-
+/**
+ * Auth Handler provides functions for handling authentication operations.
+ * @namespace authHandler
+ */
+const authHandler = {
+  /**
+   * Generates an access token for the given user.
+   * @memberof authHandler
+   * @function generateAccessTokenWithUser
+   * @param {object} user - User object.
+   * @returns {string} - Generated access token.
+   */
   generateAccessTokenWithUser(user) {
     debug(`generateAccessTokenWithUser: ${user}`);
     return jwt.sign(
@@ -22,7 +31,13 @@ module.exports = {
       { expiresIn: ACCESS_TOKEN_EXPIRATION },
     );
   },
-
+  /**
+   * Generates a refresh token for the given user ID.
+   * @memberof authHandler
+   * @function generateRefreshTokenForUser
+   * @param {number} id - User ID.
+   * @returns {string} - Generated refresh token.
+   */
   generateRefreshTokenForUser(id) {
     debug(`generateRefreshTokenForUser for id :${id}`);
     debug(jwt.sign({ id }, JWT_REFRESH_SECRET, {
@@ -32,7 +47,13 @@ module.exports = {
       expiresIn: REFRESH_TOKEN_EXPIRATION,
     });
   },
-
+  /**
+   * Middleware that authorizes access based on the required permission level.
+   * @memberof authHandler
+   * @function authorizeAccess
+   * @param {number} permissionLevelRequired - Required permission level.
+   * @returns {function} - Express middleware function.
+   */
   authorizeAccess(permissionLevelRequired) {
     return async (request, _, next) => {
       debug(`authorize middleware for level: ${permissionLevelRequired}`);
@@ -62,14 +83,28 @@ module.exports = {
       }
     };
   },
-
+  /**
+   * Checks if the provided refresh token is valid.
+   * @async
+   * @memberof authHandler
+   * @function isRefreshTokenValid
+   * @param {string} token - Refresh token.
+   * @returns {Promise<boolean>} - Indicates if the refresh token is valid.
+   */
   async isRefreshTokenValid(token) {
     const decodedToken = jwt.verify(token, JWT_REFRESH_SECRET);
     const storedToken = await dataMapper.getRefreshToken(decodedToken.id);
     debug(`isRefreshTokenValid:\n header token:   ${token} \n database token: ${storedToken}`);
     return token === storedToken;
   },
-
+  /**
+   * Retrieves the user associated with the provided token.
+   * @async
+   * @memberof authHandler
+   * @function getUserFromToken
+   * @param {string} token - Access token.
+   * @returns {Promise<object>} - User object.
+   */
   async getUserFromToken(token) {
     const decoded = jwt.verify(
       token,
@@ -80,3 +115,4 @@ module.exports = {
     return dataMapper.getByPk('get_user_view', decoded.data.id);
   },
 };
+module.exports = authHandler;
