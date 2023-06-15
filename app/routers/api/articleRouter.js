@@ -30,6 +30,7 @@ const router = express.Router();
  * @returns {object} 500 - Internal server error
  */
 router.get('/', controllerHandler(articleController.getAll));
+router.get('/admin', authorizeAccess(1), controllerHandler(articleController.getAllPrivate));
 /**
  * GET /api/articles/:slug
  * @summary Get a specific article by slug

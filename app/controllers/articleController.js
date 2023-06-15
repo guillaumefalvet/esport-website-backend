@@ -6,8 +6,14 @@ const jsend = {
 };
 module.exports = {
   async getAll(_, response) {
-    debug(`get all ${tableName}`);
-    const results = await dataMapper.getAll('article_events_categories');
+    debug(`get all public ${tableName}`);
+    const results = await dataMapper.getAll('article_events_categories_public');
+    jsend.data = results;
+    return response.status(200).json(jsend);
+  },
+  async getAllPrivate(_, response) {
+    debug(`get all private ${tableName}`);
+    const results = await dataMapper.getAll('article_events_categories_private');
     jsend.data = results;
     return response.status(200).json(jsend);
   },
