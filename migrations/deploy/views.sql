@@ -22,7 +22,7 @@ SELECT article.*,
         END
     FROM article_has_calendar
     JOIN calendar ON article_has_calendar.calendar_id = calendar.id
-    WHERE article_has_calendar.article_id = article.id
+    WHERE article_has_calendar.article_id = article.id AND calendar.publication_date <= now()
     ) AS events,
     (SELECT CASE WHEN COUNT(category.id) = 0 THEN NULL
                  ELSE json_agg(json_build_object(
