@@ -18,7 +18,7 @@ module.exports = {
     return rows;
   },
   async getBySlug(slug) {
-    const result = await client.query('SELECT * FROM article_events_categories WHERE slug = $1;', [slug]);
+    const result = await client.query('SELECT * FROM article_events_categories_public WHERE slug = $1;', [slug]);
     return result;
   },
   async getByUserName(table, userName) {
