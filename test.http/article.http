@@ -74,9 +74,11 @@ Authorization: Bearer {{accessToken}}
 
 ### CREATION D'un lien entre un article et une category
 POST {{ endpoint }}/articles/nouvel-article/category/1
+Authorization: Bearer {{accessToken}}
 
 ### CREATION D'un lien entre un article et une calendar
 POST {{ endpoint }}/articles/nouvel-article/calendar/1
+Authorization: Bearer {{accessToken}}
 
 
 ### SUPPRESSION D'UN ARTICLE
@@ -86,7 +88,9 @@ Authorization: Bearer {{accessToken}}
 
 ### SUPPRESSION D'un lien entre un joueur et un category
 DELETE {{endpoint}}/articles/nouvel-article/category/1
+Authorization: Bearer {{accessToken}}
 
 ### SUPPRESSION D'un lien entre un joueur et un calendar
 DELETE {{endpoint}}/articles/nouvel-article/calendar/1
+Authorization: Bearer {{accessToken}}
 
