@@ -39,15 +39,17 @@ module.exports = {
     jsend.data = result;
     response.status(201).json(jsend);
   },
-  async updateOne(response, request, next) {
+  async updateOne(request, response, next) {
     debug(`updateOne ${tableName}`);
-    // const { id } = request.params;
-    const findMedia = await dataMapper.getByPk(tableName, request.params);
+    const { id } = request.params;
+    debug(request.body);
+    const findMedia = await dataMapper.getByPk(tableName, id);
     if (findMedia.rowCount === 0) {
       const error = new Error();
       error.code = 404;
       return next(error);
     }
+    request.body.id = id;
     const result = await dataMapper.modifyByPk(tableName, request.body);
     jsend.status = 'success';
     jsend.data = result;

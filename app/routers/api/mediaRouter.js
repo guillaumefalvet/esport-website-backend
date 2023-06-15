@@ -13,9 +13,9 @@ const router = express.Router();
  * @property {string} updated_at - Date of last update
  */
 /**
- * Get all media
- *
  * GET /api/media
+ *
+ * Get all media
  * @summary Get all media
  * @tags Media
  * @param {object} request.query - The request query parameters
@@ -25,9 +25,9 @@ const router = express.Router();
  */
 router.get('/', controllerHandler(mediaController.getAll));
 /**
- * Create a new media
- *
  * POST /api/media
+*
+ * Create a new media
  * @summary Create a new media
  * @tags Media
  * @security BearerAuth
@@ -38,9 +38,9 @@ router.get('/', controllerHandler(mediaController.getAll));
  */
 router.post('/', authorizeAccess(1), controllerHandler(mediaController.insertOne));
 /**
- * Update a media by ID
- *
  * PATCH /api/media/{id}
+*
+ * Update a media by ID
  * @summary Update a media by ID
  * @tags Media
  * @security BearerAuth
@@ -52,9 +52,9 @@ router.post('/', authorizeAccess(1), controllerHandler(mediaController.insertOne
  */
 router.patch('/:id', authorizeAccess(1), controllerHandler(mediaController.updateOne));
 /**
- * Delete a media by ID
- *
  * DELETE /api/media/{id}
+*
+ * Delete a media by ID
  * @summary Delete a media by ID
  * @tags Media
  * @security BearerAuth
