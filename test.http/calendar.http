@@ -1,5 +1,15 @@
 @endpoint = http://localhost:{{$dotenv PORT}}/api
+@accessToken = {{login.response.body.$.data.accessToken}}
 
+## Connexion ADMIN
+# @name login
+POST {{endpoint}}/auth/login
+content-type: application/json
+
+{
+    "email": "john@example.com",
+    "password": "secret"
+}
 ### Récupérer tous les évents/calendrier/match
 GET {{ endpoint }}/calendar
 
@@ -8,8 +18,9 @@ GET {{ endpoint }}/calendar?home=true
 
 ### Création d'un évent
 
-POST {{ endpoint }}/calendar/
+POST {{ endpoint }}/calendar
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
   "event_name": "tournoi-world",
@@ -24,17 +35,21 @@ Content-Type: application/json
 
 ### Récupérer un évent
 
-GET  {{ endpoint }}/calendar/7
+GET  {{ endpoint }}/calendar/1
 
 
 ### Modification d'un évent
-PATCH {{ endpoint }}/calendar/7
+PATCH {{ endpoint }}/calendar/1
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
 
 {
-  "event_name": "event team wolrd",
+  "event_name": "event team wolrd"
 }
 
 ### Suppression d'un évent
 
-DELETE {{ endpoint }}/calendar/8
+DELETE {{ endpoint }}/calendar/1
+Authorization: Bearer {{accessToken}}
+

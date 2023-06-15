@@ -54,7 +54,7 @@ router.get('/:id', controllerHandler(calendarController.getOne));
  * @returns {Array<Calendar>} 200 - The created calendar event object
  * @returns {object} 500 - Internal server error
  */
-router.post('/', controllerHandler(calendarController.insertOne));
+router.post('/', authorizeAccess(1), controllerHandler(calendarController.insertOne));
 
 /**
  * PATCH /api/calendar/:id
@@ -67,7 +67,7 @@ router.post('/', controllerHandler(calendarController.insertOne));
  * @returns {Array<Calendar>} 200 - The updated calendar event object
  * @returns {object} 500 - Internal server error
  */
-router.patch('/:id', controllerHandler(calendarController.updateOne));
+router.patch('/:id', authorizeAccess(1), controllerHandler(calendarController.updateOne));
 
 /**
  * DELETE /api/calendar/:id
@@ -79,6 +79,6 @@ router.patch('/:id', controllerHandler(calendarController.updateOne));
  * @returns {object} 200 - Success message
  * @returns {object} 500 - Internal server error
  */
-router.delete('/:id', controllerHandler(calendarController.deleteOne));
+router.delete('/:id', authorizeAccess(1), controllerHandler(calendarController.deleteOne));
 
 module.exports = router;

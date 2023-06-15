@@ -2,7 +2,7 @@ const debug = require('debug')('app:controllers:calendarController');
 const dataMapper = require('../models/dataMapper');
 
 const tableName = 'calendar';
-jsend = {
+const jsend = {
   status: '',
   data: '',
 };
@@ -17,22 +17,23 @@ module.exports = {
     return response.status(200).json(jsend);
   },
   async getOne(request, response, next) {
-    debug(request.query);
     debug(`get one ${tableName}`);
     const { id } = request.params;
     const result = await dataMapper.getByPk(tableName, id);
-
+    if (!result.length) {
+      const error = new Error();
+      error.code = 404;
+      return next(error);
+    }
     jsend.status = 'success';
-    jsend.data = results;
+    jsend.data = result[0];
     return response.status(200).json(jsend);
   },
   async insertOne(request, response) {
     debug(`insertOne: ${tableName}`);
     const result = await dataMapper.createOne(tableName, request.body);
-    const jsend = {
-      status: 'success',
-      data: result,
-    };
+    jsend.status = 'success';
+    jsend.data = result;
     response.status(201).json(jsend);
   },
   async updateOne(request, response, next) {
@@ -46,10 +47,9 @@ module.exports = {
       return next(error);
     }
     const result = await dataMapper.modifyByPk(tableName, request.body);
-    const jsend = {
-      status: 'success',
-      data: result,
-    };
+
+    jsend.status = 'success';
+    jsend.data = result;
     return response.status(200).json(jsend);
   },
   async deleteOne(request, response, next) {
