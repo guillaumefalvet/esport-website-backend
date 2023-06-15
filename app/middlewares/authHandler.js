@@ -47,6 +47,7 @@ module.exports = {
         }
         const token = authHeader.split('Bearer ')[1];
         const decoded = jwt.verify(token, JWT_SECRET);
+        debug(`level required :${permissionLevelRequired}\ndecoded lvl: ${decoded.data.permission_level}`);
         if (decoded.data.permission_level !== permissionLevelRequired) {
           const error = new Error();
           error.code = 403;
@@ -76,6 +77,6 @@ module.exports = {
       { ignoreExpiration: true },
     );
     debug(`getUserFromToken: ${decoded.data.id}`);
-    return dataMapper.getByPk('user', decoded.data.id);
+    return dataMapper.getByPk('get_user_view', decoded.data.id);
   },
 };
