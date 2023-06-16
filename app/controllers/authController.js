@@ -2,9 +2,21 @@ const debug = require('debug')('app:controllers:authController');
 const bcrypt = require('bcrypt');
 const dataMapper = require('../models/dataMapper');
 const authHandler = require('../middlewares/authHandler');
-
+/**
+ * Auth Controller handles authentication related functionality.
+ * @namespace authController
+ */
 const authController = {
-
+  /**
+   * Handles user login.
+   * @async
+   * @memberof authController
+   * @function handleLogin
+   * @param {object} request - Express request object.
+   * @param {object} response - Express response object.
+   * @param {function} next - Next middleware function.
+   * @returns {Promise<void>}
+   */
   async handleLogin(request, response, next) {
     debug('login');
     const { email, password } = request.body;
@@ -26,7 +38,16 @@ const authController = {
     error.code = 401;
     return next(error);
   },
-
+  /**
+   * Handles token refresh.
+   * @async
+   * @memberof authController
+   * @function handleTokenRefresh
+   * @param {object} request - Express request object.
+   * @param {object} response - Express response object.
+   * @param {function} next - Next middleware function.
+   * @returns {Promise<void>}
+   */
   async handleTokenRefresh(request, response, next) {
     const { refreshToken } = request.body;
     debug(`handleTokenRefresh => refreshtoken: ${refreshToken}`);
@@ -43,7 +64,15 @@ const authController = {
     }
     return next(new Error('isRefreshTokenValid is not valid'));
   },
-
+  /**
+   * Sends authentication tokens in the response.
+   * @async
+   * @memberof authController
+   * @function sendAuthTokens
+   * @param {object} response - Express response object.
+   * @param {object} user - User object.
+   * @returns {Promise<void>}
+   */
   async sendAuthTokens(response, user) {
     const accessToken = authHandler.generateAccessTokenWithUser(user);
     const refreshToken = authHandler.generateRefreshTokenForUser(user.id);

@@ -1,4 +1,38 @@
 @endpoint = http://localhost:{{$dotenv PORT}}/api
+@accessToken = {{login.response.body.$.data.accessToken}}
+@refreshToken = {{login.response.body.$.data.refreshToken}}
+
+### Connexion ADMIN
+# @name login
+POST {{endpoint}}/auth/login
+content-type: application/json
+
+{
+    "email": "john@example.com",
+    "password": "secret"
+}
+
+###
+
+### Connexion NON ADMIN
+# @name login
+POST {{endpoint}}/auth/login
+content-type: application/json
+
+{
+    "email": "michael@example.com",
+    "password": "secret"
+}
+
+### REFRESH TOKEN FIRST TIME
+# @name login
+POST {{endpoint}}/auth/refresh-token
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "refreshToken": "{{refreshToken}}"
+}
 ### Récupérer tous les média
 GET {{ endpoint }}/media/
 
@@ -9,3 +43,23 @@ GET {{ endpoint }}/media/?type=photo
 ### Récupérer toutes les vidéos pour la section vidéos
 
 GET {{ endpoint }}/media/?type=video
+
+### Add a new media
+POST {{endpoint}}/media/
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{"link" :"https://media4.com"}
+
+### Modify media
+
+PATCH  {{endpoint}}/media/1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{"link" :"https://media6.com" }
+
+### delete media
+
+DELETE {{endpoint}}/media/3
+Authorization: Bearer {{accessToken}}

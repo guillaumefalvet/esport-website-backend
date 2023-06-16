@@ -3,7 +3,7 @@ const dataMapper = require('../models/dataMapper');
 
 const tableName = 'media';
 const jsend = {
-  success: '',
+  status: '',
   data: '',
 };
 module.exports = {
@@ -13,6 +13,7 @@ module.exports = {
     // check the type of the query, false for photo.
     if (request.query.type === 'photo') {
       const result = await dataMapper.getByType(false);
+      jsend.status = 'success';
       jsend.data = result;
       return response.status(200).json(jsend);
     }
@@ -27,5 +28,43 @@ module.exports = {
     jsend.data = results;
 
     return response.status(200).json(jsend);
+  },
+
+  async insertOne(request, response) {
+    debug(`insertOne ${tableName}`);
+    // const { link } = request.body;
+
+    const result = await dataMapper.createOne(tableName, request.body);
+    jsend.status = 'success';
+    jsend.data = result;
+    response.status(201).json(jsend);
+  },
+  async updateOne(request, response, next) {
+    debug(`updateOne ${tableName}`);
+    const { id } = request.params;
+    debug(request.body);
+    const findMedia = await dataMapper.getByPk(tableName, id);
+    if (findMedia.rowCount === 0) {
+      const error = new Error();
+      error.code = 404;
+      return next(error);
+    }
+    request.body.id = id;
+    const result = await dataMapper.modifyByPk(tableName, request.body);
+    jsend.status = 'success';
+    jsend.data = result;
+    return response.status(201).json(jsend);
+  },
+  async deleteOne(request, response, next) {
+    debug(` deleteOne ${tableName}`);
+    const { id } = request.params;
+    const findMedia = await dataMapper.getByPk(tableName, id);
+    if (findMedia.rowCount === 0) {
+      const error = new Error();
+      error.code = 404;
+      return next(error);
+    }
+    await dataMapper.deleteByPk(tableName, id);
+    return response.status(204);
   },
 };
