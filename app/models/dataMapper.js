@@ -78,4 +78,8 @@ module.exports = {
     const { rows } = await client.query(preparedQuery);
     return rows;
   },
+  async getCalendarHome() {
+    const { rows } = await client.query('SELECT * FROM get_calendar_home');
+    return rows;
+  },
 };
