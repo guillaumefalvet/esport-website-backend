@@ -17,7 +17,7 @@ POST {{endpoint}}/recruitment
 Content-Type: multipart/form-data; boundary=boundary_value
 
 --boundary_value
-Content-Disposition: form-data; name="cv"; filename="test.pdf"
+Content-Disposition: form-data; name="tsas"; filename="test.pdf"
 Content-Type: application/pdf
 
 @./test.pdf
