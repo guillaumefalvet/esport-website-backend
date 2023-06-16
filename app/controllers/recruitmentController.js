@@ -14,7 +14,6 @@ module.exports = {
         external_link: API_URL + imageUpload.path,
       };
       await createRecruitment.validateAsync(updatedData);
-      debug(updatedData);
       const result = await dataMapper.createOne('recruitment', updatedData);
       debug('Recruitment created successfully');
       return response.status(201).json(result);
