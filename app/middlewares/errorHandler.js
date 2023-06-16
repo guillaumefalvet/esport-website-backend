@@ -1,4 +1,5 @@
 const debug = require('debug')('app:middleware:errorMiddleware');
+const multer = require('multer');
 /**
  * Error middleware handles error responses.
  * @namespace errorMiddleware
@@ -28,6 +29,7 @@ const errorMiddleware = {
   errorHandler(error, request, response, next) {
     debug('error Handler');
     debug(error);
+
     if (error.code === '23505') {
       return response.status(400).json({ status: 'error', message: 'Bad Request: You are trying to send that data that already exist' });
     }
@@ -48,6 +50,10 @@ const errorMiddleware = {
     }
     if (error.name === 'jwt expired') {
       return response.status(401).json({ status: 'error', message: 'TokenExpiredError: JWT expired' });
+    }
+    // Handling MulterError
+    if (error instanceof multer.MulterError && error.code === 'LIMIT_UNEXPECTED_FILE') {
+      return response.status(400).json({ status: 'error', message: 'Unexpected field: Please check the field name in your file upload' });
     }
     return response.status(500).json({ status: 'fail', message: error.message });
   },
