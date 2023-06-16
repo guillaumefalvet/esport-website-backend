@@ -8,10 +8,17 @@ const jsend = {
 };
 module.exports = {
   async getAll(request, response) {
+    const { home } = request.query;
+    if (home) {
+      debug('Avant l\'appel à getCalendarHome');
+      const result = await dataMapper.getCalendarHome();
+      jsend.status = 'success';
+      jsend.data = result;
+      return response.status(200).json(jsend);
+    }
     debug(request.query);
     debug(`get all ${tableName}`);
-    const results = await dataMapper.getAll(tableName);
-
+    const results = await dataMapper.getAllCalendar();
     jsend.status = 'success';
     jsend.data = results;
     return response.status(200).json(jsend);
