@@ -1,16 +1,17 @@
+/* eslint-disable camelcase */
 const debug = require('debug')('app:controllers:recruitController');
+const uploadHandler = require('../middlewares/uploadHandler');
 const dataMapper = require('../models/dataMapper');
 
 module.exports = {
-  async createRecruitment(request, response) {
-    // INSERT INTO DB
-    // const { email } = request.body;
+  async insertOne(request, response, next) {
+    const image_upload = await uploadHandler(request, 'private', 'pdf', 'cv', next);
+
+    debug(request.file);
+    request.body.external_link = image_upload.path;
+    debug(request.body);
     const result = await dataMapper.createOne('recruitment', request.body);
-    // SENDS A MESSAGE TO ADMIN
-    // await mailService.admin(CONTEXT);
-    // SENDS A MSG TO THE RECRUIT WITH HIS request.body.email
-    // await mailService.send(email);
-    response.status(201).json(result);
     debug('Recruitment created successfully');
+    return response.status(201).json(result);
   },
 };
