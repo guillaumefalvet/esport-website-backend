@@ -27,8 +27,7 @@ Authorization: Bearer {{accessToken}}
   "event_date": "2023-06-10 18:00:00",
   "adversary_name": "Team D",
   "adversary_name_short": "D",
-  "small_image": "test",
-  "medium_image": "test",
+  "image": "test",
   "large_image": "test",
   "publication_date":"2023-06-10 18:00:00"
 }

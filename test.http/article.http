@@ -57,9 +57,7 @@ Authorization: Bearer {{accessToken}}
   "title": "mon nouvel article",
   "content": "Ceci est le contenu de mon nouvel article",
   "author": "jack",
-  "small_image": "test",
-  "medium_image": "test",
-  "large_image": "test",
+  "image": "test",
   "publication_date": "2023-06-12 11:37:59.04144"
 }
 

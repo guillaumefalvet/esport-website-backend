@@ -39,9 +39,7 @@ Authorization: Bearer {{accessToken}}
   "last_name": "back",
   "description":"best player of the world",
   "role": "lead team",
-  "small_image": "sasas",
-  "medium_image": "dada",
-  "large_image": "zdzdz"
+  "image": "zdzdz"
 
 }
 

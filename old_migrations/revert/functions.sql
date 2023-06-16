@@ -14,6 +14,5 @@ DROP FUNCTION public.insert_article;
 DROP FUNCTION public.update_article;
 DROP FUNCTION public.insert_calendar;
 DROP FUNCTION public.update_calendar;
-DROP FUNCTION public.update_media;
 
 COMMIT;
