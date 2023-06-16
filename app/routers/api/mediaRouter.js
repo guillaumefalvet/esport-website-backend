@@ -39,7 +39,7 @@ router.get('/', controllerHandler(mediaController.getAll));
  * @returns {Media} 200 - The newly created media object
  * @returns {object} 500 - Internal server error
  */
-router.post('/', validate(createMedia), authorizeAccess(1), controllerHandler(mediaController.insertOne));
+router.post('/', authorizeAccess(1), validate(createMedia), controllerHandler(mediaController.insertOne));
 /**
  * PATCH /api/media/{id}
 *
@@ -53,7 +53,7 @@ router.post('/', validate(createMedia), authorizeAccess(1), controllerHandler(me
  * @returns {Media} 200 - The updated media object
  * @returns {object} 500 - Internal server error
  */
-router.patch('/:id', validate(modifyMedia), authorizeAccess(1), controllerHandler(mediaController.updateOne));
+router.patch('/:id', authorizeAccess(1), validate(modifyMedia), controllerHandler(mediaController.updateOne));
 /**
  * DELETE /api/media/{id}
 *
