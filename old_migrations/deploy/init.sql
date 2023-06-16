@@ -10,7 +10,9 @@ CREATE TABLE "player"(
   "last_name" TEXT NOT NULL,
   "description" TEXT NOT NULL,
   "role" TEXT,
-  "image" TEXT NOT NULL,
+  "small_image" TEXT NOT NULL,
+  "medium_image" TEXT NOT NULL,
+  "large_image" TEXT NOT NULL,
   "statistics" TEXT,
   "achievements" TEXT,
   "youtube_link" TEXT,
@@ -62,7 +64,8 @@ CREATE TABLE "setup" (
 CREATE TABLE "media" (
     "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "link" TEXT NOT NULL,
-    "is_active" BOOLEAN NOT NULL DEFAULT false,
+    -- 0 = false
+    "is_active" BOOLEAN DEFAULT false,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
     "updated_at" TIMESTAMPTZ
 );
@@ -90,7 +93,9 @@ CREATE TABLE "article" (
     "title" TEXT NOT NULL UNIQUE,
     "content" TEXT NOT NULL,
     "author" TEXT NOT NULL,
-    "image" TEXT NOT NULL,
+    "small_image" TEXT NOT NULL,
+    "medium_image" TEXT NOT NULL,
+    "large_image" TEXT NOT NULL,
     "figcaption" TEXT,
     "publication_date" TIMESTAMPTZ NOT NULL DEFAULT now(),
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -99,7 +104,7 @@ CREATE TABLE "article" (
 -- table category
 CREATE TABLE "category" (
     "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "label" TEXT NOT NULL UNIQUE,
+    "label" TEXT NOT NULL,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
     "updated_at" TIMESTAMPTZ
 );
@@ -113,7 +118,9 @@ CREATE TABLE "calendar" (
     "replay_link" TEXT,
     "live_link" TEXT,
     "score" TEXT,
-    "image" TEXT NOT NULL,
+    "small_image" TEXT NOT NULL,
+    "medium_image" TEXT NOT NULL,
+    "large_image" TEXT NOT NULL,
     "publication_date" TIMESTAMPTZ NOT NULL DEFAULT now(),
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
     "updated_at" TIMESTAMPTZ

@@ -3,42 +3,42 @@
 BEGIN;
 
 -- Revert table "article_has_calendar"
-DROP TABLE IF EXISTS "article_has_calendar";
+DROP TABLE "article_has_calendar";
 
 -- Revert table "article_has_category"
-DROP TABLE IF EXISTS "article_has_category";
+DROP TABLE "article_has_category";
 
 -- Revert table "calendar"
-DROP TABLE IF EXISTS "calendar";
+DROP TABLE "calendar";
 
 -- Revert table "category"
-DROP TABLE IF EXISTS "category";
+DROP TABLE "category";
 
 -- Revert table "article"
-DROP TABLE IF EXISTS "article";
+DROP TABLE "article";
 
 -- Revert table "player_has_media"
-DROP TABLE IF EXISTS "player_has_media";
+DROP TABLE "player_has_media";
 
 -- Revert table "player_has_setup"
-DROP TABLE IF EXISTS "player_has_setup";
+DROP TABLE "player_has_setup";
 
 -- Revert table "media"
-DROP TABLE IF EXISTS "media";
+DROP TABLE "media";
 
 -- Revert table "setup"
-DROP TABLE IF EXISTS "setup";
+DROP TABLE "setup";
 
 -- Revert table "recruitment"
-DROP TABLE IF EXISTS "recruitment";
+DROP TABLE "recruitment";
 
 -- Revert table "user"
-DROP TABLE IF EXISTS "user";
+DROP TABLE "user";
 
 -- Revert table "permission"
-DROP TABLE IF EXISTS "permission";
+DROP TABLE "permission";
 
 -- Revert table "player"
-DROP TABLE IF EXISTS "player";
+DROP TABLE "player";
 
 COMMIT;

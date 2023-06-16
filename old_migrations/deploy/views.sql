@@ -12,7 +12,7 @@ SELECT article.*,
                          'replay_link', calendar.replay_link,
                          'live_link', calendar.live_link,
                          'score', calendar.score,
-                         'image', calendar.image,
+                         'image', calendar.mage,
                          'publication_date', calendar.publication_date,
                          'created_at', calendar.created_at,
                          'updated_at', calendar.updated_at
@@ -50,7 +50,7 @@ SELECT article.*,
                          'replay_link', calendar.replay_link,
                          'live_link', calendar.live_link,
                          'score', calendar.score,
-                         'image', calendar.image,
+                         'image', calendar.large_image,
                          'publication_date', calendar.publication_date,
                          'created_at', calendar.created_at,
                          'updated_at', calendar.updated_at
@@ -117,93 +117,9 @@ ORDER BY player.id;
 
 
 CREATE VIEW get_article_home AS
-SELECT "article"."id", "article"."slug", "article"."title", "article"."image", "article"."content" FROM "article" WHERE "article"."publication_date" <= now() limit 3;
+SELECT "article"."id", "article"."slug", "article"."title", "article"."image" FROM "article" WHERE "article"."publication_date" <= now() limit 3;
 
 CREATE VIEW get_user_view AS
 SELECT "user"."id", "user"."user_name", "user"."email", "user"."password", "user"."refresh_token", "permission"."name" AS permission_name, "permission"."level" AS permission_level ,"user"."created_at", "user"."updated_at" FROM "user" JOIN "permission" ON "permission"."id" = "user"."user_permission";
 
-
-CREATE VIEW get_calendar_home AS
-(
-  SELECT
-  json_build_object(
-    'future_event', (SELECT json_agg(calendar_event) FROM (
-      SELECT /*evenement a venir*/
-        "calendar"."id",
-        "calendar"."event_name",
-        "calendar"."event_date",
-        "calendar"."adversary_name_short",
-        "calendar"."live_link",
-        NULL AS "score",
-        "calendar"."image"
-      FROM
-        "calendar"
-      WHERE
-        "calendar"."event_date" >= now()
-      ORDER BY
-        "calendar"."event_date"
-      LIMIT 1
-    ) AS calendar_event),
-    'past_event', (SELECT json_agg(calendar_event) FROM (
-      SELECT /*evenement passer*/
-        "calendar"."id",
-        "calendar"."event_name",
-        "calendar"."event_date",
-        "calendar"."adversary_name_short",
-        "calendar"."replay_link",
-        "calendar"."score",
-        "calendar"."image"
-      FROM
-        "calendar"
-      WHERE
-        "calendar"."event_date" < now()
-      ORDER BY
-        "calendar"."event_date" DESC
-      LIMIT 1
-    ) AS calendar_event)
-  ) AS "data"
-);
-
- CREATE VIEW get_all_calendar AS
-SELECT
-  json_build_object(
-    'future_event', (SELECT json_agg(calendar_event) FROM (
-      SELECT
-        "calendar"."id",
-        "calendar"."event_name",
-        "calendar"."event_date",
-        "calendar"."adversary_name_short",
-        "calendar"."live_link",
-        NULL AS "score",
-        "calendar"."image",
-        "calendar"."publication_date",
-        "calendar"."created_at",
-        "calendar"."updated_at"
-      FROM
-        "calendar"
-      WHERE
-        "calendar"."event_date" >= now()
-      ORDER BY
-        "calendar"."event_date"
-    ) AS calendar_event),
-    'past_event', (SELECT json_agg(calendar_event) FROM (
-      SELECT
-        "calendar"."id",
-        "calendar"."event_name",
-        "calendar"."event_date",
-        "calendar"."adversary_name_short",
-        "calendar"."replay_link",
-        "calendar"."score",
-        "calendar"."image",
-        "calendar"."publication_date",
-        "calendar"."created_at",
-        "calendar"."updated_at"
-      FROM
-        "calendar"
-      WHERE
-        "calendar"."event_date" < now()
-      ORDER BY
-        "calendar"."event_date" DESC
-    ) AS calendar_event)
-  ) AS "data";
 COMMIT;
