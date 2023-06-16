@@ -5,10 +5,41 @@ POST {{endpoint}}/recruitment
 Content-Type: application/json
 
 {
-  "user_name": "slayer",
-  "email": "slayer@example.com",
-  "first_name":"robert",
-  "last_name":"slayer",
-  "external_link": "external_link_url",
+  "user_name": "slayerssssss",
+  "email": "slayer@sssssssexample.com",
+  "first_name":"roberts",
+  "last_name":"slayers",
   "message":"accepter ma demande je suis chaud"
 }
+
+### Envoyer un formulaire de recrutement
+POST {{endpoint}}/recruitment
+Content-Type: multipart/form-data; boundary=boundary_value
+
+--boundary_value
+Content-Disposition: form-data; name="cv"; filename="test.pdf"
+Content-Type: application/pdf
+
+@./test.pdf
+--boundary_value
+Content-Disposition: form-data; name="user_name"
+
+slayerssssss
+--boundary_value
+Content-Disposition: form-data; name="email"
+
+slayer@sssssssexample.com
+--boundary_value
+Content-Disposition: form-data; name="first_name"
+
+roberts
+--boundary_value
+Content-Disposition: form-data; name="last_name"
+
+slayers
+--boundary_value
+Content-Disposition: form-data; name="message"
+
+accepter ma demande je suis chaud
+--boundary_value--
+
