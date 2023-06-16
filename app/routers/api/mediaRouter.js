@@ -1,7 +1,10 @@
+/* eslint-disable max-len */
 const express = require('express');
 const controllerHandler = require('../../middlewares/controllerHandler');
 const { authorizeAccess } = require('../../middlewares/authHandler');
 const mediaController = require('../../controllers/mediaController');
+const validate = require('../../validations/validate');
+const { createMedia, modifyMedia } = require('../../validations/schemas/media-schema');
 
 const router = express.Router();
 /**
@@ -36,7 +39,7 @@ router.get('/', controllerHandler(mediaController.getAll));
  * @returns {Media} 200 - The newly created media object
  * @returns {object} 500 - Internal server error
  */
-router.post('/', authorizeAccess(1), controllerHandler(mediaController.insertOne));
+router.post('/', validate(createMedia), authorizeAccess(1), controllerHandler(mediaController.insertOne));
 /**
  * PATCH /api/media/{id}
 *
@@ -50,7 +53,7 @@ router.post('/', authorizeAccess(1), controllerHandler(mediaController.insertOne
  * @returns {Media} 200 - The updated media object
  * @returns {object} 500 - Internal server error
  */
-router.patch('/:id', authorizeAccess(1), controllerHandler(mediaController.updateOne));
+router.patch('/:id', validate(modifyMedia), authorizeAccess(1), controllerHandler(mediaController.updateOne));
 /**
  * DELETE /api/media/{id}
 *
