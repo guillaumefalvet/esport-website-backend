@@ -17,6 +17,8 @@ const { authorizeAccess } = require('../../middlewares/authHandler');
 
 /**
  * POST /api/recruitment
+ * @summary submit an application
+ * @tags Recruitment
  * @param {Recruitment} request.body.required - The recruitment object to insert - multipart/form-data
  * @returns {object} 200 - Success message
  * @returns {object} 400 - Bad request
