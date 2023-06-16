@@ -4,8 +4,8 @@ BEGIN;
 
 -- XXX Add DDLs here.
 
-DROP IF EXISTS "get_calendar_home";
+DROP VIEW "get_calendar_home";
 
-DROP IF EXISTS "get_all_calendar";
+DROP VIEW "get_all_calendar";
 
 COMMIT;
