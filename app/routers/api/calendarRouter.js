@@ -16,9 +16,7 @@ const router = express.Router();
  * @property {string} replay_link - a calendar replay_link
  * @property {string} live_link - a calendar live_link
  * @property {string} score - a calendar score
- * @property {string} small_image - a calendar small image
- * @property {string} medium_image - a calendar medium image
- * @property {string} large_image - a calendar large image
+ * @property {string} image - a calendar image
  * @property {string} publication_date - a calendar publication date
  * @property {string} created_at - date of creation
  * @property {string} updated_at - date of last update

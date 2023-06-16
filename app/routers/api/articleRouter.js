@@ -13,9 +13,7 @@ const router = express.Router();
  * @property {string} title - The article title
  * @property {string} content - The article content
  * @property {string} author - The article author
- * @property {string} small_image - The URL of the article's small image
- * @property {string} medium_image - The URL of the article's medium image
- * @property {string} large_image - The URL of the article's large image
+ * @property {string} image - The URL of the article's image
  * @property {string} figcaption - The article figcaption
  * @property {string} publication_date - The article publication date
  * @property {string} created_at - The date of creation
