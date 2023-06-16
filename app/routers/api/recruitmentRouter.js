@@ -1,11 +1,10 @@
 const express = require('express');
 const controllerHandler = require('../../middlewares/controllerHandler');
-const { recruitmentValidation } = require('../../validations/schemas/recruitment-schema');
-const validate = require('../../validations/validate');
-const { createRecruitment } = require('../../controllers/recruitmentController');
-// const mailService = require('../../services/recruitMailing');
+// const { recruitmentValidation } = require('../../validations/schemas/recruitment-schema');
+// const validate = require('../../validations/validate');
+const recruitController = require('../../controllers/recruitmentController');
+const { authorizeAccess } = require('../../middlewares/authHandler');
 
-const router = express.Router();
 /**
  * a recruitment type
  * @typedef {object} Recruitment
@@ -27,7 +26,8 @@ const router = express.Router();
  * @returns {object} 200 - success message
  * @returns {object} 400 - bad request
  */
-
-router.post('/', validate(recruitmentValidation), controllerHandler(createRecruitment));
+const router = express.Router();
+router.use('/private', authorizeAccess(1), express.static('private'));
+router.post('/', controllerHandler(recruitController.insertOne));
 
 module.exports = router;

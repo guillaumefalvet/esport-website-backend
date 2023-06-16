@@ -37,6 +37,8 @@ app.use(express.urlencoded({ extended: true }));
 
 debug(`Production mode ${!!process.env.PROD}`);
 expressJSDocSwagger(app)(options);
+app.use(express.static('public'));
+
 app.use(express.json());
 app.use(cors(corsOptions));
 app.use(router);
