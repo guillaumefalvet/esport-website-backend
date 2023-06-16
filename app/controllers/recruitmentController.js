@@ -1,19 +1,26 @@
-/* eslint-disable camelcase */
 const debug = require('debug')('app:controllers:recruitController');
 const uploadHandler = require('../middlewares/uploadHandler');
 const dataMapper = require('../models/dataMapper');
+const { createRecruitment } = require('../validations/schemas/recruitment-schema');
 
-const API_URL = process.env.API_URL ?? 'https://projet-14-victory-zone-back-production.up.railway.app/api/recruitment';
+const API_URL = process.env.API_URL ?? '';
 
 module.exports = {
   async insertOne(request, response, next) {
-    const image_upload = await uploadHandler(request, 'private', 'pdf', 'cv', next);
-
-    debug(request.file);
-    request.body.external_link = `${API_URL}/${image_upload.path}`;
-    debug(request.body);
-    const result = await dataMapper.createOne('recruitment', request.body);
-    debug('Recruitment created successfully');
-    return response.status(201).json(result);
+    try {
+      const imageUpload = await uploadHandler(request, 'private', 'pdf', 'cv', next);
+      const updatedData = {
+        ...request.body,
+        external_link: API_URL + imageUpload.path,
+      };
+      await createRecruitment.validateAsync(updatedData);
+      debug(updatedData);
+      const result = await dataMapper.createOne('recruitment', updatedData);
+      debug('Recruitment created successfully');
+      return response.status(201).json(result);
+    } catch (err) {
+      debug('Error while creating recruitment', err);
+      return next(err);
+    }
   },
 };
