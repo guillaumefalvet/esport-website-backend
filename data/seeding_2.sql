@@ -63,7 +63,7 @@ VALUES
 INSERT INTO "calendar" ("event_name", "event_date", "adversary_name", "adversary_name_short", "replay_link", "live_link", "score", "small_image", "medium_image", "large_image", "publication_date")
 VALUES
   ('Match 1', '2023-06-15 18:00:00', 'Adversaire 1', 'Adv 1', 'https://replaylink1.com', 'https://livestream1.com', '2-1', 'small_image_1.jpg', 'medium_image_1.jpg', 'large_image_1.jpg', '2023-06-14 18:00:00'),
-  ('Match du mois prochain', '2023-06-20 19:30:00', 'the futute is now', 'future is now', 'https://replaylink2.com', 'https://livestream2.com', '1-1', 'small_image_2.jpg', 'medium_image_2.jpg', 'large_image_2.jpg', '2024-07-15 18:00:00'),
+  ('Match du mois prochain', '2023-06-20 19:30:00', 'the futute is now', 'future is now', 'https://replaylink2.com', 'https://livestream2.com', '', 'small_image_2.jpg', 'medium_image_2.jpg', 'large_image_2.jpg', '2024-07-15 18:00:00'),
   ('Match 2', '2023-06-20 19:30:00', 'Adversaire 2', 'Adv 2', 'https://replaylink2.com', 'https://livestream2.com', '1-1', 'small_image_2.jpg', 'medium_image_2.jpg', 'large_image_2.jpg', '2023-06-14 18:00:00');
 
 -- Seeding data for the "article_has_category" table
