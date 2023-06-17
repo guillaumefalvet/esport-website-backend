@@ -18,7 +18,7 @@ const authHandler = {
    * @returns {string} - Generated access token.
    */
   generateAccessTokenWithUser(user) {
-    debug(`generateAccessTokenWithUser: ${user}`);
+    debug('generating access token ...');
     return jwt.sign(
       {
         data: {
@@ -39,10 +39,7 @@ const authHandler = {
    * @returns {string} - Generated refresh token.
    */
   generateRefreshTokenForUser(id) {
-    debug(`generateRefreshTokenForUser for id :${id}`);
-    debug(jwt.sign({ id }, JWT_REFRESH_SECRET, {
-      expiresIn: REFRESH_TOKEN_EXPIRATION,
-    }));
+    debug('generating refresh token ...');
     return jwt.sign({ id }, JWT_REFRESH_SECRET, {
       expiresIn: REFRESH_TOKEN_EXPIRATION,
     });
@@ -59,9 +56,8 @@ const authHandler = {
       debug(`authorize middleware for level: ${permissionLevelRequired}`);
       try {
         const authHeader = request.headers.authorization;
-        debug(`authHeader: ${authHeader}`);
         if (!authHeader) {
-          debug('❌ no header found');
+          debug('❌ ERROR: no header found');
           const error = new Error();
           error.code = 401;
           return next(error);
@@ -77,7 +73,7 @@ const authHandler = {
         debug('✅ authorize done');
         return next();
       } catch (error) {
-        debug(`❌no valid token to grant access to permission level: ${permissionLevelRequired}`);
+        debug(`❌ ERRO: no valid token to grant access to permission level: ${permissionLevelRequired}`);
         error.name = 'jwt expired';
         return next(error);
       }
@@ -94,7 +90,7 @@ const authHandler = {
   async isRefreshTokenValid(token) {
     const decodedToken = jwt.verify(token, JWT_REFRESH_SECRET);
     const storedToken = await dataMapper.getRefreshToken(decodedToken.id);
-    debug(`isRefreshTokenValid:\n header token:   ${token} \n database token: ${storedToken}`);
+    debug(token === storedToken ? '✅ valid refresh token' : '❌ not valid refresh token');
     return token === storedToken;
   },
   /**
@@ -106,13 +102,39 @@ const authHandler = {
    * @returns {Promise<object>} - User object.
    */
   async getUserFromToken(token) {
+    debug('getUserFromToken');
     const decoded = jwt.verify(
       token,
       JWT_SECRET,
       { ignoreExpiration: true },
     );
-    debug(`getUserFromToken: ${decoded.data.id}`);
     return dataMapper.getByPk('get_user_view', decoded.data.id);
+  },
+  /**
+ * Sends authentication tokens to the client.
+ *
+ * @async
+ * @memberof authHandler
+ * @function sendAuthTokens
+ * @param {object} response - The response object.
+ * @param {object} user - The user object.
+ * @returns {Promise<object>} - Object containing the status and data of the tokens.
+ */
+  async sendAuthTokens(response, user) {
+    debug('sending auth token ...');
+    const accessToken = authHandler.generateAccessTokenWithUser(user);
+    const refreshToken = authHandler.generateRefreshTokenForUser(user.id);
+    debug('saving newly generated refresh token is the database ...');
+    await dataMapper.setRefreshToken(user.id, refreshToken);
+    return {
+      status: 'success',
+      data: {
+        id: user.id,
+        permission_level: user.permission_level,
+        accessToken,
+        refreshToken,
+      },
+    };
   },
 };
 module.exports = authHandler;
