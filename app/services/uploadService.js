@@ -11,7 +11,7 @@ const multer = require('multer');
  * @returns {Promise<Object>} A Promise that resolves to an object containing the uploaded file information.
  * @throws {Error} If there is an error during file upload.
  */
-const uploadHandler = (request, mainFolder, subFolder, fieldname, next) => {
+const uploadService = (request, mainFolder, subFolder, fieldname, next) => {
   const uploadFolder = `${mainFolder}/${subFolder}`;
 
   const storage = multer.diskStorage({
@@ -66,4 +66,4 @@ const uploadHandler = (request, mainFolder, subFolder, fieldname, next) => {
     });
 };
 
-module.exports = uploadHandler;
+module.exports = uploadService;
