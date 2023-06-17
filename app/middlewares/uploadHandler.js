@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
 const multer = require('multer');
-
 /**
  * Handles file upload using Multer middleware.
  *
@@ -26,7 +25,21 @@ const uploadHandler = (request, mainFolder, subFolder, fieldname, next) => {
     },
   });
 
-  const upload = multer({ storage });
+  const upload = multer({
+    storage,
+    fileFilter(_, file, cb) {
+      const allowedExtensions = ['.pdf', '.doc', '.docx', '.webp', '.jpg', '.jpeg', '.png'];
+      const fileExtension = file.originalname
+        .toLowerCase()
+        .substring(file.originalname.lastIndexOf('.'));
+
+      if (allowedExtensions.includes(fileExtension)) {
+        cb(null, true);
+      } else {
+        cb(new multer.MulterError('INVALID_FILE_EXTENSION', `Invalid file extension. Allowed extensions: ${allowedExtensions.join(', ')}`));
+      }
+    },
+  });
 
   return new Promise((resolve, reject) => {
     upload.single(fieldname)(request, null, (err) => {
@@ -36,9 +49,9 @@ const uploadHandler = (request, mainFolder, subFolder, fieldname, next) => {
       }
       // If there isn't any file => send empty string
       if (!request.file) {
-        return resolve({ filename: '', path: 'no file provided' });
+        return resolve({ filename: '', path: '' });
       }
-      // File upload successful
+      // file upload successful
       const { filename, path } = request.file;
 
       // Process the file and resolve the Promise with the result

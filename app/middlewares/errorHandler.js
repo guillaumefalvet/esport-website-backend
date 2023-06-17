@@ -51,9 +51,11 @@ const errorMiddleware = {
     if (error.name === 'jwt expired') {
       return response.status(401).json({ status: 'error', message: 'TokenExpiredError: JWT expired' });
     }
-    // Handling MulterError
     if (error instanceof multer.MulterError && error.code === 'LIMIT_UNEXPECTED_FILE') {
       return response.status(400).json({ status: 'error', message: 'Unexpected field: Please check the field name in your file upload' });
+    }
+    if (error instanceof multer.MulterError && error.code === 'INVALID_FILE_EXTENSION') {
+      return response.status(400).json({ status: 'error', message: 'Invalid file extension: Please upload files with allowed extensions' });
     }
     return response.status(500).json({ status: 'fail', message: error.message });
   },
