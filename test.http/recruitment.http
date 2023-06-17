@@ -1,23 +1,18 @@
 @endpoint = http://localhost:{{$dotenv PORT}}/api
 
-### Envoyer un formulaire de recrutement
-POST {{endpoint}}/recruitment
-Content-Type: application/json
 
-{
-  "user_name": "slayerssssss",
-  "email": "slayer@sssssssexample.com",
-  "first_name":"roberts",
-  "last_name":"slayers",
-  "message":"accepter ma demande je suis chaud"
-}
+
+### Récupérer toutes les recrutment
+GET {{ endpoint }}/recruitment
+
+
 
 ### Envoyer un formulaire de recrutement
 POST {{endpoint}}/recruitment
 Content-Type: multipart/form-data; boundary=boundary_value
 
 --boundary_value
-Content-Disposition: form-data; name="tsas"; filename="test.pdf"
+Content-Disposition: form-data; name="cv"; filename="test.pdf"
 Content-Type: application/pdf
 
 @./test.pdf
@@ -43,3 +38,5 @@ Content-Disposition: form-data; name="message"
 accepter ma demande je suis chaud
 --boundary_value--
 
+### Suppression d'un recrutement
+DELETE {{ endpoint }}/recruitment/3

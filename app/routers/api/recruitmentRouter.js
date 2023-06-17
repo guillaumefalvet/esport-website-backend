@@ -1,10 +1,9 @@
 const express = require('express');
 const controllerHandler = require('../../middlewares/controllerHandler');
-// const { recruitmentValidation } = require('../../validations/schemas/recruitment-schema');
-// const validate = require('../../validations/validate');
 const recruitController = require('../../controllers/recruitmentController');
 const { authorizeAccess } = require('../../middlewares/authHandler');
 
+const router = express.Router();
 /**
  * @typedef {object} Recruitment - A recruitment type.
  * @property {string} user_name.required - The recruitment user name.
@@ -23,9 +22,30 @@ const { authorizeAccess } = require('../../middlewares/authHandler');
  * @returns {object} 200 - Success message
  * @returns {object} 400 - Bad request
  */
-
-const router = express.Router();
-router.use('/private', authorizeAccess(1), express.static('private'));
 router.post('/', controllerHandler(recruitController.insertOne));
 
+/**
+ * GET /api/recruitment
+ * @summary Get all recruitment applications
+ * @tags Recruitment
+ * @returns {object} 200 - Array of recruitment applications
+ * @security BearerAuth
+ * @returns {object} 401 - Unauthorized error
+ */
+router.get('/', controllerHandler(recruitController.getAll));
+
+// Serve static files in the 'private' directory
+
+/**
+ * DELETE /api/recruitment/:id
+ * @summary Delete a recruitment application by ID
+ * @tags Recruitment
+ * @security BearerAuth
+ * @param {number} id.path.required - The ID of the recruitment application to delete
+ * @returns {object} 200 - Success message
+ * @returns {object} 401 - Unauthorized error
+ * @returns {object} 404 - Not Found error
+*/
+router.delete('/:id', controllerHandler(recruitController.deleteOne));
+router.use('/private', authorizeAccess(1), express.static('private'));
 module.exports = router;
