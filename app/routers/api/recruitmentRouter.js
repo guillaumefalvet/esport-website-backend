@@ -28,11 +28,11 @@ router.post('/', controllerHandler(recruitController.insertOne));
  * GET /api/recruitment
  * @summary Get all recruitment applications
  * @tags Recruitment
- * @returns {object} 200 - Array of recruitment applications
  * @security BearerAuth
- * @returns {object} 401 - Unauthorized error
+ * @returns {object} 200 - Array of recruitment applications
+ * @returns {object} 403 - Forbidden
  */
-router.get('/', controllerHandler(recruitController.getAll));
+router.get('/', authorizeAccess(1), controllerHandler(recruitController.getAll));
 
 // Serve static files in the 'private' directory
 
@@ -43,9 +43,9 @@ router.get('/', controllerHandler(recruitController.getAll));
  * @security BearerAuth
  * @param {number} id.path.required - The ID of the recruitment application to delete
  * @returns {object} 200 - Success message
- * @returns {object} 401 - Unauthorized error
+ * @returns {object} 403 - Forbidden
  * @returns {object} 404 - Not Found error
 */
-router.delete('/:id', controllerHandler(recruitController.deleteOne));
+router.delete('/:id', authorizeAccess(1), controllerHandler(recruitController.deleteOne));
 router.use('/private', authorizeAccess(1), express.static('private'));
 module.exports = router;
