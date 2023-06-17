@@ -120,7 +120,7 @@ const authHandler = {
  * @param {object} user - The user object.
  * @returns {Promise<object>} - Object containing the status and data of the tokens.
  */
-  async sendAuthTokens(response, user) {
+  async sendAuthTokens(user) {
     debug('sending auth token ...');
     const accessToken = authHandler.generateAccessTokenWithUser(user);
     const refreshToken = authHandler.generateRefreshTokenForUser(user.id);

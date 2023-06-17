@@ -32,7 +32,7 @@ const authController = {
     const dbPassword = result[0].password;
     if (await bcrypt.compare(password, dbPassword)) {
       debug('✅ successfull login');
-      const sendToken = await authHandler.sendAuthTokens(response, result[0]);
+      const sendToken = await authHandler.sendAuthTokens(result[0]);
       return response.status(200).json(sendToken);
     }
     debug('❌ ERROR: user password isn\'t matching database password for that user');
@@ -63,7 +63,7 @@ const authController = {
     const accessToken = authHeader.split('Bearer ')[1];
     if (await authHandler.isRefreshTokenValid(refreshToken)) {
       const user = await authHandler.getUserFromToken(accessToken);
-      const sendToken = await authHandler.sendAuthTokens(response, user[0]);
+      const sendToken = await authHandler.sendAuthTokens(user[0]);
       return response.status(200).json(sendToken);
     }
     return next(new Error('❌ ERROR: refresh token is not valid'));
