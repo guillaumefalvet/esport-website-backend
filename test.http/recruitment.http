@@ -1,23 +1,36 @@
 @endpoint = http://localhost:{{$dotenv PORT}}/api
+@accessToken = {{login.response.body.$.data.accessToken}}
+@refreshToken = {{login.response.body.$.data.refreshToken}}
 
-### Envoyer un formulaire de recrutement
-POST {{endpoint}}/recruitment
-Content-Type: application/json
+### Connexion NON ADMIN
+# @name login
+POST {{endpoint}}/auth/login
+content-type: application/json
 
 {
-  "user_name": "slayerssssss",
-  "email": "slayer@sssssssexample.com",
-  "first_name":"roberts",
-  "last_name":"slayers",
-  "message":"accepter ma demande je suis chaud"
+    "email": "michael@example.com",
+    "password": "secret"
 }
+
+### REFRESH TOKEN FIRST TIME
+# @name login
+POST {{endpoint}}/auth/refresh-token
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "refreshToken": "{{refreshToken}}"
+}
+### Récupérer toutes les recrutment
+GET {{ endpoint }}/recruitment
+Authorization: Bearer {{accessToken}}
 
 ### Envoyer un formulaire de recrutement
 POST {{endpoint}}/recruitment
 Content-Type: multipart/form-data; boundary=boundary_value
 
 --boundary_value
-Content-Disposition: form-data; name="tsas"; filename="test.pdf"
+Content-Disposition: form-data; name="cv"; filename="test.pdf"
 Content-Type: application/pdf
 
 @./test.pdf
@@ -43,3 +56,6 @@ Content-Disposition: form-data; name="message"
 accepter ma demande je suis chaud
 --boundary_value--
 
+### Suppression d'un recrutement
+DELETE {{ endpoint }}/recruitment/3
+Authorization: Bearer {{accessToken}}
