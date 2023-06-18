@@ -8,7 +8,7 @@
     "dev": "DEBUG=app:* npx nodemon index.js",
     "DBreset": "sqitch revert -y",
     "DBdeploy": "sqitch deploy",
-    "DBseeding": "psql -d victoryzone -f ./data/seeding_2.sql",
+    "DBseeding": "psql -d victoryzone -f ./data/seeding_MVP.sql",
     "DBsetup": "npm run DBreset && npm run DBdeploy && npm run DBseeding"
   },
   "keywords": [],
