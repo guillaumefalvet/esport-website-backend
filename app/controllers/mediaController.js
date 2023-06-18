@@ -43,13 +43,14 @@ module.exports = {
     debug(`updateOne ${tableName}`);
     const { id } = request.params;
     debug(request.body);
+    request.body.id = id;
     const findMedia = await dataMapper.getByPk(tableName, id);
-    if (findMedia.rowCount === 0) {
+    if (!findMedia.length) {
       const error = new Error();
       error.code = 404;
       return next(error);
     }
-    request.body.id = id;
+    // request.body.id = id;
     const result = await dataMapper.modifyByPk(tableName, request.body);
     jsend.status = 'success';
     jsend.data = result;
@@ -59,7 +60,7 @@ module.exports = {
     debug(` deleteOne ${tableName}`);
     const { id } = request.params;
     const findMedia = await dataMapper.getByPk(tableName, id);
-    if (findMedia.rowCount === 0) {
+    if (!findMedia.length) {
       const error = new Error();
       error.code = 404;
       return next(error);
