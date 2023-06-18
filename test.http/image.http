@@ -49,7 +49,7 @@ POST {{endpoint}}/media/
 content-type: application/json
 Authorization: Bearer {{accessToken}}
 
-{"link" :"https://media4.com"}
+{"link" :"https://media4.com","is_active":"false"}
 
 ### Modify media
 
@@ -61,5 +61,5 @@ Authorization: Bearer {{accessToken}}
 
 ### delete media
 
-DELETE {{endpoint}}/media/3
+DELETE {{endpoint}}/media/10
 Authorization: Bearer {{accessToken}}
