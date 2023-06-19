@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 const multer = require('multer');
+const debug = require('debug')('app:service:uploadService');
 /**
  * Handles file upload using Multer middleware.
  *
@@ -28,7 +29,12 @@ const uploadService = (request, mainFolder, subFolder, fieldname, next) => {
   const upload = multer({
     storage,
     fileFilter(_, file, cb) {
-      const allowedExtensions = ['.pdf', '.doc', '.docx', '.webp', '.jpg', '.jpeg', '.png'];
+      const allowedExtensions = [];
+      if (fieldname === 'img') {
+        allowedExtensions.push('.webp', '.jpg', '.jpeg', '.png');
+      } else {
+        allowedExtensions.push('.pdf', '.doc', '.docx');
+      }
       const fileExtension = file.originalname
         .toLowerCase()
         .substring(file.originalname.lastIndexOf('.'));
