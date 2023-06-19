@@ -22,8 +22,8 @@ module.exports = {
     return rows;
   },
   async getBySlug(slug) {
-    const result = await client.query('SELECT * FROM article_events_categories_public WHERE slug = $1;', [slug]);
-    return result;
+    const { rows } = await client.query('SELECT * FROM article_events_categories_public WHERE slug = $1;', [slug]);
+    return rows;
   },
   async getByUserName(table, userName) {
     const { rows } = await client.query(`SELECT * FROM ${table} WHERE user_name = $1;`, [userName]);
