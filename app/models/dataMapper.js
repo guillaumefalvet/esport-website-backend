@@ -5,6 +5,10 @@ module.exports = {
     const { rows } = await client.query('SELECT * FROM "user" WHERE user_name = $1', [userName]);
     return rows;
   },
+  async getByColumnValue(table, column, value) {
+    const { rows } = await client.query(`SELECT * FROM ${table} WHERE ${column} = $1`, [value]);
+    return rows;
+  },
   async getByType(boolean) {
     const { rows } = await client.query('SELECT * FROM "media" WHERE is_active = $1', [boolean]);
     return rows;
@@ -87,11 +91,11 @@ module.exports = {
     return rows;
   },
   async getCalendarHome() {
-    const result = await client.query('SELECT * FROM get_calendar_home');
-    return result.rows[0].data;
+    const { rows } = await client.query('SELECT * FROM get_calendar_home');
+    return rows[0];
   },
   async getAllCalendar() {
     const result = await client.query('SELECT * FROM get_all_calendar');
-    return result.rows[0].data;
+    return result.rows[0];
   },
 };
