@@ -8,7 +8,7 @@ POST {{endpoint}}/auth/login
 content-type: application/json
 
 {
-    "email": "michael@example.com",
+    "email": "john@example.com",
     "password": "secret"
 }
 
@@ -57,5 +57,5 @@ accepter ma demande je suis chaud
 --boundary_value--
 
 ### Suppression d'un recrutement
-DELETE {{ endpoint }}/recruitment/3
+DELETE {{ endpoint }}/recruitment/19
 Authorization: Bearer {{accessToken}}
