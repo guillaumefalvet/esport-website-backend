@@ -1,4 +1,5 @@
 const debug = require('debug')('app:controllers:recruitController');
+const fs = require('fs');
 const uploadHandler = require('../services/uploadService');
 const dataMapper = require('../models/dataMapper');
 const { createRecruitment } = require('../validations/schemas/recruitment-schema');
@@ -20,10 +21,15 @@ module.exports = {
   async insertOne(request, response, next) {
     try {
       const imageUpload = await uploadHandler(request, 'private', 'pdf', 'cv', next);
+
       const updatedData = {
         ...request.body,
-        external_link: API_URL + imageUpload.path,
       };
+      if (!imageUpload.path.length) {
+        updatedData.external_link = '';
+      } else {
+        updatedData.external_link = `${API_URL}${imageUpload.path}`;
+      }
       await createRecruitment.validateAsync(updatedData);
       const result = await dataMapper.createOne('recruitment', updatedData);
       debug('Recruitment created successfully');
@@ -41,6 +47,14 @@ module.exports = {
       const error = new Error();
       error.code = 404;
       return next(error);
+    }
+    debug(findRecruitment[0]);
+    if (findRecruitment[0].external_link.length) {
+      // verification si il n'est pas vide
+      const fileToDelete = findRecruitment[0].external_link.split(API_URL);
+      debug(fileToDelete);
+      fs.unlinkSync(`./${fileToDelete[1]}`);
+      debug('local file deleted');
     }
     await dataMapper.deleteByPk(tableName, id);
     return response.status(204);

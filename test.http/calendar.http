@@ -1,7 +1,8 @@
 @endpoint = http://localhost:{{$dotenv PORT}}/api
 @accessToken = {{login.response.body.$.data.accessToken}}
+@refreshToken = {{login.response.body.$.data.refreshToken}}
 
-## Connexion ADMIN
+### Connexion ADMIN
 # @name login
 POST {{endpoint}}/auth/login
 content-type: application/json
@@ -9,6 +10,17 @@ content-type: application/json
 {
     "email": "john@example.com",
     "password": "secret"
+}
+
+
+### REFRESH TOKEN FIRST TIME
+# @name login
+POST {{endpoint}}/auth/refresh-token
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "refreshToken": "{{refreshToken}}"
 }
 ### Récupérer tous les évents/calendrier/match
 GET {{ endpoint }}/calendar

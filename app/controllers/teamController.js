@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 /* eslint-disable max-len */
 /* eslint-disable camelcase */
 const dataMapper = require('../models/dataMapper');
@@ -12,7 +13,7 @@ const jsend = {
 module.exports = {
   async getAll(_, response) {
     debug(`get all ${tableName}`);
-    const results = await dataMapper.getAll('player_view');
+    const results = await dataMapper.getAll(tableName);
     jsend.data = results;
     jsend.status = 'success';
     return response.status(200).json(jsend);
@@ -21,7 +22,7 @@ module.exports = {
     debug(`get one ${tableName}`);
     const { user_name } = request.params;
     const result = await dataMapper.getByUserName('player_view', user_name);
-    if (result.length === 0) {
+    if (!result.length) {
       const error = new Error();
       error.code = 404;
       return next(error);
@@ -30,19 +31,26 @@ module.exports = {
     jsend.data = result;
     return response.status(200).json(jsend);
   },
-  async insertOne(request, response) {
+  async insertOne(request, response, next) {
     debug(`insertOne: ${tableName}`);
+    const { user_name } = request.body;
+    const findPlayer = await dataMapper.getByUserName(tableName, user_name);
+    if (findPlayer.length) {
+      const error = new Error();
+      error.code = 303;
+      return next(error);
+    }
     const result = await dataMapper.createOne(tableName, request.body);
     jsend.status = 'success';
     jsend.data = result;
-    response.status(201).json(jsend);
+    return response.status(201).json(jsend);
   },
   async insertMedia(request, response, next) {
     debug('insertMedia');
     // VERIFICATION SI PLAYER EXISTE DANS LA TABLE PLAYER SINON ERREUR
     const { user_name } = request.params;
     const findPlayer = await dataMapper.getByUserName(tableName, user_name);
-    if (findPlayer.length === 0) {
+    if (!findPlayer.length) {
       const error = new Error();
       error.code = 404;
       return next(error);
@@ -52,7 +60,7 @@ module.exports = {
     const media_id = request.params.id;
     const findMedia = await dataMapper.getByPk('media', media_id);
     debug(`media exist: ${findMedia[0] ? 'true' : 'false'}`);
-    if (findMedia.length === 0) {
+    if (!findMedia.length) {
       const error = new Error();
       error.code = 404;
       return next(error);
@@ -62,7 +70,7 @@ module.exports = {
     debug(`relation exist already :${alreadyExist ? 'true' : 'false'}`);
     if (alreadyExist) {
       const error = new Error();
-      error.code = '23505';
+      error.code = 303;
       return next(error);
     }
     // CREATION END BDD
@@ -70,7 +78,7 @@ module.exports = {
     // RENVOIE LA VERSION VIEW
     const result = await dataMapper.getByUserName('player_view', user_name);
     jsend.status = 'success';
-    jsend.data = result;
+    jsend.data = result[0];
     return response.status(200).json(jsend);
   },
   async insertSetup(request, response, next) {
@@ -78,7 +86,7 @@ module.exports = {
     // VERIFICATION SI PLAYER EXISTE DANS LA TABLE PLAYER SINON ERREUR
     const { user_name } = request.params;
     const findPlayer = await dataMapper.getByUserName(tableName, user_name);
-    if (findPlayer.length === 0) {
+    if (!findPlayer.length) {
       const error = new Error();
       error.code = 404;
       return next(error);
@@ -88,7 +96,7 @@ module.exports = {
     const setup_id = request.params.id;
     const findSetup = await dataMapper.getByPk('setup', setup_id);
     debug(`setup exist: ${findSetup[0] ? 'true' : 'false'}`);
-    if (findSetup.length === 0) {
+    if (!findSetup.length) {
       const error = new Error();
       error.code = 404;
       return next(error);
@@ -98,7 +106,7 @@ module.exports = {
     debug(`relation exist already :${alreadyExist ? 'true' : 'false'}`);
     if (alreadyExist) {
       const error = new Error();
-      error.code = '23505';
+      error.code = 303;
       return next(error);
     }
     // CREATION END BDD
@@ -106,7 +114,7 @@ module.exports = {
     // RENVOIE LA VERSION VIEW
     const result = await dataMapper.getByUserName('player_view', user_name);
     jsend.status = 'success';
-    jsend.data = result;
+    jsend.data = result[0];
     return response.status(200).json(jsend);
   },
   async updateOne(request, response, next) {
@@ -114,7 +122,7 @@ module.exports = {
     const { user_name } = request.params;
     request.body.user_name = user_name;
     const findPlayer = await dataMapper.getByUserName(tableName, user_name);
-    if (findPlayer.length === 0) {
+    if (!findPlayer.length) {
       const error = new Error();
       error.code = 404;
       return next(error);
@@ -128,7 +136,7 @@ module.exports = {
     debug(`deleteOne: ${tableName}`);
     const { user_name } = request.params;
     const findPlayer = await dataMapper.getByUserName(tableName, user_name);
-    if (findPlayer.length === 0) {
+    if (!findPlayer.length) {
       const error = new Error();
       error.code = 404;
       return next(error);
@@ -141,7 +149,7 @@ module.exports = {
     // VERIFICATION SI PLAYER EXISTE DANS LA TABLE PLAYER SINON ERREUR
     const { user_name } = request.params;
     const findPlayer = await dataMapper.getByUserName(tableName, user_name);
-    if (findPlayer.length === 0) {
+    if (!findPlayer.length) {
       const error = new Error();
       error.code = 404;
       return next(error);
@@ -151,14 +159,14 @@ module.exports = {
     const findMedia = await dataMapper.getByPk('media', media_id);
     // VERIFICATION SI LE MEDIA dans la table MEDIA EXISTE SINON ERREUR
     debug(`media exist: ${findMedia[0] ? 'true' : 'false'}`);
-    if (findMedia.length === 0) {
+    if (!findMedia.length) {
       const error = new Error();
       error.code = 404;
       return next(error);
     }
     const alreadyExist = await dataMapper.getReferenceTable(tableName, 'media', findPlayer[0].id, media_id);
     debug(`relation exist already :${alreadyExist ? 'true' : 'false'}`);
-    // RECUPERATION DE LA TABLE DE RELATION SI EXISTE SINON ERREUR
+    // RECUPERATION DE LA TABLE DE RELATION SI EXISTE PAS => ERREUR
     if (!alreadyExist) {
       const error = new Error();
       error.code = 404;
@@ -173,7 +181,7 @@ module.exports = {
     // VERIFICATION SI PLAYER EXISTE DANS LA TABLE PLAYER SINON ERREUR
     const { user_name } = request.params;
     const findPlayer = await dataMapper.getByUserName(tableName, user_name);
-    if (findPlayer.length === 0) {
+    if (!findPlayer.length) {
       const error = new Error();
       error.code = 404;
       return next(error);
@@ -183,14 +191,14 @@ module.exports = {
     const findSetup = await dataMapper.getByPk('media', setup_id);
     // VERIFICATION SI LE SETUP dans la table SETUP EXISTE SINON ERREUR
     debug(`setup exist: ${findSetup[0] ? 'true' : 'false'}`);
-    if (findSetup.length === 0) {
+    if (!findSetup.length) {
       const error = new Error();
       error.code = 404;
       return next(error);
     }
     const alreadyExist = await dataMapper.getReferenceTable(tableName, 'setup', findPlayer[0].id, setup_id);
     debug(`relation exist already :${alreadyExist ? 'true' : 'false'}`);
-    // RECUPERATION DE LA TABLE DE RELATION SI EXISTE SINON ERREUR
+    // RECUPERATION DE LA TABLE DE RELATION SI EXISTE PAS => ERREUR
     if (!alreadyExist) {
       const error = new Error();
       error.code = 404;
