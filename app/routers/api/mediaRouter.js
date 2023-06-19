@@ -3,8 +3,6 @@ const express = require('express');
 const controllerHandler = require('../../middlewares/controllerHandler');
 const { authorizeAccess } = require('../../middlewares/authHandler');
 const mediaController = require('../../controllers/mediaController');
-const validate = require('../../validations/validate');
-const { createMedia, modifyMedia } = require('../../validations/schemas/media-schema');
 
 const router = express.Router();
 /**
@@ -39,21 +37,7 @@ router.get('/', controllerHandler(mediaController.getAll));
  * @returns {Media} 200 - The newly created media object
  * @returns {object} 500 - Internal server error
  */
-router.post('/', authorizeAccess(1), validate(createMedia), controllerHandler(mediaController.insertOne));
-/**
- * PATCH /api/media/{id}
-*
- * Update a media by ID
- * @summary Update a media by ID
- * @tags Media
- * @security BearerAuth
- * @param {number} request.params.id - The ID of the media to be updated
- * @param {object} request.body - The request body
- * @param {Partial<Media>} request.body - The updated media object
- * @returns {Media} 200 - The updated media object
- * @returns {object} 500 - Internal server error
- */
-router.patch('/:id', authorizeAccess(1), validate(modifyMedia), controllerHandler(mediaController.updateOne));
+router.post('/', authorizeAccess(1), controllerHandler(mediaController.insertOne));
 /**
  * DELETE /api/media/{id}
 *
