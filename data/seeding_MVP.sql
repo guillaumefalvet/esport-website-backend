@@ -77,6 +77,7 @@ INSERT INTO "category" ("label")
 VALUES
   ('Actualités'),
   ('Guides'),
+  ('Évenement'),
   ('Conseils');
 
 -- Seeding data for the "calendar" table
