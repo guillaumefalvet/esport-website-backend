@@ -36,6 +36,9 @@ const errorMiddleware = {
     if (error.code === 404) {
       return response.status(error.code).json({ status: 'error', message: 'Not Found: The requested resource could not be found.' });
     }
+    if (error.code === 303) {
+      return response.status(error.code).json({ status: 'error', message: 'See other: You are trying to send that data that already exist' });
+    }
     if (error.code === 401) {
       return response.status(error.code).json({ status: 'error', message: 'Unauthorized: The request requires authentication, and the user is not authenticated or lacks valid credentials' });
     }
@@ -51,6 +54,7 @@ const errorMiddleware = {
     if (error.name === 'JsonWebTokenError') {
       return response.status(400).json({ status: 'error', message: 'JsonWebTokenError: Malformed JWT' });
     }
+
     if (error.name === 'jwt expired') {
       return response.status(401).json({ status: 'error', message: 'TokenExpiredError: JWT expired' });
     }

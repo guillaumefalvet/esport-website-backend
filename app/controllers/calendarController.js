@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+/* eslint-disable prefer-destructuring */
 const debug = require('debug')('app:controllers:calendarController');
 const dataMapper = require('../models/dataMapper');
 
@@ -9,18 +11,17 @@ const jsend = {
 module.exports = {
   async getAll(request, response) {
     const { home } = request.query;
-    if (home) {
-      debug('Avant l\'appel à getCalendarHome');
+    if (home === 'true') {
+      debug('getCalendarHome');
       const result = await dataMapper.getCalendarHome();
+      jsend.data = result.data;
       jsend.status = 'success';
-      jsend.data = result;
       return response.status(200).json(jsend);
     }
-    debug(request.query);
     debug(`get all ${tableName}`);
     const results = await dataMapper.getAllCalendar();
     jsend.status = 'success';
-    jsend.data = results;
+    jsend.data = results.data;
     return response.status(200).json(jsend);
   },
   async getOne(request, response, next) {
@@ -36,12 +37,19 @@ module.exports = {
     jsend.data = result[0];
     return response.status(200).json(jsend);
   },
-  async insertOne(request, response) {
+  async insertOne(request, response, next) {
     debug(`insertOne: ${tableName}`);
+    const { event_name } = request.body;
+    const findEvent = await dataMapper.getByColumnValue(tableName, 'event_name', event_name);
+    if (findEvent.length) {
+      const error = new Error();
+      error.code = 303;
+      return next(error);
+    }
     const result = await dataMapper.createOne(tableName, request.body);
     jsend.status = 'success';
     jsend.data = result;
-    response.status(201).json(jsend);
+    return response.status(201).json(jsend);
   },
   async updateOne(request, response, next) {
     debug(`updateOne: ${tableName}`);
