@@ -45,6 +45,9 @@ const errorMiddleware = {
     if (error.name === 'ValidationError') {
       return response.status(422).json({ status: 'error', message: error.details.map((err) => err.message) });
     }
+    if (error.message === 'Unexpected end of form') {
+      return response.status(400).json({ status: 'error', message: error.message });
+    }
     if (error.name === 'JsonWebTokenError') {
       return response.status(400).json({ status: 'error', message: 'JsonWebTokenError: Malformed JWT' });
     }

@@ -5,9 +5,4 @@ const createMedia = Joi.object({
   is_active: Joi.boolean().required(),
 }).required();
 
-const modifyMedia = Joi.object({
-  link: Joi.string(),
-  is_active: Joi.string(),
-}).required().min(1);
-
-module.exports = { createMedia, modifyMedia };
+module.exports = { createMedia };

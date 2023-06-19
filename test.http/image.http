@@ -44,22 +44,23 @@ GET {{ endpoint }}/media/?type=photo
 
 GET {{ endpoint }}/media/?type=video
 
-### Add a new media
+### Add a new media image multi part
 POST {{endpoint}}/media/
-content-type: application/json
+Content-Type: multipart/form-data; boundary=boundary_value
 Authorization: Bearer {{accessToken}}
 
-{"link" :"https://media4.com","is_active":"false"}
+--boundary_value
+Content-Disposition: form-data; name="img"; filename="test.jpg"
+Content-Type: image/jpeg
 
-### Modify media
+@./test.jpg
+--boundary_value
+Content-Disposition: form-data; name="link"
 
-PATCH  {{endpoint}}/media/1
-content-type: application/json
-Authorization: Bearer {{accessToken}}
+lienhttp.com
+--boundary_value--
 
-{"link" :"https://media6.com" }
 
 ### delete media
-
-DELETE {{endpoint}}/media/10
+DELETE {{endpoint}}/media/8
 Authorization: Bearer {{accessToken}}
