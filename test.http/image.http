@@ -49,15 +49,35 @@ POST {{endpoint}}/media/
 content-type: application/json
 Authorization: Bearer {{accessToken}}
 
-{"link" :"https://media4.com","is_active":"false"}
+{"link" :"https://media4.com","is_active":"true"}
 
-### Modify media
+### Add a new media image multi part
+POST {{endpoint}}/media/
+Content-Type: multipart/form-data; boundary=boundary_value
 
-PATCH  {{endpoint}}/media/1
-content-type: application/json
-Authorization: Bearer {{accessToken}}
+--boundary_value
+Content-Disposition: form-data; name="img"; filename="test.jpg"
+Content-Type: image/jpeg
 
-{"link" :"https://media6.com" }
+@./test.jpg
+--boundary_value
+Content-Disposition: form-data; name="link"
+
+lienhttp.com
+--boundary_value--
+
+
+
+### Add a new media image multi part
+POST {{endpoint}}/media/
+Content-Type: multipart/form-data; boundary=boundary_value
+
+--boundary_value
+Content-Disposition: form-data; name="link"
+
+lienhttp.com
+--boundary_value--
+
 
 ### delete media
 
