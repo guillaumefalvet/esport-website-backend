@@ -17,7 +17,7 @@ VALUES
 -- Seeding data for the "user" table
 INSERT INTO "user" ("user_name", "email", "password", "user_permission")
 VALUES
-  ('admin', 'john@example.com', '$2b$10$/by8W/BetZSETyF6OlSH4.CwX0szBcOMgENI1fLVcPYlK3x3crW7O', 1),
+  ('john', 'john@example.com', '$2b$10$/by8W/BetZSETyF6OlSH4.CwX0szBcOMgENI1fLVcPYlK3x3crW7O', 1),
   ('utilisateur1', 'michael@example.com', '$2b$10$/by8W/BetZSETyF6OlSH4.CwX0szBcOMgENI1fLVcPYlK3x3crW7O', 2);
 -- Seeding data for the "recruitment" table
 INSERT INTO "recruitment" ("user_name", "email", "first_name", "last_name", "message", "external_link")
