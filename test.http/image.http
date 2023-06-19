@@ -44,16 +44,10 @@ GET {{ endpoint }}/media/?type=photo
 
 GET {{ endpoint }}/media/?type=video
 
-### Add a new media
-POST {{endpoint}}/media/
-content-type: application/json
-Authorization: Bearer {{accessToken}}
-
-{"link" :"https://media4.com","is_active":"true"}
-
 ### Add a new media image multi part
 POST {{endpoint}}/media/
 Content-Type: multipart/form-data; boundary=boundary_value
+Authorization: Bearer {{accessToken}}
 
 --boundary_value
 Content-Disposition: form-data; name="img"; filename="test.jpg"
@@ -67,19 +61,6 @@ lienhttp.com
 --boundary_value--
 
 
-
-### Add a new media image multi part
-POST {{endpoint}}/media/
-Content-Type: multipart/form-data; boundary=boundary_value
-
---boundary_value
-Content-Disposition: form-data; name="link"
-
-lienhttp.com
---boundary_value--
-
-
 ### delete media
-
-DELETE {{endpoint}}/media/10
+DELETE {{endpoint}}/media/8
 Authorization: Bearer {{accessToken}}
