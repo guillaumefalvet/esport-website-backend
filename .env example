@@ -1,5 +1,5 @@
 PORT=3000
-API_URL='http://localhost:3000/api/'
+API_URL='http://localhost:3000/'
 # if http MODE
 # DEV=anything
 # if https MODE
