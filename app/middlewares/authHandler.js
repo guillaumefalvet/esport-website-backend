@@ -131,6 +131,7 @@ const authHandler = {
       data: {
         id: user.id,
         permission_level: user.permission_level,
+        user_name: user.user_name,
         accessToken,
         refreshToken,
       },
