@@ -47,5 +47,4 @@ router.get('/', authorizeAccess(1), controllerHandler(recruitController.getAll))
  * @returns {object} 404 - Not Found error
 */
 router.delete('/:id', authorizeAccess(1), controllerHandler(recruitController.deleteOne));
-router.use('/private', authorizeAccess(1), express.static('private'));
 module.exports = router;
