@@ -22,7 +22,7 @@ module.exports = {
       const imageUpload = await uploadHandler(request, 'private', 'pdf', 'cv', next);
       const updatedData = {
         ...request.body,
-        external_link: API_URL + imageUpload.path,
+        external_link: `${API_URL}recruitment/${imageUpload.path}`,
       };
       await createRecruitment.validateAsync(updatedData);
       const result = await dataMapper.createOne('recruitment', updatedData);
