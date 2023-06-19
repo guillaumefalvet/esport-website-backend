@@ -6,17 +6,12 @@ const mediaController = require('../../controllers/mediaController');
 
 const router = express.Router();
 /**
- * @typedef {object} Media
- * @property {number} id - Media ID
+ * @typedef {object} Media - a media type
  * @property {string} link - The media link
- * @property {boolean} is_active - A boolean to differentiate a video from a photo
- * @property {string} created_at - Date of creation
- * @property {string} updated_at - Date of last update
+ * @property {string} img - the media file - binary
  */
 /**
  * GET /api/media
- *
- * Get all media
  * @summary Get all media
  * @tags Media
  * @param {object} request.query - The request query parameters
@@ -27,27 +22,24 @@ const router = express.Router();
 router.get('/', controllerHandler(mediaController.getAll));
 /**
  * POST /api/media
-*
- * Create a new media
  * @summary Create a new media
  * @tags Media
  * @security BearerAuth
- * @param {object} request.body - The request body
- * @param {Media} request.body - The media object to be created
- * @returns {Media} 200 - The newly created media object
- * @returns {object} 500 - Internal server error
+ * @param {Media} request.body.required - The media object to be created - multipart/form-data
+ * @returns {object} 200 - Success message
+ * @returns {object} 400 - Bad request
  */
 router.post('/', authorizeAccess(1), controllerHandler(mediaController.insertOne));
 /**
  * DELETE /api/media/{id}
-*
- * Delete a media by ID
+
  * @summary Delete a media by ID
  * @tags Media
  * @security BearerAuth
- * @param {number} request.params.id - The ID of the media to be deleted
- * @returns {object} 204 - No content
- * @returns {object} 500 - Internal server error
+ * @param {number} id.path.required - The ID of the media to be deleted
+ * @returns {object} 200 - Success message
+ * @returns {object} 403 - Forbidden
+ * @returns {object} 404 - Not Found error
  */
 router.delete('/:id', authorizeAccess(1), controllerHandler(mediaController.deleteOne));
 module.exports = router;
