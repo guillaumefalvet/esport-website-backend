@@ -46,7 +46,7 @@ module.exports = {
         updatedData.is_active = true;
       } else {
         debug('image was uploaded');
-        updatedData.link = `${API_URL}/${imageUpload.path}`;
+        updatedData.link = `${API_URL}${imageUpload.path}`;
         updatedData.is_active = false;
       }
       await createMedia.validateAsync(updatedData);
@@ -72,7 +72,7 @@ module.exports = {
     if (!findMedia[0].is_active) { // if = false
       // delete locally
       const removed_url = findMedia[0].link.split(API_URL);
-      fs.unlinkSync(`.${removed_url[1]}`);
+      fs.unlinkSync(`./${removed_url[1]}`);
       debug('FS: media deleted ');
     }
     await dataMapper.deleteByPk(tableName, id);
