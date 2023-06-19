@@ -8,9 +8,7 @@ const createCalendar = Joi.object({
   replay_link: Joi.string(),
   live_link: Joi.string(),
   score: Joi.string(),
-  small_image: Joi.string().required(),
-  medium_image: Joi.string().required(),
-  large_image: Joi.string().required(),
+  image: Joi.string().required(),
   publication_date: Joi.string(),
 }).required();
 
@@ -22,9 +20,7 @@ const modifyCalendar = Joi.object({
   replay_link: Joi.string(),
   live_link: Joi.string(),
   score: Joi.string(),
-  small_image: Joi.string(),
-  medium_image: Joi.string(),
-  large_image: Joi.string(),
+  image: Joi.string(),
   publication_date: Joi.string(),
 }).required().min(1);
 

@@ -1,8 +1,11 @@
 -- Seeding data for the "player" table
 INSERT INTO "player" ("user_name", "first_name", "last_name", "description", "role", "image", "statistics", "achievements", "youtube_link", "twitch_link", "twitter_link")
 VALUES
-  ('joueur1', 'Jean', 'Dupont', 'Description du joueur 1', 'Joueur professionnel', 'image_1.jpg', 'Statistiques du joueur 1', 'Ses réalisations', 'https://youtube.com/joueur1', 'https://twitch.tv/joueur1', 'https://twitter.com/joueur1'),
-  ('joueur2', 'Pierre', 'Martin', 'Description du joueur 2', 'Joueur semi-professionnel', 'image_2.jpg', 'Statistiques du joueur 2', 'Ses réalisations', 'https://youtube.com/joueur2', 'https://twitch.tv/joueur2', 'https://twitter.com/joueur2');
+  ('theGardener', 'Ali', 'Hadj Cherif', 'Description du joueur 1', 'Joueur professionnel', 'https://projet-14-victory-zone-back-production.up.railway.app/image/player_ali.webp', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse odio lorem, fringilla at tincidunt sed, tempus at dui. Morbi commodo.', 'Ses réalisations', 'https://youtube.com/thegardener', 'https://twitch.tv/thegardener', 'https://twitter.com/thegardener'),
+  ('fullStack_DPS', 'Manu', 'Chevalier', 'Description du joueur 1', 'Joueur professionnel', 'https://projet-14-victory-zone-back-production.up.railway.app/image/player_manu.webp', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse odio lorem, fringilla at tincidunt sed, tempus at dui. Morbi commodo.', 'Ses réalisations', 'https://youtube.com/fullstack_dps', 'https://twitch.tv/fullstack_dps', 'https://twitter.com/fullstack_dps'),
+  ('error_sniper', 'Guillaume', 'Falvet', 'Description du joueur 1', 'Joueur professionnel', 'https://projet-14-victory-zone-back-production.up.railway.app/image/player_guillaume.webp', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse odio lorem, fringilla at tincidunt sed, tempus at dui. Morbi commodo.', 'Ses réalisations', 'https://youtube.com/error_sniper', 'https://twitch.tv/error_sniper', 'https://twitter.com/error_sniper'),
+  ('reactLover', 'Axel', 'Martin', 'Description du joueur 1', 'Joueur professionnel', 'https://projet-14-victory-zone-back-production.up.railway.app/image/player_axel.webp', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse odio lorem, fringilla at tincidunt sed, tempus at dui. Morbi commodo.', 'Ses réalisations', 'https://youtube.com/reactlover', 'https://twitch.tv/reactlover', 'https://twitter.com/reactlover'),
+  ('code_healer', 'Quentin', 'Joanon', 'Description du joueur 1', 'Joueur professionnel', 'https://projet-14-victory-zone-back-production.up.railway.app/image/player_quentin.webp', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse odio lorem, fringilla at tincidunt sed, tempus at dui. Morbi commodo.', 'Ses réalisations', 'https://youtube.com/code_healer', 'https://twitch.tv/code_healer', 'https://twitter.com/code_healer');
 
 -- Seeding data for the "permission" table
 INSERT INTO "permission" ("name", "level")
@@ -14,7 +17,7 @@ VALUES
 -- Seeding data for the "user" table
 INSERT INTO "user" ("user_name", "email", "password", "user_permission")
 VALUES
-  ('admin', 'john@example.com', '$2b$10$/by8W/BetZSETyF6OlSH4.CwX0szBcOMgENI1fLVcPYlK3x3crW7O', 1),
+  ('john', 'john@example.com', '$2b$10$/by8W/BetZSETyF6OlSH4.CwX0szBcOMgENI1fLVcPYlK3x3crW7O', 1),
   ('utilisateur1', 'michael@example.com', '$2b$10$/by8W/BetZSETyF6OlSH4.CwX0szBcOMgENI1fLVcPYlK3x3crW7O', 2);
 -- Seeding data for the "recruitment" table
 INSERT INTO "recruitment" ("user_name", "email", "first_name", "last_name", "message", "external_link")
@@ -25,8 +28,25 @@ VALUES
 -- Seeding data for the "setup" table
 INSERT INTO "setup" ("name", "external_link")
 VALUES
-  ('Configuration 1', 'https://lienexterne1.com'),
-  ('Configuration 2', 'https://lienexterne2.com');
+--keyboard
+  ('Corsair K70 RGB', 'https://www.corsair.com/keyboards/k70-rgb'),
+  ('Razer BlackWidow Elite', 'https://www.razer.com/keyboards/blackwidow-elite'),
+  ('Logitech G Pro', 'https://www.logitechg.com/keyboards/g-pro'),
+  ('SteelSeries Apex Pro', 'https://steelseries.com/keyboards/apex-pro'),
+  ('HyperX Alloy Elite 2', 'https://www.hyperxgaming.com/keyboards/alloy-elite-2'),
+--headset
+  ('HyperX Cloud II', 'https://www.hyperxgaming.com/headsets/cloud-ii'),
+  ('SteelSeries Arctis Pro', 'https://steelseries.com/headsets/arctis-pro'),
+  ('Astro A40 TR', 'https://www.astrogaming.com/headsets/A40-TR-gen-4'),
+  ('Razer Kraken X', 'https://www.razer.com/gaming-audio/razer-kraken-x'),
+  ('Logitech G Pro X', 'https://www.logitechg.com/headsets/g-pro-x'),
+--mouse
+  ('Logitech G502 Hero', 'https://www.logitechg.com/mice/g502-hero'),
+  ('Razer DeathAdder Elite', 'https://www.razer.com/mice/deathadder-elite'),
+  ('SteelSeries Rival 600', 'https://steelseries.com/mice/rival-600'),
+  ('Corsair Ironclaw RGB', 'https://www.corsair.com/mice/ironclaw-rgb'),
+  ('HyperX Pulsefire Surge', 'https://www.hyperxgaming.com/mice/pulsefire-surge');
+
 
 -- Seeding data for the "media" table
 INSERT INTO "media" ("link", "is_active")
@@ -86,10 +106,25 @@ VALUES
   (1, 2),
   (2, 1),
   (2, 2);
-
 INSERT INTO "player_has_setup" ("player_id", "setup_id")
 VALUES
+  -- Seeding data for the "player_has_setup" table (keyboard)
   (1, 1),
-  (1, 2),
-  (2, 1),
-  (2, 2);
+  (2, 2),
+  (3, 3),
+  (4, 4),
+  (5, 5),
+  -- Seeding data for the "player_has_setup" table (headset)
+  (1, 6),
+  (2, 7),
+  (3, 8),
+  (4, 9),
+  (5, 10),
+  -- Seeding data for the "player_has_setup" table (mouse)
+  (1, 11),
+  (2, 12),
+  (3, 13),
+  (4, 14),
+  (5, 15);
+
+

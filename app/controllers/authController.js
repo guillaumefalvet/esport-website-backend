@@ -18,22 +18,24 @@ const authController = {
    * @returns {Promise<void>}
    */
   async handleLogin(request, response, next) {
-    debug('login');
+    debug('handleLogin');
     const { email, password } = request.body;
     const result = await dataMapper.getByEmail(email);
     if (!result[0]) {
-      debug('database: email not matching');
+      debug('❌ ERROR: user email ≠ any database email');
       const error = new Error();
       error.code = 401;
       return next(error);
     }
 
-    debug('Comparing request.bodypassword with hashed db password...');
+    debug('bcrypt is comparing the passswords...');
     const dbPassword = result[0].password;
     if (await bcrypt.compare(password, dbPassword)) {
       debug('✅ successfull login');
-      return authController.sendAuthTokens(response, result[0]);
+      const sendToken = await authHandler.sendAuthTokens(result[0]);
+      return response.status(200).json(sendToken);
     }
+    debug('❌ ERROR: user password isn\'t matching database password for that user');
     const error = new Error();
     error.code = 401;
     return next(error);
@@ -49,45 +51,24 @@ const authController = {
    * @returns {Promise<void>}
    */
   async handleTokenRefresh(request, response, next) {
+    debug('handleTokenRefresh');
+    // refresh token is always stored in the body
     const { refreshToken } = request.body;
-    debug(`handleTokenRefresh => refreshtoken: ${refreshToken}`);
+    // the a
     const authHeader = request.headers.authorization;
-    debug(`handleTokenRefresh => authHeader: ${authHeader}`);
+    // if there is no header
     if (!authHeader || !refreshToken) {
-      return next(new Error('Missing authHeader or refreshToken'));
+      return next(new Error('❌ ERROR: Missing authHeader or {refreshToken} in the body'));
     }
-    debug(`isRefreshTokenValid valid ? : ${await authHandler.isRefreshTokenValid(refreshToken)}`);
-    const token = authHeader.split('Bearer ')[1];
+    const accessToken = authHeader.split('Bearer ')[1];
     if (await authHandler.isRefreshTokenValid(refreshToken)) {
-      const user = await authHandler.getUserFromToken(token);
-      return authController.sendAuthTokens(response, user[0]);
+      const user = await authHandler.getUserFromToken(accessToken);
+      const sendToken = await authHandler.sendAuthTokens(user[0]);
+      return response.status(200).json(sendToken);
     }
-    return next(new Error('isRefreshTokenValid is not valid'));
+    return next(new Error('❌ ERROR: refresh token is not valid'));
   },
-  /**
-   * Sends authentication tokens in the response.
-   * @async
-   * @memberof authController
-   * @function sendAuthTokens
-   * @param {object} response - Express response object.
-   * @param {object} user - User object.
-   * @returns {Promise<void>}
-   */
-  async sendAuthTokens(response, user) {
-    const accessToken = authHandler.generateAccessTokenWithUser(user);
-    const refreshToken = authHandler.generateRefreshTokenForUser(user.id);
-    debug('sendAuthTokens');
-    await dataMapper.setRefreshToken(user.id, refreshToken);
-    return response.status(200).json({
-      status: 'success',
-      data: {
-        id: user.id,
-        permission_level: user.permission_level,
-        accessToken,
-        refreshToken,
-      },
-    });
-  },
+
 };
 
 module.exports = authController;
