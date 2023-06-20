@@ -34,7 +34,7 @@ const router = express.Router();
  * @returns {Array<Team>} 200 - Success response
  * @returns {object} 500 - Internal server error
  */
-router.get('/', controllerHandler(teamController.getAll));
+router.get('/', controllerHandler(teamController.getAll.bind(teamController)));
 
 /**
  * GET /api/team/:user_name
@@ -45,7 +45,7 @@ router.get('/', controllerHandler(teamController.getAll));
  * @returns {Array<Team>} 200 - The player object
  * @returns {object} 500 - Internal server error
  */
-router.get('/:user_name', controllerHandler(teamController.getOne));
+router.get('/:user_name', controllerHandler(teamController.getOne.bind(teamController)));
 
 /**
  * POST /api/team
@@ -57,7 +57,7 @@ router.get('/:user_name', controllerHandler(teamController.getOne));
  * @returns {Array<Team>} 200 - The created player object
  * @returns {object} 500 - Internal server error
  */
-router.post('/', authorizeAccess(1), validate(createPlayerValidation), controllerHandler(teamController.insertOne));
+router.post('/', authorizeAccess(1), validate(createPlayerValidation), controllerHandler(teamController.createOne.bind(teamController)));
 
 /**
  * POST /api/team/:user_name/setup/:id
@@ -70,7 +70,7 @@ router.post('/', authorizeAccess(1), validate(createPlayerValidation), controlle
  * @returns {object} 200 - Success message
  * @returns {object} 500 - Internal server error
  */
-router.post('/:user_name/setup/:id', authorizeAccess(1), controllerHandler(teamController.insertSetup));
+router.post('/:user_name/setup/:id', authorizeAccess(1), controllerHandler(teamController.createSetupRelation.bind(teamController)));
 
 /**
  * POST /api/team/:user_name/media/:id
@@ -83,7 +83,7 @@ router.post('/:user_name/setup/:id', authorizeAccess(1), controllerHandler(teamC
  * @returns {object} 200 - Success message
  * @returns {object} 500 - Internal server error
  */
-router.post('/:user_name/media/:id', authorizeAccess(1), controllerHandler(teamController.insertMedia));
+router.post('/:user_name/media/:id', authorizeAccess(1), controllerHandler(teamController.createMediaRelation.bind(teamController)));
 
 /**
  * PATCH /api/team/:user_name
@@ -96,7 +96,7 @@ router.post('/:user_name/media/:id', authorizeAccess(1), controllerHandler(teamC
  * @returns {Array<Team>} 200 - The updated player object
  * @returns {object} 500 - Internal server error
  */
-router.patch('/:user_name', authorizeAccess(1), validate(modifyPlayerValidation), controllerHandler(teamController.updateOne));
+router.patch('/:user_name', authorizeAccess(1), validate(modifyPlayerValidation), controllerHandler(teamController.modifyOne.bind(teamController)));
 
 /**
  * DELETE /api/team/:user_name
@@ -108,7 +108,7 @@ router.patch('/:user_name', authorizeAccess(1), validate(modifyPlayerValidation)
  * @returns {object} 200 - Success message
  * @returns {object} 500 - Internal server error
  */
-router.delete('/:user_name', authorizeAccess(1), controllerHandler(teamController.deleteOne));
+router.delete('/:user_name', authorizeAccess(1), controllerHandler(teamController.deleteOne.bind(teamController)));
 
 /**
  * DELETE /api/team/:user_name/setup/:id
@@ -121,7 +121,7 @@ router.delete('/:user_name', authorizeAccess(1), controllerHandler(teamControlle
  * @returns {object} 200 - Success message
  * @returns {object} 500 - Internal server error
  */
-router.delete('/:user_name/setup/:id', authorizeAccess(1), controllerHandler(teamController.deleteSetup));
+router.delete('/:user_name/setup/:id', authorizeAccess(1), controllerHandler(teamController.deleteSetupRelation.bind(teamController)));
 
 /**
  * DELETE /api/team/:user_name/media/:id
@@ -134,6 +134,6 @@ router.delete('/:user_name/setup/:id', authorizeAccess(1), controllerHandler(tea
  * @returns {object} 200 - Success message
  * @returns {object} 500 - Internal server error
  */
-router.delete('/:user_name/media/:id', authorizeAccess(1), controllerHandler(teamController.deleteMedia));
+router.delete('/:user_name/media/:id', authorizeAccess(1), controllerHandler(teamController.deleteMediaRelation.bind(teamController)));
 
 module.exports = router;

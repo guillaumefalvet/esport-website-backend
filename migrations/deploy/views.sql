@@ -98,7 +98,7 @@ SELECT
   (SELECT json_agg(json_build_object(
             'id', media.id,
             'link', media.link,
-            'is_video', media.is_active
+            'is_active', media.is_active
           ))
    FROM media
    JOIN player_has_media ON player_has_media.media_id = media.id
@@ -107,7 +107,7 @@ SELECT
   (SELECT json_agg(json_build_object(
             'id', media.id,
             'link', media.link,
-            'is_video', media.is_active
+            'is_active', media.is_active
           ))
    FROM media
    JOIN player_has_media ON player_has_media.media_id = media.id
