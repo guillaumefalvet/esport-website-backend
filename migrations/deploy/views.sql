@@ -5,6 +5,7 @@ CREATE VIEW article_events_categories_public AS
 SELECT article.*,
     (SELECT CASE WHEN COUNT(calendar.id) = 0 THEN NULL
                  ELSE json_agg(json_build_object(
+                         'event_id', calendar.id,
                          'event_name', calendar.event_name,
                          'event_date', calendar.event_date,
                          'adversary_name', calendar.adversary_name,
@@ -43,6 +44,7 @@ CREATE VIEW article_events_categories_private AS
 SELECT article.*,
     (SELECT CASE WHEN COUNT(calendar.id) = 0 THEN NULL
                  ELSE json_agg(json_build_object(
+                         'event_id', calendar.id,
                          'event_name', calendar.event_name,
                          'event_date', calendar.event_date,
                          'adversary_name', calendar.adversary_name,
