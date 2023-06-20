@@ -16,10 +16,11 @@ class CoreController {
 
   async getOne(request, response, next) {
     debug(`${this.constructor.name} getOne`);
+    const tableName = this.constructor.tableNameView || this.constructor.tableName;
     const result = await dataMapper.getByColumnValue(
-      this.constructor.tableName,
+      tableName,
       this.constructor.columnName,
-      request.params[this.constructor.paramsLink],
+      request.params[this.constructor.columnName],
     );
     debug(result);
     if (!result) {
@@ -55,14 +56,14 @@ class CoreController {
     const doesExist = await dataMapper.getByColumnValue(
       this.constructor.tableName,
       this.constructor.columnName,
-      request.params[this.constructor.paramsLink],
+      request.params[this.constructor.columnName],
     );
     if (!doesExist) {
       const error = new Error();
       error.code = 404;
       return next(error);
     }
-    request.body[this.constructor.paramsLink] = request.params[this.constructor.paramsLink];
+    request.body[this.constructor.columnName] = request.params[this.constructor.columnName];
     const result = await dataMapper.modifyOne(this.constructor.tableName, request.body);
     jsend.data = result;
     return response.status(200).json(jsend);
@@ -73,7 +74,7 @@ class CoreController {
     const doesExist = await dataMapper.getByColumnValue(
       this.constructor.tableName,
       this.constructor.columnName,
-      request.params[this.constructor.paramsLink],
+      request.params[this.constructor.columnName],
     );
     if (!doesExist) {
       const error = new Error();
@@ -83,7 +84,7 @@ class CoreController {
     await dataMapper.deleteByColumnValue(
       this.constructor.tableName,
       this.constructor.columnName,
-      request.params[this.constructor.paramsLink],
+      request.params[this.constructor.columnName],
     );
     return response.status(204);
   }
@@ -93,7 +94,7 @@ class CoreController {
     const findOrigin = await dataMapper.getByColumnValue(
       this.constructor.tableName,
       this.constructor.columnName,
-      request.params[this.constructor.paramsLink],
+      request.params[this.constructor.columnName],
     );
     if (!findOrigin) {
       const error = new Error();
@@ -128,7 +129,7 @@ class CoreController {
     const findOrigin = await dataMapper.getByColumnValue(
       this.constructor.tableName,
       this.constructor.columnName,
-      request.params[this.constructor.paramsLink],
+      request.params[this.constructor.columnName],
     );
     if (!findOrigin) {
       const error = new Error();
