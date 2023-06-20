@@ -1,10 +1,7 @@
-/* eslint-disable class-methods-use-this */
-
 const debug = require('debug')('app:controllers:calendar');
 const dataMapper = require('../models/dataMapper');
 const CoreController = require('./CoreController');
 
-const tableName = 'calendar';
 const jsend = {
   status: 'success',
 };
@@ -22,13 +19,13 @@ class CalendarController extends CoreController {
   async getAllCalendar(request, response) {
     const { home } = request.query;
     if (home === 'true') {
-      debug('getCalendarHome');
+      debug(`get homepage ${this.constructor.name}`);
       const results = await dataMapper.getAll('get_calendar_home');
       jsend.data = results[0].data;
       jsend.status = 'success';
       return response.status(200).json(jsend);
     }
-    debug(`get all ${tableName}`);
+    debug(`get all ${this.constructor.name}`);
     const results = await dataMapper.getAll('get_all_calendar');
     jsend.status = 'success';
     jsend.data = results[0].data;
