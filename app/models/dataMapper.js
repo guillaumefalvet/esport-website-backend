@@ -9,6 +9,10 @@ module.exports = {
     const { rows } = await client.query(`SELECT * FROM ${table}`);
     return rows;
   },
+  async getByType(boolean) {
+    const { rows } = await client.query('SELECT * FROM media WHERE is_active = $1', [boolean]);
+    return rows;
+  },
   async getByEmail(email) {
     const { rows } = await client.query('SELECT * FROM get_user_view WHERE email = $1;', [email]);
     return rows[0];
