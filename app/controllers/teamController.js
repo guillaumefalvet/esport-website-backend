@@ -14,7 +14,7 @@ module.exports = {
   async getAll(_, response) {
     debug(`get all ${tableName}`);
     const results = await dataMapper.getAll(tableName);
-    jsend.data = results[0];
+    jsend.data = results;
     jsend.status = 'success';
     return response.status(200).json(jsend);
   },
