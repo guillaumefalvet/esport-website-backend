@@ -19,7 +19,7 @@ const router = express.Router();
  * @returns {Array<Media>} 200 - An array of media objects matching the specified filter
  * @returns {object} 500 - Internal server error
  */
-router.get('/', controllerHandler(mediaController.getAll));
+router.get('/', controllerHandler(mediaController.getAllMedia.bind(mediaController)));
 /**
  * POST /api/media
  * @summary Create a new media
@@ -29,7 +29,7 @@ router.get('/', controllerHandler(mediaController.getAll));
  * @returns {object} 200 - Success message
  * @returns {object} 400 - Bad request
  */
-router.post('/', authorizeAccess(1), controllerHandler(mediaController.insertOne));
+router.post('/', authorizeAccess(1), controllerHandler(mediaController.insertMedia.bind(mediaController)));
 /**
  * DELETE /api/media/{id}
 
@@ -41,5 +41,5 @@ router.post('/', authorizeAccess(1), controllerHandler(mediaController.insertOne
  * @returns {object} 403 - Forbidden
  * @returns {object} 404 - Not Found error
  */
-router.delete('/:id', authorizeAccess(1), controllerHandler(mediaController.deleteOne));
+router.delete('/:id', authorizeAccess(1), controllerHandler(mediaController.deleteMedia.bind(mediaController)));
 module.exports = router;

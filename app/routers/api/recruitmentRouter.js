@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 const express = require('express');
 const controllerHandler = require('../../middlewares/controllerHandler');
 const recruitController = require('../../controllers/recruitmentController');
@@ -22,7 +23,7 @@ const router = express.Router();
  * @returns {object} 200 - Success message
  * @returns {object} 400 - Bad request
  */
-router.post('/', controllerHandler(recruitController.insertOne));
+router.post('/', controllerHandler(recruitController.insertRecruitment.bind(recruitController)));
 
 /**
  * GET /api/recruitment
@@ -32,7 +33,7 @@ router.post('/', controllerHandler(recruitController.insertOne));
  * @returns {object} 200 - Array of recruitment applications
  * @returns {object} 403 - Forbidden
  */
-router.get('/', authorizeAccess(1), controllerHandler(recruitController.getAll));
+router.get('/', authorizeAccess(1), controllerHandler(recruitController.getAll.bind(recruitController)));
 
 // Serve static files in the 'private' directory
 
@@ -46,5 +47,5 @@ router.get('/', authorizeAccess(1), controllerHandler(recruitController.getAll))
  * @returns {object} 403 - Forbidden
  * @returns {object} 404 - Not Found error
 */
-router.delete('/:id', authorizeAccess(1), controllerHandler(recruitController.deleteOne));
+router.delete('/:id', authorizeAccess(1), controllerHandler(recruitController.deleteRecruitment.bind(recruitController)));
 module.exports = router;
