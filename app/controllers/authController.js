@@ -21,7 +21,7 @@ const authController = {
     debug('handleLogin');
     const { email, password } = request.body;
     const result = await dataMapper.getByEmail(email);
-    if (!result[0]) {
+    if (!result) {
       debug('❌ ERROR: user email ≠ any database email');
       const error = new Error();
       error.code = 401;
@@ -29,10 +29,10 @@ const authController = {
     }
 
     debug('bcrypt is comparing the passswords...');
-    const dbPassword = result[0].password;
+    const dbPassword = result.password;
     if (await bcrypt.compare(password, dbPassword)) {
       debug('✅ successfull login');
-      const sendToken = await authHandler.sendAuthTokens(result[0]);
+      const sendToken = await authHandler.sendAuthTokens(result);
       return response.status(200).json(sendToken);
     }
     debug('❌ ERROR: user password isn\'t matching database password for that user');
@@ -63,7 +63,7 @@ const authController = {
     const accessToken = authHeader.split('Bearer ')[1];
     if (await authHandler.isRefreshTokenValid(refreshToken)) {
       const user = await authHandler.getUserFromToken(accessToken);
-      const sendToken = await authHandler.sendAuthTokens(user[0]);
+      const sendToken = await authHandler.sendAuthTokens(user);
       return response.status(200).json(sendToken);
     }
     return next(new Error('❌ ERROR: refresh token is not valid'));

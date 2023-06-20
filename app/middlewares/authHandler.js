@@ -108,7 +108,7 @@ const authHandler = {
       JWT_SECRET,
       { ignoreExpiration: true },
     );
-    return dataMapper.getByPk('get_user_view', decoded.data.id);
+    return dataMapper.getByColumnValue('get_user_view', 'id', decoded.data.id);
   },
   /**
  * Sends authentication tokens to the client.
