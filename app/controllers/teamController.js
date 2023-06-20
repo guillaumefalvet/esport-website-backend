@@ -14,7 +14,7 @@ module.exports = {
   async getAll(_, response) {
     debug(`get all ${tableName}`);
     const results = await dataMapper.getAll(tableName);
-    jsend.data = results;
+    jsend.data = results[0];
     jsend.status = 'success';
     return response.status(200).json(jsend);
   },
@@ -28,7 +28,7 @@ module.exports = {
       return next(error);
     }
     jsend.status = 'success';
-    jsend.data = result;
+    jsend.data = result[0];
     return response.status(200).json(jsend);
   },
   async insertOne(request, response, next) {
