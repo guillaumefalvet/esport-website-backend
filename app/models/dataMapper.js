@@ -5,9 +5,9 @@ module.exports = {
     const { rows } = await client.query('SELECT * FROM "user" WHERE user_name = $1', [userName]);
     return rows;
   },
-  async getByColumnValue(table, column, value) {
-    const { rows } = await client.query(`SELECT * FROM ${table} WHERE ${column} = $1`, [value]);
-    return rows;
+  async getByColumnValue(tableName, columnName, value) {
+    const { rows } = await client.query(`SELECT * FROM ${tableName} WHERE ${columnName} = $1`, [value]);
+    return rows[0];
   },
   async getByType(boolean) {
     const { rows } = await client.query('SELECT * FROM "media" WHERE is_active = $1', [boolean]);
@@ -50,6 +50,10 @@ module.exports = {
     return rows[0];
   },
   async modifyByPk(table, data) {
+    const { rows } = await client.query(`SELECT * FROM update_${table}($1);`, [JSON.stringify(data)]);
+    return rows[0];
+  },
+  async modifyOne(table, data) {
     const { rows } = await client.query(`SELECT * FROM update_${table}($1);`, [JSON.stringify(data)]);
     return rows[0];
   },

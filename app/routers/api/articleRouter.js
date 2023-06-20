@@ -1,9 +1,11 @@
+/* eslint-disable camelcase */
 const express = require('express');
 const controllerHandler = require('../../middlewares/controllerHandler');
 const { authorizeAccess } = require('../../middlewares/authHandler');
 const { createArticle, modifyArticle } = require('../../validations/schemas/article-schema');
 const validate = require('../../validations/validate');
 const articleController = require('../../controllers/articleController');
+const Article_Controller = require('../../controllers/Article_Controller');
 
 const router = express.Router();
 /**
@@ -28,7 +30,7 @@ const router = express.Router();
  * @returns {Array.<Article>} 200 - Array of article objects
  * @returns {object} 500 - Internal server error
  */
-router.get('/', controllerHandler(articleController.getAll));
+router.get('/', controllerHandler(Article_Controller.getAll.bind(Article_Controller)));
 
 /**
  * GET /api/articles/admin
@@ -50,7 +52,7 @@ router.get('/admin', authorizeAccess(1), controllerHandler(articleController.get
  * @returns {Article} 200 - The article object
  * @returns {object} 500 - Internal server error
  */
-router.get('/:slug', controllerHandler(articleController.getOne));
+router.get('/:slug', controllerHandler(Article_Controller.getOne.bind(Article_Controller)));
 
 /**
  * POST /api/articles
@@ -62,7 +64,7 @@ router.get('/:slug', controllerHandler(articleController.getOne));
  * @returns {Article} 200 - The created article object
  * @returns {object} 500 - Internal server error
  */
-router.post('/', authorizeAccess(1), validate(createArticle), controllerHandler(articleController.insertOne));
+router.post('/', authorizeAccess(1), validate(createArticle), controllerHandler(Article_Controller.createOne.bind(Article_Controller)));
 
 /**
  * POST /api/articles/{slug}/category/{id}
@@ -101,7 +103,7 @@ router.post('/:slug/calendar/:id', authorizeAccess(1), controllerHandler(article
  * @returns {Article} 200 - The updated article object
  * @returns {object} 500 - Internal server error
  */
-router.patch('/:slug', authorizeAccess(1), validate(modifyArticle), controllerHandler(articleController.updateOne));
+router.patch('/:slug', authorizeAccess(1), validate(modifyArticle), controllerHandler(Article_Controller.modifyOne.bind(Article_Controller)));
 
 /**
  * DELETE /api/articles/{slug}
