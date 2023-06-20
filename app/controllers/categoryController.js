@@ -1,18 +1,15 @@
-const debug = require('debug')('app:controllers:categoryController');
-const dataMapper = require('../models/dataMapper');
+const debug = require('debug')('app:controllers:category');
+const CoreController = require('./CoreController');
 
-const tableName = 'category';
-const jsend = {
-  status: '',
-  data: '',
-};
+class CategoryController extends CoreController {
+  static tableName = 'category';
 
-module.exports = {
-  async getAll(request, response) {
-    debug(`getAll ${tableName}`);
-    const results = await dataMapper.getAll(tableName);
-    jsend.data = results;
+  static columnName = 'id';
 
-    return response.status(200).json(jsend);
-  },
-};
+  constructor() {
+    super();
+    debug('CategoryController created');
+  }
+}
+
+module.exports = new CategoryController();

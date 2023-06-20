@@ -1,27 +1,30 @@
-const debug = require('debug')('app:controllers:recruitController');
+/* eslint-disable max-len */
+const debug = require('debug')('app:controllers:recruitment');
 const fs = require('fs');
 const uploadHandler = require('../services/uploadService');
 const dataMapper = require('../models/dataMapper');
 const { createRecruitment } = require('../validations/schemas/recruitment-schema');
+const CoreController = require('./CoreController');
 
 const API_URL = process.env.API_URL ?? '';
 const tableName = 'recruitment';
 const jsend = {
-  status: '',
-  data: '',
+  status: 'success',
 };
-module.exports = {
-  async getAll(_, response) {
-    debug(`get all ${tableName}`);
-    const results = await dataMapper.getAll(tableName);
-    jsend.data = results;
-    jsend.status = 'success';
-    return response.status(200).json(jsend);
-  },
-  async insertOne(request, response, next) {
+
+class RecruitmentController extends CoreController {
+  static tableName = 'recruitment';
+
+  static columnName = 'user_name';
+
+  constructor() {
+    super();
+    debug('RecruitmentController created');
+  }
+
+  async insertRecruitment(request, response, next) {
     try {
       const imageUpload = await uploadHandler(request, 'private', 'pdf', 'cv', next);
-
       const updatedData = {
         ...request.body,
       };
@@ -31,32 +34,56 @@ module.exports = {
         updatedData.external_link = `${API_URL}${imageUpload.path}`;
       }
       await createRecruitment.validateAsync(updatedData);
-      const result = await dataMapper.createOne('recruitment', updatedData);
+      const alradyExist = await dataMapper.getByColumnValue(
+        this.constructor.tableName,
+        this.constructor.columnName,
+        updatedData.user_name,
+      );
+
+      if (alradyExist) {
+        const fileToDelete = updatedData.external_link.split(API_URL);
+        debug(fileToDelete);
+        fs.unlinkSync(`./${fileToDelete[1]}`);
+        debug('local file deleted');
+        const error = new Error();
+        error.code = 303;
+        return next(error);
+      }
+      const result = await dataMapper.createOne(this.constructor.tableName, updatedData);
       debug('Recruitment created successfully');
-      return response.status(201).json(result);
+      jsend.data = result;
+      return response.status(201).json(jsend);
     } catch (err) {
       debug('Error while creating recruitment', err);
       return next(err);
     }
-  },
-  async deleteOne(request, response, next) {
+  }
+
+  async deleteRecruitment(request, response, next) {
     debug(`deleteOne: ${tableName}`);
-    const { id } = request.params;
-    const findRecruitment = await dataMapper.getByPk(tableName, id);
-    if (findRecruitment.length === 0) {
+    const findRecruitment = await dataMapper.getByColumnValue(
+      this.constructor.tableName,
+      'id',
+      request.params.id,
+    );
+    debug(request.params.id);
+    if (!findRecruitment) {
       const error = new Error();
       error.code = 404;
       return next(error);
     }
-    debug(findRecruitment[0]);
-    if (findRecruitment[0].external_link.length) {
+    if (findRecruitment.external_link.length) {
       // verification si il n'est pas vide
-      const fileToDelete = findRecruitment[0].external_link.split(API_URL);
-      debug(fileToDelete);
+      const fileToDelete = findRecruitment.external_link.split(API_URL);
       fs.unlinkSync(`./${fileToDelete[1]}`);
       debug('local file deleted');
     }
-    await dataMapper.deleteByPk(tableName, id);
+    await dataMapper.deleteByColumnValue(
+      this.constructor.tableName,
+      'id',
+      request.params.id,
+    );
     return response.status(204);
-  },
-};
+  }
+}
+module.exports = new RecruitmentController();

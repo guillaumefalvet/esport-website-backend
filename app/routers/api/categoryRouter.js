@@ -20,5 +20,5 @@ const router = express.Router();
  * @returns {Array<Category>} 200 - success response
  * @returns {object} 500 - Internal server error
  */
-router.get('/', controllerHandler(categoryController.getAll));
+router.get('/', controllerHandler(categoryController.getAll.bind(categoryController)));
 module.exports = router;
