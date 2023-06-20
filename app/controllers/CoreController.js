@@ -22,7 +22,6 @@ class CoreController {
       this.constructor.columnName,
       request.params[this.constructor.columnName],
     );
-    debug(result);
     if (!result) {
       const error = new Error();
       error.code = 404;
