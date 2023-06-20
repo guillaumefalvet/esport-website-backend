@@ -30,7 +30,7 @@ const router = express.Router();
  * @returns {Array<Calendar>} 200 - success response
  * @returns {object} 500 - Internal server error
  */
-router.get('/', controllerHandler(calendarController.getAll));
+router.get('/', controllerHandler(calendarController.getAllCalendar.bind(calendarController)));
 /**
  * GET /api/calendar/:id
  *
@@ -40,7 +40,7 @@ router.get('/', controllerHandler(calendarController.getAll));
  * @returns {Array<Calendar>} 200 - The calendar event object
  * @returns {object} 500 - Internal server error
  */
-router.get('/:id', controllerHandler(calendarController.getOne));
+router.get('/:id', controllerHandler(calendarController.getOne.bind(calendarController)));
 
 /**
  * POST /api/calendar
@@ -52,7 +52,7 @@ router.get('/:id', controllerHandler(calendarController.getOne));
  * @returns {Array<Calendar>} 200 - The created calendar event object
  * @returns {object} 500 - Internal server error
  */
-router.post('/', authorizeAccess(1), controllerHandler(calendarController.insertOne));
+router.post('/', authorizeAccess(1), controllerHandler(calendarController.createOne.bind(calendarController)));
 
 /**
  * PATCH /api/calendar/:id
@@ -65,7 +65,7 @@ router.post('/', authorizeAccess(1), controllerHandler(calendarController.insert
  * @returns {Array<Calendar>} 200 - The updated calendar event object
  * @returns {object} 500 - Internal server error
  */
-router.patch('/:id', authorizeAccess(1), controllerHandler(calendarController.updateOne));
+router.patch('/:id', authorizeAccess(1), controllerHandler(calendarController.modifyOne.bind(calendarController)));
 
 /**
  * DELETE /api/calendar/:id
@@ -77,6 +77,6 @@ router.patch('/:id', authorizeAccess(1), controllerHandler(calendarController.up
  * @returns {object} 200 - Success message
  * @returns {object} 500 - Internal server error
  */
-router.delete('/:id', authorizeAccess(1), controllerHandler(calendarController.deleteOne));
+router.delete('/:id', authorizeAccess(1), controllerHandler(calendarController.deleteOne.bind(calendarController)));
 
 module.exports = router;
