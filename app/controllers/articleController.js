@@ -8,15 +8,10 @@ const jsend = {
 class ArticleController extends CoreController {
   static tableName = 'article';
 
+  static tableNameView = 'article_events_categories_public';
+
   static columnName = 'slug';
 
-  static paramsLink = 'slug';
-
-  /**
-   * create a category controller
-  *
-  * @augments CoreController
-  */
   constructor() {
     super();
     debug('ArticleController created');
@@ -33,22 +28,6 @@ class ArticleController extends CoreController {
     debug(`get all public ${this.constructor.tableName}`);
     const results = await dataMapper.getAll('article_events_categories_public');
     jsend.data = results;
-    return response.status(200).json(jsend);
-  }
-
-  async getOneView(request, response, next) {
-    debug(`get one ${this.constructor.tableName}`);
-    const result = await dataMapper.getByColumnValue(
-      'article_events_categories_public',
-      this.constructor.columnName,
-      request.params[this.constructor.paramsLink],
-    );
-    if (!result) {
-      const error = new Error();
-      error.code = 404;
-      return next(error);
-    }
-    jsend.data = result;
     return response.status(200).json(jsend);
   }
 
