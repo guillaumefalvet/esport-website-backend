@@ -72,6 +72,9 @@ module.exports = {
   async deleteByPk(table, id) {
     await client.query(`DELETE FROM ${table} WHERE id = $1;`, [id]);
   },
+  async deleteByColumnValue(tableName, columnName, value) {
+    await client.query(`DELETE FROM ${tableName} WHERE ${columnName} = $1;`, [value]);
+  },
   async deleteBySlug(slug) {
     await client.query('DELETE FROM article WHERE slug = $1;', [slug]);
   },
