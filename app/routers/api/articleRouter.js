@@ -51,7 +51,7 @@ router.get('/admin', authorizeAccess(1), controllerHandler(articleController.get
  * @returns {Article} 200 - The article object
  * @returns {object} 500 - Internal server error
  */
-router.get('/:slug', controllerHandler(articleController.getOneView.bind(articleController)));
+router.get('/:slug', controllerHandler(articleController.getOne.bind(articleController)));
 
 /**
  * POST /api/articles
