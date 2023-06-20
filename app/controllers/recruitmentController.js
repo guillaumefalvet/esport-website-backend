@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 const debug = require('debug')('app:controllers:recruitment');
 const fs = require('fs');
-const busboys = require('busboy');
 const uploadHandler = require('../services/uploadService');
 const dataMapper = require('../models/dataMapper');
 const { createRecruitment } = require('../validations/schemas/recruitment-schema');
@@ -52,7 +51,8 @@ class RecruitmentController extends CoreController {
       }
       const result = await dataMapper.createOne(this.constructor.tableName, updatedData);
       debug('Recruitment created successfully');
-      return response.status(201).json(result);
+      jsend.data = result;
+      return response.status(201).json(jsend);
     } catch (err) {
       debug('Error while creating recruitment', err);
       return next(err);
