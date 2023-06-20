@@ -5,7 +5,6 @@ const { authorizeAccess } = require('../../middlewares/authHandler');
 const { createArticle, modifyArticle } = require('../../validations/schemas/article-schema');
 const validate = require('../../validations/validate');
 const articleController = require('../../controllers/articleController');
-const Article_Controller = require('../../controllers/Article_Controller');
 
 const router = express.Router();
 /**
@@ -30,7 +29,7 @@ const router = express.Router();
  * @returns {Array.<Article>} 200 - Array of article objects
  * @returns {object} 500 - Internal server error
  */
-router.get('/', controllerHandler(Article_Controller.getAll.bind(Article_Controller)));
+router.get('/', controllerHandler(articleController.getAllPublic.bind(articleController)));
 
 /**
  * GET /api/articles/admin
@@ -41,7 +40,7 @@ router.get('/', controllerHandler(Article_Controller.getAll.bind(Article_Control
  * @returns {Array.<Article>} 200 - Array of private article objects
  * @returns {object} 500 - Internal server error
  */
-router.get('/admin', authorizeAccess(1), controllerHandler(articleController.getAllPrivate));
+router.get('/admin', authorizeAccess(1), controllerHandler(articleController.getAllPrivate.bind(articleController)));
 
 /**
  * GET /api/articles/{slug}
@@ -52,7 +51,7 @@ router.get('/admin', authorizeAccess(1), controllerHandler(articleController.get
  * @returns {Article} 200 - The article object
  * @returns {object} 500 - Internal server error
  */
-router.get('/:slug', controllerHandler(Article_Controller.getOne.bind(Article_Controller)));
+router.get('/:slug', controllerHandler(articleController.getOneView.bind(articleController)));
 
 /**
  * POST /api/articles
@@ -64,7 +63,7 @@ router.get('/:slug', controllerHandler(Article_Controller.getOne.bind(Article_Co
  * @returns {Article} 200 - The created article object
  * @returns {object} 500 - Internal server error
  */
-router.post('/', authorizeAccess(1), validate(createArticle), controllerHandler(Article_Controller.createOne.bind(Article_Controller)));
+router.post('/', authorizeAccess(1), validate(createArticle), controllerHandler(articleController.createOne.bind(articleController)));
 
 /**
  * POST /api/articles/{slug}/category/{id}
@@ -77,7 +76,7 @@ router.post('/', authorizeAccess(1), validate(createArticle), controllerHandler(
  * @returns {object} 200 - Success message
  * @returns {object} 500 - Internal server error
  */
-router.post('/:slug/category/:id', authorizeAccess(1), controllerHandler(articleController.insertCategory));
+router.post('/:slug/category/:id', authorizeAccess(1), controllerHandler(articleController.createCategoryRelation.bind(articleController)));
 
 /**
  * POST /api/articles/{slug}/calendar/{id}
@@ -90,7 +89,7 @@ router.post('/:slug/category/:id', authorizeAccess(1), controllerHandler(article
  * @returns {object} 200 - Success message
  * @returns {object} 500 - Internal server error
  */
-router.post('/:slug/calendar/:id', authorizeAccess(1), controllerHandler(articleController.insertCalendar));
+router.post('/:slug/calendar/:id', authorizeAccess(1), controllerHandler(articleController.createCalendarRelation.bind(articleController)));
 
 /**
  * PATCH /api/articles/{slug}
@@ -103,7 +102,7 @@ router.post('/:slug/calendar/:id', authorizeAccess(1), controllerHandler(article
  * @returns {Article} 200 - The updated article object
  * @returns {object} 500 - Internal server error
  */
-router.patch('/:slug', authorizeAccess(1), validate(modifyArticle), controllerHandler(Article_Controller.modifyOne.bind(Article_Controller)));
+router.patch('/:slug', authorizeAccess(1), validate(modifyArticle), controllerHandler(articleController.modifyOne.bind(articleController)));
 
 /**
  * DELETE /api/articles/{slug}
@@ -115,7 +114,7 @@ router.patch('/:slug', authorizeAccess(1), validate(modifyArticle), controllerHa
  * @returns {object} 200 - Success message
  * @returns {object} 500 - Internal server error
  */
-router.delete('/:slug', authorizeAccess(1), controllerHandler(articleController.deleteOne));
+router.delete('/:slug', authorizeAccess(1), controllerHandler(articleController.deleteOne.bind(articleController)));
 
 /**
  * DELETE /api/articles/{slug}/category/{id}
@@ -128,7 +127,7 @@ router.delete('/:slug', authorizeAccess(1), controllerHandler(articleController.
  * @returns {object} 200 - Success message
  * @returns {object} 500 - Internal server error
  */
-router.delete('/:slug/category/:id', authorizeAccess(1), controllerHandler(articleController.deleteCategory));
+router.delete('/:slug/category/:id', authorizeAccess(1), controllerHandler(articleController.deleteCategoryRelation.bind(articleController)));
 
 /**
  * DELETE /api/articles/{slug}/calendar/{id}
@@ -141,6 +140,6 @@ router.delete('/:slug/category/:id', authorizeAccess(1), controllerHandler(artic
  * @returns {object} 200 - Success message
  * @returns {object} 500 - Internal server error
  */
-router.delete('/:slug/calendar/:id', authorizeAccess(1), controllerHandler(articleController.deleteCalendar));
+router.delete('/:slug/calendar/:id', authorizeAccess(1), controllerHandler(articleController.deleteCalendarRelation.bind(articleController)));
 
 module.exports = router;
