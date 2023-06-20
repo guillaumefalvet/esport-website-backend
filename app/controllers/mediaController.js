@@ -26,14 +26,14 @@ class MediaController extends CoreController {
     debug(`${this.constructor.name} get all`);
     if (request.query.type === 'photo') {
       debug('photo');
-      const result = await dataMapper.getByType(false);
+      const result = await dataMapper.getByColumnValue(this.constructor.tableName, 'is_active', false);
       jsend.status = 'success';
       jsend.data = result;
       return response.status(200).json(jsend);
     }
     if (request.query.type === 'video') {
       debug('video');
-      const result = await dataMapper.getByType(true);
+      const result = await await dataMapper.getByColumnValue(this.constructor.tableName, 'is_active', true);
       jsend.data = result;
       return response.status(200).json(jsend);
     }
