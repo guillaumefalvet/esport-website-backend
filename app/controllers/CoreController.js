@@ -4,7 +4,6 @@ const dataMapper = require('../models/dataMapper');
 
 const jsend = {
   status: 'success',
-  data: '',
 };
 class CoreController {
   async getAll(_, response) {
