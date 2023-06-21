@@ -23,7 +23,7 @@ const router = express.Router();
  * @param {LoginRequest} request.body - User login credentials
 
  */
-router.post('/login', validate(loginValidation), controllerHandler(authController.handleLogin));
+router.post('/login', validate(loginValidation), controllerHandler(authController.handleLogin.bind(authController)));
 
 /**
  * POST /api/auth/refresh-token
@@ -31,6 +31,6 @@ router.post('/login', validate(loginValidation), controllerHandler(authControlle
  * @tags Authentication
  * @param {RefreshRequest} request.body - Request body
  */
-router.post('/refresh-token', validate(refreshToken), controllerHandler(authController.handleTokenRefresh));
+router.post('/refresh-token', validate(refreshToken), controllerHandler(authController.handleTokenRefresh.bind(authController)));
 
 module.exports = router;

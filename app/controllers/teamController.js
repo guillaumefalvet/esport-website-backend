@@ -20,14 +20,14 @@ class TeamController extends CoreController {
   async createMediaRelation(request, response, next) {
     const createReference = await this.createReference(request, next, 'media', 'id');
     if (createReference) {
-      response.status(200).json(jsend);
+      response.status(201).json(jsend);
     }
   }
 
   async createSetupRelation(request, response, next) {
     const createReference = await this.createReference(request, next, 'setup', 'id');
     if (createReference) {
-      response.status(200).json(jsend);
+      response.status(201).json(jsend);
     }
   }
 
