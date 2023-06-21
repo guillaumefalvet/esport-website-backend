@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-const debug = require('debug')('app:controllers');
+const debug = require('debug')('app:controllers:CoreController');
 const dataMapper = require('../models/dataMapper');
 
 const jsend = {
