@@ -82,7 +82,7 @@ class MediaController extends CoreController {
       debug('FS: media deleted ');
     }
     await dataMapper.deleteByColumnValue(this.constructor.tableName, this.constructor.columnName, request.params[this.constructor.columnName]);
-    return response.status(204);
+    return response.status(204).send();
   }
 }
 module.exports = new MediaController();
