@@ -45,12 +45,12 @@ Authorization: Bearer {{accessToken}}
 
 ### Récupérer un joueur
 
-GET {{ endpoint }}/team/slayer_back
+GET {{ endpoint }}/team/jack_doe
 
 
 ### Modification d'un joueur
 
-PATCH  {{endpoint}}/team/slayer_back
+PATCH  {{endpoint}}/team/6
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
