@@ -181,9 +181,25 @@ VALUES
 INSERT INTO "article_has_category" ("article_id", "category_id")
 VALUES
   (1, 1),
-  (1, 2),
-  (2, 1),
-  (2, 3);
+  (2, 2),
+  (3, 1),
+  (4, 3),
+  (5, 3),
+  (6, 3),
+  (8, 3),
+  (7, 2),
+  (9, 1),
+  (10, 2),
+  (11, 1),
+  (12, 3),
+  (13, 2),
+  (14, 1),
+  (15, 3),
+  (16, 1),
+  (17, 2),
+  (18, 2),
+  (19, 1),
+  (20, 3);
 
 -- Seeding data for the "article_has_calendar" table
 INSERT INTO "article_has_calendar" ("article_id", "calendar_id")
