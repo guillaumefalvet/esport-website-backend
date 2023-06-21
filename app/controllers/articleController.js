@@ -12,6 +12,8 @@ class ArticleController extends CoreController {
 
   static columnName = 'slug';
 
+  static secondaryColumnName = 'id';
+
   constructor() {
     super();
     debug('ArticleController created');
