@@ -41,14 +41,14 @@ class ArticleController extends CoreController {
   async createCalendarRelation(request, response, next) {
     const createReference = await this.createReference(request, next, 'calendar', 'id');
     if (createReference) {
-      response.status(200).json(jsend);
+      response.status(201).json(jsend);
     }
   }
 
   async createCategoryRelation(request, response, next) {
     const createReference = await this.createReference(request, next, 'category', 'id');
     if (createReference) {
-      response.status(200).json(jsend);
+      response.status(201).json(jsend);
     }
   }
 

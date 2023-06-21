@@ -47,7 +47,7 @@ class CoreController {
     }
     const result = await dataMapper.createOne(this.constructor.tableName, request.body);
     jsend.data = result;
-    return response.status(200).json(jsend);
+    return response.status(201).json(jsend);
   }
 
   async modifyOne(request, response, next) {
