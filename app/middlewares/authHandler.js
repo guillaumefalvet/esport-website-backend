@@ -127,7 +127,6 @@ const authHandler = {
     debug('saving newly generated refresh token is the database ...');
     await dataMapper.setRefreshToken(user.id, refreshToken);
     return {
-      status: 'success',
       data: {
         accessToken,
         refreshToken,
