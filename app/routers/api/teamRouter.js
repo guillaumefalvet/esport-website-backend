@@ -86,17 +86,17 @@ router.post('/:user_name/setup/:id(\\d+)', authorizeAccess(1), controllerHandler
 router.post('/:user_name/media/:id(\\d+)', authorizeAccess(1), controllerHandler(teamController.createMediaRelation.bind(teamController)));
 
 /**
- * PATCH /api/team/:user_name
+ * PATCH /api/team/:id
  *
  * @summary Update an existing player
  * @tags Team
  * @security BearerAuth
- * @param {string} user_name.path - The user name of the player to update
+ * @param {number} id.path - The if of the player to update
  * @param {Team} request.body - The updated player object
  * @returns {Array<Team>} 200 - The updated player object
  * @returns {object} 500 - Internal server error
  */
-router.patch('/:user_name', authorizeAccess(1), validate(modifyPlayerValidation), controllerHandler(teamController.modifyOne.bind(teamController)));
+router.patch('/:id(\\d+)', authorizeAccess(1), validate(modifyPlayerValidation), controllerHandler(teamController.modifyOne.bind(teamController)));
 
 /**
  * DELETE /api/team/:user_name
