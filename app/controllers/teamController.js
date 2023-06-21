@@ -12,6 +12,8 @@ class TeamController extends CoreController {
 
   static columnName = 'user_name';
 
+  static secondaryColumnName = 'id';
+
   constructor() {
     super();
     debug('TeamController created');
