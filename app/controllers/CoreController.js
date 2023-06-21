@@ -32,7 +32,6 @@ class CoreController {
 
   async createOne(request, response, next) {
     debug(`${this.constructor.name} createOne`);
-    debug(request.body[this.constructor.columnName]);
     const alradyExist = await dataMapper.getByColumnValue(
       this.constructor.tableName,
       this.constructor.columnName,
@@ -51,17 +50,18 @@ class CoreController {
 
   async modifyOne(request, response, next) {
     debug(`${this.constructor.name} modifyOne`);
+    const finalColumnName = this.constructor.secondaryColumnName || this.constructor.columnName;
     const doesExist = await dataMapper.getByColumnValue(
       this.constructor.tableName,
-      this.constructor.columnName,
-      request.params[this.constructor.columnName],
+      finalColumnName,
+      request.params[finalColumnName],
     );
     if (!doesExist) {
       const error = new Error();
       error.code = 404;
       return next(error);
     }
-    request.body[this.constructor.columnName] = request.params[this.constructor.columnName];
+    request.body[finalColumnName] = request.params[finalColumnName];
     const result = await dataMapper.modifyOne(this.constructor.tableName, request.body);
     jsend.data = result;
     return response.status(200).json(jsend);
