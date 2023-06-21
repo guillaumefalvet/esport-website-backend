@@ -31,7 +31,7 @@ router.get('/', controllerHandler(mediaController.getAllMedia.bind(mediaControll
  */
 router.post('/', authorizeAccess(1), controllerHandler(mediaController.insertMedia.bind(mediaController)));
 /**
- * DELETE /api/media/{id}
+ * DELETE /api/media/:id
 
  * @summary Delete a media by ID
  * @tags Media
