@@ -83,7 +83,7 @@ class RecruitmentController extends CoreController {
       'id',
       request.params.id,
     );
-    return response.status(204);
+    return response.status(204).send();
   }
 }
 module.exports = new RecruitmentController();

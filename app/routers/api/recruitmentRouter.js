@@ -47,5 +47,5 @@ router.get('/', authorizeAccess(1), controllerHandler(recruitController.getAll.b
  * @returns {object} 403 - Forbidden
  * @returns {object} 404 - Not Found error
 */
-router.delete('/:id', authorizeAccess(1), controllerHandler(recruitController.deleteRecruitment.bind(recruitController)));
+router.delete('/:id(\\d+)', authorizeAccess(1), controllerHandler(recruitController.deleteRecruitment.bind(recruitController)));
 module.exports = router;

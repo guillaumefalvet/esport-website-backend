@@ -70,7 +70,7 @@ router.post('/', authorizeAccess(1), validate(createPlayerValidation), controlle
  * @returns {object} 200 - Success message
  * @returns {object} 500 - Internal server error
  */
-router.post('/:user_name/setup/:id', authorizeAccess(1), controllerHandler(teamController.createSetupRelation.bind(teamController)));
+router.post('/:user_name/setup/:id(\\d+)', authorizeAccess(1), controllerHandler(teamController.createSetupRelation.bind(teamController)));
 
 /**
  * POST /api/team/:user_name/media/:id
@@ -83,7 +83,7 @@ router.post('/:user_name/setup/:id', authorizeAccess(1), controllerHandler(teamC
  * @returns {object} 200 - Success message
  * @returns {object} 500 - Internal server error
  */
-router.post('/:user_name/media/:id', authorizeAccess(1), controllerHandler(teamController.createMediaRelation.bind(teamController)));
+router.post('/:user_name/media/:id(\\d+)', authorizeAccess(1), controllerHandler(teamController.createMediaRelation.bind(teamController)));
 
 /**
  * PATCH /api/team/:user_name
@@ -121,7 +121,7 @@ router.delete('/:user_name', authorizeAccess(1), controllerHandler(teamControlle
  * @returns {object} 200 - Success message
  * @returns {object} 500 - Internal server error
  */
-router.delete('/:user_name/setup/:id', authorizeAccess(1), controllerHandler(teamController.deleteSetupRelation.bind(teamController)));
+router.delete('/:user_name/setup/:id(\\d+)', authorizeAccess(1), controllerHandler(teamController.deleteSetupRelation.bind(teamController)));
 
 /**
  * DELETE /api/team/:user_name/media/:id
@@ -134,6 +134,6 @@ router.delete('/:user_name/setup/:id', authorizeAccess(1), controllerHandler(tea
  * @returns {object} 200 - Success message
  * @returns {object} 500 - Internal server error
  */
-router.delete('/:user_name/media/:id', authorizeAccess(1), controllerHandler(teamController.deleteMediaRelation.bind(teamController)));
+router.delete('/:user_name/media/:id(\\d+)', authorizeAccess(1), controllerHandler(teamController.deleteMediaRelation.bind(teamController)));
 
 module.exports = router;
