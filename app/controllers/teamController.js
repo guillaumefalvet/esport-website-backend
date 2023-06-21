@@ -33,12 +33,12 @@ class TeamController extends CoreController {
 
   async deleteMediaRelation(request, response, next) {
     await this.deleteReference(request, next, 'media', 'id');
-    return response.status(204);
+    return response.status(204).send();
   }
 
   async deleteSetupRelation(request, response, next) {
     await this.deleteReference(request, next, 'setup', 'id');
-    return response.status(204);
+    return response.status(204).send();
   }
 }
 

@@ -85,7 +85,7 @@ class CoreController {
       this.constructor.columnName,
       request.params[this.constructor.columnName],
     );
-    return response.status(204);
+    return response.status(204).send();
   }
 
   async createReference(request, next, referenceTableName, referenceColumName) {

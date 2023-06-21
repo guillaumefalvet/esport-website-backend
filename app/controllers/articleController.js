@@ -54,12 +54,12 @@ class ArticleController extends CoreController {
 
   async deleteCalendarRelation(request, response, next) {
     await this.deleteReference(request, next, 'calendar', 'id');
-    return response.status(204);
+    return response.status(204).send();
   }
 
   async deleteCategoryRelation(request, response, next) {
     await this.deleteReference(request, next, 'category', 'id');
-    return response.status(204);
+    return response.status(204).send();
   }
 }
 
