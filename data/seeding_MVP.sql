@@ -169,13 +169,16 @@ VALUES
   ('Évenement'),
   ('Conseils');
 
+
+
+
 -- Seeding data for the "calendar" table
 INSERT INTO "calendar" ("event_name", "event_date", "adversary_name", "adversary_name_short", "replay_link", "live_link", "score", "image")
 VALUES
-  ('Match 1', '2023-06-15 18:00:00', 'Adversaire 1', 'Adv 1', 'https://replaylink1.com', 'https://livestream1.com', '2-1', 'https://projet-14-victory-zone-back-production.up.railway.app/public/public/image/fff.webp'),
-  ('Match 2', '2023-06-20 19:30:00', 'Adversaire 2', 'Adv 2', 'https://replaylink2.com', 'https://livestream2.com', '1-1', 'https://projet-14-victory-zone-back-production.up.railway.app/public/public/image/fff.webp'),
-  ('Match dans 1 ans', '2024-06-20 19:30:00', 'the futute is now', 'future is now', 'https://replaylink2.com', 'https://livestream2.com', '', 'https://projet-14-victory-zone-back-production.up.railway.app/public/public/image/fff.webp'),
-  ('Match dans 2 ans', '2024-06-20 19:30:00', 'the futute is now', 'future is now', 'https://replaylink2.com', 'https://livestream2.com', '', 'https://projet-14-victory-zone-back-production.up.railway.app/public/public/image/fff.webp');
+  ('Match 1', '2023-06-15 18:00:00', 'Adversaire 1', 'Adv 1', 'https://replaylink1.com', 'https://livestream1.com', '2-1', 'https://projet-14-victory-zone-back-production.up.railway.app/public/image/fff.webp'),
+  ('Match 2', '2023-06-20 19:30:00', 'Adversaire 2', 'Adv 2', 'https://replaylink2.com', 'https://livestream2.com', '1-1', 'https://projet-14-victory-zone-back-production.up.railway.app/public/image/fff.webp'),
+  ('Match dans 1 ans', '2024-06-20 19:30:00', 'the futute is now', 'future is now', 'https://replaylink2.com', 'https://livestream2.com', '', 'https://projet-14-victory-zone-back-production.up.railway.app/public/image/fff.webp'),
+  ('Match dans 2 ans', '2024-06-20 19:30:00', 'the futute is now', 'future is now', 'https://replaylink2.com', 'https://livestream2.com', '', 'https://projet-14-victory-zone-back-production.up.railway.app/public/image/fff.webp');
 
 -- Seeding data for the "article_has_category" table
 INSERT INTO "article_has_category" ("article_id", "category_id")
