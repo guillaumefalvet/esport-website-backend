@@ -21,7 +21,7 @@ const router = express.Router();
  * @summary submit an application
  * @tags Recruitment
  * @param {Recruitment} request.body.required - The recruitment object to insert - multipart/form-data
- * @returns {object} 200 - Success message
+ * @returns {object} 201 - Success message
  * @returns {object} 400 - Bad request
  */
 router.post('/', controllerHandler(recruitController.insertRecruitment.bind(recruitController)));
