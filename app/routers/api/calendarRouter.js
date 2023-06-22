@@ -49,8 +49,9 @@ router.get('/:id(\\d+)', controllerHandler(calendarController.getOne.bind(calend
  * @tags Calendar
  * @security BearerAuth
  * @param {Calendar} request.body - The calendar event object to create
- * @returns {Array<Calendar>} 200 - The created calendar event object
- * @returns {object} 500 - Internal server error
+ * @returns {Array<Calendar>} 201 - The created calendar event object
+ * @returns {object} 403 - Forbidden
+ * @returns {object} 303 - already exist
  */
 router.post('/', authorizeAccess(1), controllerHandler(calendarController.createOne.bind(calendarController)));
 
@@ -63,7 +64,8 @@ router.post('/', authorizeAccess(1), controllerHandler(calendarController.create
  * @param {number} id.path - The ID of the calendar event to update
  * @param {Calendar} request.body - The updated calendar event object
  * @returns {Array<Calendar>} 200 - The updated calendar event object
- * @returns {object} 500 - Internal server error
+ * @returns {object} 403 - Forbidden
+ * @returns {object} 404 - not found
  */
 router.patch('/:id(\\d+)', authorizeAccess(1), controllerHandler(calendarController.modifyOne.bind(calendarController)));
 
@@ -74,8 +76,9 @@ router.patch('/:id(\\d+)', authorizeAccess(1), controllerHandler(calendarControl
  * @tags Calendar
  * @security BearerAuth
  * @param {number} id.path - The ID of the calendar event to delete
- * @returns {object} 200 - Success message
- * @returns {object} 500 - Internal server error
+ * @returns {object} 204 - Success message
+ * @returns {object} 403 - Forbidden
+ * @returns {object} 404 - not found
  */
 router.delete('/:id(\\d+)', authorizeAccess(1), controllerHandler(calendarController.deleteOne.bind(calendarController)));
 

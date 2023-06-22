@@ -16,7 +16,8 @@ class AuthController extends CoreController {
    * @param {object} request - Express request object.
    * @param {object} response - Express response object.
    * @param {function} next - Next middleware function.
-   * @returns {Promise<void>}
+   * @returns {Array} 200 - successful
+   * @returns {Array} 401 - wrong credentials
    */
   async handleLogin(request, response, next) {
     debug(`${this.constructor.name} handleLogin`);
@@ -51,17 +52,22 @@ class AuthController extends CoreController {
    * @param {object} request - Express request object.
    * @param {object} response - Express response object.
    * @param {function} next - Next middleware function.
-   * @returns {Promise<void>}
+   * @returns {Array} 200 - Successful
+   * @returns {Array} 400 - bad request
+   * @returns {Array} 400 - Unauthorized
    */
   async handleTokenRefresh(request, response, next) {
     debug(`${this.constructor.name} handleTokenRefresh`);
     // refresh token is always stored in the body
     const { refreshToken } = request.body;
-    // the a
+    // the authHeader is stored in the request headers
     const authHeader = request.headers.authorization;
     // if there is no header
     if (!authHeader || !refreshToken) {
-      return next(new Error('❌ ERROR: Missing authHeader or {refreshToken} in the body'));
+      debug('❌ ERROR: Missing authHeader or {refreshToken} in the body');
+      const error = new Error();
+      error.code = 401;
+      return next(error);
     }
     const accessToken = authHeader.split('Bearer ')[1];
     if (await authHandler.isRefreshTokenValid(refreshToken)) {
@@ -70,7 +76,11 @@ class AuthController extends CoreController {
       jsend.data = sendToken.data;
       return response.status(200).json(jsend);
     }
-    return next(new Error('❌ ERROR: refresh token is not valid'));
+    debug('❌ ERROR: refresh token is not valid');
+    const error = new Error();
+    error.code = 401;
+
+    return next(error);
   }
 }
 module.exports = new AuthController();

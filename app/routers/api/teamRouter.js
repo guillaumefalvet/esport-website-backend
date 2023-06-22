@@ -55,6 +55,7 @@ router.get('/:user_name', controllerHandler(teamController.getOne.bind(teamContr
  * @security BearerAuth
  * @param {Team} request.body - The player object to create
  * @returns {Array<Team>} 200 - The created player object
+ * @returns {object} 403 - Forbidden
  * @returns {object} 500 - Internal server error
  */
 router.post('/', authorizeAccess(1), validate(createPlayerValidation), controllerHandler(teamController.createOne.bind(teamController)));
@@ -67,8 +68,9 @@ router.post('/', authorizeAccess(1), validate(createPlayerValidation), controlle
  * @security BearerAuth
  * @param {string} user_name.path - The user name of the player
  * @param {string} id.path - The ID of the setup
- * @returns {object} 200 - Success message
- * @returns {object} 500 - Internal server error
+ * @returns {object} 201 - Success message
+ * @returns {object} 403 - Forbidden
+ * @returns {object} 303 - See other
  */
 router.post('/:user_name/setup/:id(\\d+)', authorizeAccess(1), controllerHandler(teamController.createSetupRelation.bind(teamController)));
 
@@ -81,7 +83,8 @@ router.post('/:user_name/setup/:id(\\d+)', authorizeAccess(1), controllerHandler
  * @param {string} user_name.path - The user name of the player
  * @param {string} id.path - The ID of the media
  * @returns {object} 200 - Success message
- * @returns {object} 500 - Internal server error
+ * @returns {object} 403 - Forbidden
+ * @returns {object} 404 - not found
  */
 router.post('/:user_name/media/:id(\\d+)', authorizeAccess(1), controllerHandler(teamController.createMediaRelation.bind(teamController)));
 
@@ -94,7 +97,8 @@ router.post('/:user_name/media/:id(\\d+)', authorizeAccess(1), controllerHandler
  * @param {number} id.path - The if of the player to update
  * @param {Team} request.body - The updated player object
  * @returns {Array<Team>} 200 - The updated player object
- * @returns {object} 500 - Internal server error
+ * @returns {object} 403 - Forbidden
+ * @returns {object} 404 - not found
  */
 router.patch('/:id(\\d+)', authorizeAccess(1), validate(modifyPlayerValidation), controllerHandler(teamController.modifyOne.bind(teamController)));
 
@@ -105,8 +109,9 @@ router.patch('/:id(\\d+)', authorizeAccess(1), validate(modifyPlayerValidation),
  * @tags Team
  * @security BearerAuth
  * @param {string} user_name.path - The user name of the player to delete
- * @returns {object} 200 - Success message
- * @returns {object} 500 - Internal server error
+ * @returns {object} 204 - Success message
+ * @returns {object} 403 - Forbidden
+ * @returns {object} 404 - not found
  */
 router.delete('/:user_name', authorizeAccess(1), controllerHandler(teamController.deleteOne.bind(teamController)));
 
@@ -118,8 +123,9 @@ router.delete('/:user_name', authorizeAccess(1), controllerHandler(teamControlle
  * @security BearerAuth
  * @param {string} user_name.path - The user name of the player
  * @param {string} id.path - The ID of the setup to delete
- * @returns {object} 200 - Success message
- * @returns {object} 500 - Internal server error
+ * @returns {object} 204 - Success message
+ * @returns {object} 403 - Forbidden
+ * @returns {object} 404 - not found
  */
 router.delete('/:user_name/setup/:id(\\d+)', authorizeAccess(1), controllerHandler(teamController.deleteSetupRelation.bind(teamController)));
 
@@ -131,8 +137,9 @@ router.delete('/:user_name/setup/:id(\\d+)', authorizeAccess(1), controllerHandl
  * @security BearerAuth
  * @param {string} user_name.path - The user name of the player
  * @param {string} id.path - The ID of the media to delete
- * @returns {object} 200 - Success message
- * @returns {object} 500 - Internal server error
+ * @returns {object} 204 - Success message
+ * @returns {object} 403 - Forbidden
+ * @returns {object} 404 - not found
  */
 router.delete('/:user_name/media/:id(\\d+)', authorizeAccess(1), controllerHandler(teamController.deleteMediaRelation.bind(teamController)));
 

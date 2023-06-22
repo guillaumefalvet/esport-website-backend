@@ -12,7 +12,8 @@ const router = express.Router();
  * @property {string} first_name.required - The recruitment first name.
  * @property {string} last_name.required - The recruitment last name.
  * @property {string} message.required - The recruitment message.
- * @property {string} cv - The recruitment external link. - binary
+ * @property {string} external_link - the recruitment optional external link
+ * @property {string} cv - the recruitment optional external file. - binary
  */
 
 /**
@@ -20,7 +21,7 @@ const router = express.Router();
  * @summary submit an application
  * @tags Recruitment
  * @param {Recruitment} request.body.required - The recruitment object to insert - multipart/form-data
- * @returns {object} 200 - Success message
+ * @returns {object} 201 - Success message
  * @returns {object} 400 - Bad request
  */
 router.post('/', controllerHandler(recruitController.insertRecruitment.bind(recruitController)));

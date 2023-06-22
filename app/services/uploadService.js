@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 const multer = require('multer');
-const debug = require('debug')('app:service:uploadService');
+const fs = require('fs');
 /**
  * Handles file upload using Multer middleware.
  *
@@ -9,12 +9,14 @@ const debug = require('debug')('app:service:uploadService');
  * @param {string} subFolder - The subfolder within the main folder where files will be uploaded.
  * @param {string} fieldname - The name of the field in the request containing the file.
  * @param {Function} next - The next middleware function to pass the error to.
+ * @param {Joi.Schema} schema - The Joi validation schema for the request body.
  * @returns {Promise<Object>} A Promise that resolves to an object containing the uploaded file information.
- * @throws {Error} If there is an error during file upload.
+ * @throws {Error} If there is an error during file upload or if the validation fails.
  */
-const uploadService = (request, mainFolder, subFolder, fieldname, next) => {
+const uploadService = (request, mainFolder, subFolder, fieldname, next, schema) => {
   const uploadFolder = `${mainFolder}/${subFolder}`;
 
+  // Configure the storage settings for Multer
   const storage = multer.diskStorage({
     destination(_, file, cb) {
       cb(null, uploadFolder);
@@ -26,9 +28,11 @@ const uploadService = (request, mainFolder, subFolder, fieldname, next) => {
     },
   });
 
+  // Create a Multer instance with the configured storage settings
   const upload = multer({
     storage,
-    fileFilter(_, file, cb) {
+    async fileFilter(req, file, cb) {
+      // Perform file extension validation
       const allowedExtensions = [];
       if (fieldname === 'img') {
         allowedExtensions.push('.webp', '.jpg', '.jpeg', '.png');
@@ -48,28 +52,40 @@ const uploadService = (request, mainFolder, subFolder, fieldname, next) => {
   });
 
   return new Promise((resolve, reject) => {
-    upload.single(fieldname)(request, null, (err) => {
+    // Use Multer to handle the file upload
+    upload.single(fieldname)(request, null, async (err) => {
       if (err) {
         // Pass the error to the next middleware
         return reject(err);
       }
-      // If there isn't any file => send empty string
-      if (!request.file) {
-        return resolve({ filename: '', path: '' });
-      }
-      // file upload successful
-      const { filename, path } = request.file;
 
-      // Process the file and resolve the Promise with the result
-      return resolve({ filename, path });
+      try {
+        // Perform custom request body validation using Joi schema
+        await schema.validateAsync(request.body);
+        // If validation passes, process the file and resolve the Promise with the result
+
+        // If there isn't any file => send empty string
+        if (!request.file) {
+          return resolve({ filename: '', path: '' });
+        }
+
+        // File upload successful
+        const { filename, path } = request.file;
+
+        // Process the file and resolve the Promise with the result
+        return resolve({ filename, path });
+      } catch (error) {
+        // If validation fails, delete the uploaded file if necessary
+        if (request.file) {
+          fs.unlinkSync(request.file.path);
+        }
+        // Pass the validation error to the next middleware
+        next(error);
+        // Reject the Promise
+        return reject(error);
+      }
     });
-  })
-    .then((result) => result)
-    .catch((error) => {
-    // Pass the error to the next middleware
-      next(error);
-      throw error; // Add this line to prevent further execution
-    });
+  });
 };
 
 module.exports = uploadService;

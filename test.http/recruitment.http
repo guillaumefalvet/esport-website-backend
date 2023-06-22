@@ -54,6 +54,10 @@ slayers
 Content-Disposition: form-data; name="message"
 
 accepter ma demande je suis chaud
+--boundary_value
+Content-Disposition: form-data; name="external_link"
+
+hhpassasa
 --boundary_value--
 
 ### Suppression d'un recrutement

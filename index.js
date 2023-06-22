@@ -20,7 +20,7 @@ const options = {
     },
   },
   // Base directory which we use to locate your JSDOC files
-  baseDir: `${__dirname}/app`,
+  baseDir: `${__dirname}/app/routers`,
   // Glob pattern to find your jsdoc files (multiple patterns can be added in an array)
   filesPattern: './**/*.js',
   // URL where SwaggerUI will be rendered
@@ -43,6 +43,7 @@ app.use(cors(corsOptions));
 app.use(router);
 
 app.listen(port, () => {
-  debug(`Server ready: http://localhost:${port}`);
+  debug(`🚀 Server ready: http://localhost:${port}`);
   debug(`📚 SwaggerUI: http://localhost:${port}/api-docs`);
+  debug(`🏞️  Public image: http://localhost:${port}/public`);
 });
