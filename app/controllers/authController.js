@@ -2,11 +2,12 @@ const debug = require('debug')('app:controllers:authController');
 const bcrypt = require('bcrypt');
 const dataMapper = require('../models/dataMapper');
 const authHandler = require('../middlewares/authHandler');
-/**
- * Auth Controller handles authentication related functionality.
- * @namespace authController
- */
-const authController = {
+const CoreController = require('./CoreController');
+
+const jsend = {
+  status: 'success',
+};
+class AuthController extends CoreController {
   /**
    * Handles user login.
    * @async
@@ -18,7 +19,7 @@ const authController = {
    * @returns {Promise<void>}
    */
   async handleLogin(request, response, next) {
-    debug('handleLogin');
+    debug(`${this.constructor.name} handleLogin`);
     const { email, password } = request.body;
     const result = await dataMapper.getByEmail(email);
     if (!result) {
@@ -33,13 +34,15 @@ const authController = {
     if (await bcrypt.compare(password, dbPassword)) {
       debug('✅ successfull login');
       const sendToken = await authHandler.sendAuthTokens(result);
-      return response.status(200).json(sendToken);
+      jsend.data = sendToken.data;
+      return response.status(200).json(jsend);
     }
     debug('❌ ERROR: user password isn\'t matching database password for that user');
     const error = new Error();
     error.code = 401;
     return next(error);
-  },
+  }
+
   /**
    * Handles token refresh.
    * @async
@@ -51,7 +54,7 @@ const authController = {
    * @returns {Promise<void>}
    */
   async handleTokenRefresh(request, response, next) {
-    debug('handleTokenRefresh');
+    debug(`${this.constructor.name} handleTokenRefresh`);
     // refresh token is always stored in the body
     const { refreshToken } = request.body;
     // the a
@@ -64,11 +67,10 @@ const authController = {
     if (await authHandler.isRefreshTokenValid(refreshToken)) {
       const user = await authHandler.getUserFromToken(accessToken);
       const sendToken = await authHandler.sendAuthTokens(user);
-      return response.status(200).json(sendToken);
+      jsend.data = sendToken.data;
+      return response.status(200).json(jsend);
     }
     return next(new Error('❌ ERROR: refresh token is not valid'));
-  },
-
-};
-
-module.exports = authController;
+  }
+}
+module.exports = new AuthController();

@@ -33,7 +33,7 @@ CREATE FUNCTION update_player(json_data json) RETURNS "player" AS $$
     "twitch_link" = COALESCE((json_data->>'twitch_link')::text, "twitch_link"),
     "twitter_link" = COALESCE((json_data->>'twitter_link')::text, "twitter_link"),
     "updated_at" = now()
-  WHERE "user_name" = (json_data->>'user_name')::text
+  WHERE "id" = (json_data->>'id')::int
   RETURNING *;
 $$ LANGUAGE sql;
 
@@ -119,7 +119,7 @@ CREATE FUNCTION insert_article(json_data json) RETURNS "article" AS $$
       "figcaption" = COALESCE((json_data->>'figcaption')::text, "figcaption"),
       "publication_date" = COALESCE((json_data->>'publication_date')::TIMESTAMPTZ, "publication_date"),
       "updated_at" = now()
-    WHERE "slug" = (json_data->>'slug')::text
+    WHERE "id" = (json_data->>'id')::int
     RETURNING *;
   $$ LANGUAGE sql;
 --calendar
