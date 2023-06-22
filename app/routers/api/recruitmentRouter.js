@@ -12,7 +12,8 @@ const router = express.Router();
  * @property {string} first_name.required - The recruitment first name.
  * @property {string} last_name.required - The recruitment last name.
  * @property {string} message.required - The recruitment message.
- * @property {string} cv - The recruitment external link. - binary
+ * @property {string} external_link - the recruitment optional external link
+ * @property {string} cv - the recruitment optional external file. - binary
  */
 
 /**

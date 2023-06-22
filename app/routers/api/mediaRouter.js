@@ -7,8 +7,8 @@ const mediaController = require('../../controllers/mediaController');
 const router = express.Router();
 /**
  * @typedef {object} Media - a media type
- * @property {string} link - The media link
- * @property {string} img - the media file - binary
+ * @property {string} link - The media optional link
+ * @property {string} img - the media optional file - binary
  */
 /**
  * GET /api/media
