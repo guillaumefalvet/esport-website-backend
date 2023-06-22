@@ -1,4 +1,3 @@
-const debug = require('debug')('app:middleware:errorMiddleware');
 const multer = require('multer');
 /**
  * Error middleware handles error responses.
@@ -7,34 +6,28 @@ const multer = require('multer');
 const errorMiddleware = {
   /**
    * Handles 404 Not Found errors.
-   * @memberof errorMiddleware
-   * @function error404
-   * @param {object} request - Express request object.
-   * @param {object} response - Express response object.
-   * @returns {void}
+   * @param {object} request - The HTTP request object.
+   * @param {object} response - The HTTP response object.
+   * @param {function} next - The next middleware function.
    */
-  error404(request, response) {
-    response.status(404).json({ status: 'error', message: 'Not Found: The requested resource could not be found.' });
+  error404(request, response, next) {
+    const error = new Error();
+    error.code = 404;
+    next(error);
   },
   /**
-   * Handles various error types and returns appropriate error responses.
-   * @memberof errorMiddleware
-   * @function errorHandler
-   * @param {Error} error - Error object.
-   * @param {object} request - Express request object.
-   * @param {object} response - Express response object.
-   * @param {function} next - Next middleware function.
-   * @returns {void}
+   * Handles various types of errors and sends appropriate responses.
+   * @param {object} error - The error object.
+   * @param {object} request - The HTTP request object.
+   * @param {object} response - The HTTP response object.
+   * @param {function} next - The next middleware function.
    */
   errorHandler(error, request, response, next) {
-    debug('error Handler');
-    debug(error);
-
     if (error.code === '23505') {
       return response.status(400).json({ status: 'error', message: 'Bad Request: You are trying to send that data that already exist' });
     }
     if (error.code === 404) {
-      return response.status(error.code).json({ status: 'error', message: 'Not Found: The requested resource could not be found.' });
+      return response.status(error.code).json({ status: 'error', message: 'Not Found: The requested resource could not be found.ssssss' });
     }
     if (error.code === 303) {
       return response.status(error.code).json({ status: 'error', message: 'See other: You are trying to send that data that already exist' });
@@ -57,7 +50,6 @@ const errorMiddleware = {
     if (error.name === 'JsonWebTokenError') {
       return response.status(400).json({ status: 'error', message: 'JsonWebTokenError: Malformed JWT' });
     }
-
     if (error.name === 'jwt expired') {
       return response.status(401).json({ status: 'error', message: 'TokenExpiredError: JWT expired' });
     }
