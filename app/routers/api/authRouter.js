@@ -20,8 +20,9 @@ const router = express.Router();
  * POST /api/auth/login
  * @group Auth - Authentication
  * @tags Authentication
- * @param {LoginRequest} request.body - User login credentials
-
+ * @param {LoginRequest} request.body.required - User login credentials
+ * @returns {Array} 200 - successful
+ * @returns {Array} 401 - wrong credentials
  */
 router.post('/login', validate(loginValidation), controllerHandler(authController.handleLogin.bind(authController)));
 
@@ -29,7 +30,10 @@ router.post('/login', validate(loginValidation), controllerHandler(authControlle
  * POST /api/auth/refresh-token
  * @group Auth - Authentication
  * @tags Authentication
- * @param {RefreshRequest} request.body - Request body
+ * @param {RefreshRequest} request.body.required - Request body
+ * @returns {Array} 200 - Successful
+ * @returns {Array} 400 - bad request
+ * @returns {Array} 400 - Unauthorized
  */
 router.post('/refresh-token', validate(refreshToken), controllerHandler(authController.handleTokenRefresh.bind(authController)));
 

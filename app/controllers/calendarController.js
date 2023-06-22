@@ -5,17 +5,45 @@ const CoreController = require('./CoreController');
 const jsend = {
   status: 'success',
 };
+/**
+ * @typedef {object} CalendarController
+ * @property {function} getAllCalendar - Get all calendars.
+ */
 
+/**
+ * CalendarController class
+ * @class
+ * @classdesc Controller for managing calendars.
+ * @extends CoreController
+ */
 class CalendarController extends CoreController {
+  /**
+   * Name of the table for calendars.
+   * @type {string}
+   */
   static tableName = 'calendar';
 
+  /**
+   * Name of the column used as a unique identifier for calendars.
+   * @type {string}
+   */
   static columnName = 'id';
 
+  /**
+   * Create an instance of CalendarController.
+   */
   constructor() {
     super();
     debug('CalendarController created');
   }
 
+  /**
+   * Get all calendars.
+   * @param {object} request - The request object.
+   * @param {object} response - The response object.
+   * @returns {Array<Calendar>} 200 - success response
+   * @returns {object} 500 - Internal server error
+   */
   async getAllCalendar(request, response) {
     const { home } = request.query;
     if (home === 'true') {

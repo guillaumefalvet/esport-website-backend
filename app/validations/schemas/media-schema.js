@@ -1,8 +1,7 @@
 const Joi = require('joi');
 
 const createMedia = Joi.object({
-  link: Joi.string().required(),
-  is_active: Joi.boolean().required(),
+  link: Joi.string().allow(null, ''),
 }).required();
 
 module.exports = { createMedia };

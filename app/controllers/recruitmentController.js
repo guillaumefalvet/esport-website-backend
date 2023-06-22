@@ -11,40 +11,64 @@ const tableName = 'recruitment';
 const jsend = {
   status: 'success',
 };
+/**
+ * @typedef {object} RecruitmentController
+ * @property {function} insertRecruitment - Insert a recruitment entry.
+ * @property {function} deleteRecruitment - Delete a recruitment entry.
+ */
 
+/**
+ * RecruitmentController class
+ * @class
+ * @classdesc Controller for managing recruitment data.
+ * @extends CoreController
+ */
 class RecruitmentController extends CoreController {
+  /**
+   * Name of the table for recruitement.
+   * @type {string}
+   */
   static tableName = 'recruitment';
 
+  /**
+   * Name of the view table for recruitement.
+   * @type {string}
+   */
   static columnName = 'user_name';
 
+  /**
+   * Create an instance of RecruitmentController.
+   */
   constructor() {
     super();
     debug('RecruitmentController created');
   }
 
+  /**
+ * Insert recruitment data.
+ *
+ * @param {Object} request - Express request object.
+ * @param {Object} response - Express response object.
+ * @param {Function} next - Express next function.
+ * @returns {Array<Recruitement>} - JSON response with inserted recruitment data.
+ * @throws {Error} - If there is an error during the recruitment creation process.
+ */
   async insertRecruitment(request, response, next) {
     try {
-      const imageUpload = await uploadHandler(request, 'private', 'pdf', 'cv', next);
+      const imageUpload = await uploadHandler(request, 'private', 'pdf', 'cv', next, createRecruitment);
       const updatedData = {
         ...request.body,
       };
-      if (!imageUpload.path.length) {
-        updatedData.external_link = '';
-      } else {
+
+      if (imageUpload.path.length) {
         updatedData.external_link = `${API_URL}${imageUpload.path}`;
       }
-      await createRecruitment.validateAsync(updatedData);
       const alradyExist = await dataMapper.getByColumnValue(
         this.constructor.tableName,
         this.constructor.columnName,
         updatedData.user_name,
       );
-
       if (alradyExist) {
-        const fileToDelete = updatedData.external_link.split(API_URL);
-        debug(fileToDelete);
-        fs.unlinkSync(`./${fileToDelete[1]}`);
-        debug('local file deleted');
         const error = new Error();
         error.code = 303;
         return next(error);
@@ -59,6 +83,17 @@ class RecruitmentController extends CoreController {
     }
   }
 
+  /**
+ * Delete recruitment data.
+ *
+ * @param {Object} request - Express request object.
+ * @param {Object} response - Express response object.
+ * @param {Function} next - Express next function.
+ * @returns {object} 200 - Success message
+ * @returns {object} 403 - Forbidden
+ * @returns {object} 404 - Not Found error
+ * @throws {Error} - If the recruitment data to be deleted is not found or there is an error during deletion.
+ */
   async deleteRecruitment(request, response, next) {
     debug(`deleteOne: ${tableName}`);
     const findRecruitment = await dataMapper.getByColumnValue(

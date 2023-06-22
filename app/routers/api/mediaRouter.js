@@ -7,8 +7,8 @@ const mediaController = require('../../controllers/mediaController');
 const router = express.Router();
 /**
  * @typedef {object} Media - a media type
- * @property {string} link - The media link
- * @property {string} img - the media file - binary
+ * @property {string} link - The media optional link
+ * @property {string} img - the media optional file - binary
  */
 /**
  * GET /api/media
@@ -26,7 +26,8 @@ router.get('/', controllerHandler(mediaController.getAllMedia.bind(mediaControll
  * @tags Media
  * @security BearerAuth
  * @param {Media} request.body.required - The media object to be created - multipart/form-data
- * @returns {object} 200 - Success message
+ * @returns {object} 201 - Success message
+ * @returns {object} 403 - Forbidden
  * @returns {object} 400 - Bad request
  */
 router.post('/', authorizeAccess(1), controllerHandler(mediaController.insertMedia.bind(mediaController)));
@@ -37,7 +38,7 @@ router.post('/', authorizeAccess(1), controllerHandler(mediaController.insertMed
  * @tags Media
  * @security BearerAuth
  * @param {number} id.path.required - The ID of the media to be deleted
- * @returns {object} 200 - Success message
+ * @returns {object} 204 - Success message
  * @returns {object} 403 - Forbidden
  * @returns {object} 404 - Not Found error
  */
