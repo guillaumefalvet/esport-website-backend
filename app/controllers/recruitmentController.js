@@ -24,27 +24,20 @@ class RecruitmentController extends CoreController {
 
   async insertRecruitment(request, response, next) {
     try {
-      const imageUpload = await uploadHandler(request, 'private', 'pdf', 'cv', next);
+      const imageUpload = await uploadHandler(request, 'private', 'pdf', 'cv', next, createRecruitment);
       const updatedData = {
         ...request.body,
       };
-      if (!imageUpload.path.length) {
-        updatedData.external_link = '';
-      } else {
+
+      if (imageUpload.path.length) {
         updatedData.external_link = `${API_URL}${imageUpload.path}`;
       }
-      await createRecruitment.validateAsync(updatedData);
       const alradyExist = await dataMapper.getByColumnValue(
         this.constructor.tableName,
         this.constructor.columnName,
         updatedData.user_name,
       );
-
       if (alradyExist) {
-        const fileToDelete = updatedData.external_link.split(API_URL);
-        debug(fileToDelete);
-        fs.unlinkSync(`./${fileToDelete[1]}`);
-        debug('local file deleted');
         const error = new Error();
         error.code = 303;
         return next(error);
