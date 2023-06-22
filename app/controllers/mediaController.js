@@ -46,18 +46,18 @@ class MediaController extends CoreController {
   async insertMedia(request, response, next) {
     try {
       debug(`${this.constructor.name} insertMedia`);
-      const imageUpload = await uploadService(request, 'public', 'image', 'img', next);
-      const updatedData = {};
+      const imageUpload = await uploadService(request, 'public', 'image', 'img', next, createMedia);
+      const updatedData = {
+        ...request.body,
+      };
       if (!imageUpload.path.length) {
         debug('no image uploaded');
-        updatedData.link = request.body.link;
         updatedData.is_active = true;
       } else {
         debug('image was uploaded');
         updatedData.link = `${API_URL}${imageUpload.path}`;
         updatedData.is_active = false;
       }
-      await createMedia.validateAsync(updatedData);
       const result = await dataMapper.createOne(this.constructor.tableName, updatedData);
       jsend.data = result;
       return response.status(201).json(jsend);
