@@ -44,6 +44,10 @@ const errorMiddleware = {
     if (error.name === 'ValidationError') {
       return response.status(422).json({ status: 'error', message: error.details.map((err) => err.message) });
     }
+    if (error.code === 422) {
+      return response.status(422).json({ status: 'error', message: `missing field ${error.message}` });
+    }
+
     if (error.message === 'Unexpected end of form') {
       return response.status(400).json({ status: 'error', message: error.message });
     }

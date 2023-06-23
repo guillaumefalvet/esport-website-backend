@@ -21,10 +21,10 @@ VALUES
   ('john', 'john@example.com', '$2b$10$/by8W/BetZSETyF6OlSH4.CwX0szBcOMgENI1fLVcPYlK3x3crW7O', 1),
   ('utilisateur1', 'michael@example.com', '$2b$10$/by8W/BetZSETyF6OlSH4.CwX0szBcOMgENI1fLVcPYlK3x3crW7O', 2);
 -- Seeding data for the "recruitment" table
-INSERT INTO "recruitment" ("user_name", "email", "first_name", "last_name", "message", "external_link")
+INSERT INTO "recruitment" ("user_name", "email", "first_name", "last_name", "message", "external_link", "cv")
 VALUES
-  ('recrue1', 'recrue1@example.com', 'John', 'Doe', 'Message de recrutement 1', 'https://lienexterne1.com'),
-  ('recrue2', 'recrue2@example.com', 'Jane', 'Smith', 'Message de recrutement 2', 'https://lienexterne2.com');
+  ('recrue1', 'recrue1@example.com', 'John', 'Doe', 'Message de recrutement 1', 'https://lienexterne1.com', 'casasas'),
+  ('recrue2', 'recrue2@example.com', 'Jane', 'Smith', 'Message de recrutement 2', 'https://lienexterne2.com', 'casasas');
 
 -- Seeding data for the "setup" table
 INSERT INTO "setup" ("name", "external_link")
