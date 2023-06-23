@@ -34,7 +34,7 @@ const router = express.Router();
  * @returns {Array<Team>} 200 - Success response
  * @returns {object} 500 - Internal server error
  */
-router.get('/', controllerHandler(teamController.getAll.bind(teamController)));
+router.get('/', controllerHandler(teamController.getAllPlayer.bind(teamController)));
 
 /**
  * GET /api/team/:user_name
