@@ -27,6 +27,10 @@ Authorization: Bearer {{accessToken}}
 ### Récupérer tous les membres
 GET {{ endpoint }}/team
 
+
+### Récupérer tous les membres pour la home page
+GET {{ endpoint }}/team?home=true
+
 ### Création d'un joueur
 
 POST {{ endpoint }}/team/
@@ -45,7 +49,7 @@ Authorization: Bearer {{accessToken}}
 
 ### Récupérer un joueur
 
-GET {{ endpoint }}/team/jack_doe
+GET {{ endpoint }}/team/theGardener
 
 
 ### Modification d'un joueur
