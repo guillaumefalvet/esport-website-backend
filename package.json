@@ -6,12 +6,18 @@
   "scripts": {
     "start": "node index.js",
     "dev": "DEBUG=app:* npx nodemon index.js",
-    "DBreset": "sqitch revert -y",
-    "DBdeploy": "sqitch deploy",
-    "DBseeding": "psql -d victoryzone -f ./data/seeding_MVP.sql",
+    "DBresetLocal": "sqitch revert -y local",
+    "DBdeployLocal": "sqitch deploy local",
+    "DBseedingLocal": "psql -d victoryzone -f ./data/seeding_MVP.sql",
+
+
+    "DBresetRailway": "sqitch revert -y local",
+    "DBdeployRailway": "sqitch deploy local",
     "DBseedingRailway": "PGPASSWORD=rTERHtf7TO1l0mJ8Yv8I psql -h containers-us-west-168.railway.app -U postgres -p 8032 -d railway -f ./data/seeding_MVP.sql",
-    "DBsetup": "npm run DBreset && npm run DBdeploy && npm run DBseeding",
-    "DBrailway": "npm run DBreset && npm run DBdeploy && DBseedingRailway"
+
+
+    "DBLocal": "npm run DBresetLocal && npm run DBdeployLocal && npm run DBseedingLocal",
+    "DBRailway": "npm run DBresetRailway && npm run DBdeployRailway && DBseedingRailway"
   },
   "keywords": [],
   "author": "",

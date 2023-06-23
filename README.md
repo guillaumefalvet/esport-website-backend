@@ -5,17 +5,15 @@
 
    database: `victoryzone` => `CREATE DATABASE victoryzone OWNER victoryzone;`
 
-2. create a file `sqitch.conf` and copy the content of `sqitch.conf example` (MAKE SURE TO UNCOMMENT `target = db:pg:victoryzone` by removing the `#`).
-
-3. Do a first deployement with sqitch:
-   -`sqitch deploy`
+2. Do a first deployement with sqitch:
+   -`sqitch deploy local`
    ***note**: if you don't have sqitch installed, [go there](https://sqitch.org/download/)*
 
-4. `npm run DBsetup` it will run execute multiple [npm script](package.json)
+3. `npm run DBLocal` it will run execute multiple [npm script](package.json)
 
-5. `npm i` to install the dependencies.
+4. `npm i` to install the dependencies.
 
-6. create a file `.env` and copy the content of `.env example`.
+5. create a file `.env` and copy the content of `.env example`.
 
 
 7. `npm run dev` or `npm run start`.
