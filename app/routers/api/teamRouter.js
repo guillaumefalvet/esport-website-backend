@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 const express = require('express');
 const controllerHandler = require('../../middlewares/controllerHandler');
 const { authorizeAccess } = require('../../middlewares/authHandler');
@@ -30,11 +31,11 @@ const router = express.Router();
  *
  * @summary Get all players
  * @tags Team
- *
+ * @param {string} [request.query.home] - if request.query.home=true Optional query parameter to filter the info and only get the user_name, role, first_name, last_name and image of the player
  * @returns {Array<Team>} 200 - Success response
  * @returns {object} 500 - Internal server error
  */
-router.get('/', controllerHandler(teamController.getAll.bind(teamController)));
+router.get('/', controllerHandler(teamController.getAllPlayer.bind(teamController)));
 
 /**
  * GET /api/team/:user_name

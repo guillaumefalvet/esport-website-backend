@@ -54,33 +54,35 @@ class RecruitmentController extends CoreController {
  * @throws {Error} - If there is an error during the recruitment creation process.
  */
   async insertRecruitment(request, response, next) {
-    try {
-      const imageUpload = await uploadHandler(request, 'private', 'pdf', 'cv', next, createRecruitment);
-      const updatedData = {
-        ...request.body,
-      };
-
-      if (imageUpload.path.length) {
-        updatedData.external_link = `${API_URL}${imageUpload.path}`;
-      }
-      const alradyExist = await dataMapper.getByColumnValue(
-        this.constructor.tableName,
-        this.constructor.columnName,
-        updatedData.user_name,
-      );
-      if (alradyExist) {
-        const error = new Error();
-        error.code = 303;
-        return next(error);
-      }
-      const result = await dataMapper.createOne(this.constructor.tableName, updatedData);
-      debug('Recruitment created successfully');
-      jsend.data = result;
-      return response.status(201).json(jsend);
-    } catch (err) {
-      debug('Error while creating recruitment', err);
-      return next(err);
+    const imageUpload = await uploadHandler(request, 'private', 'pdf', 'cv', next, createRecruitment);
+    const updatedData = {
+      ...request.body,
+    };
+    if (!imageUpload.path.length) {
+      const error = new Error();
+      debug('validation error missing file');
+      error.code = 422;
+      error.message = 'cv';
+      return next(error);
     }
+    updatedData.cv = `${API_URL}${imageUpload.path}`;
+    const alradyExist = await dataMapper.getByColumnValue(
+      this.constructor.tableName,
+      this.constructor.columnName,
+      updatedData.user_name,
+    );
+    if (alradyExist) {
+      // if the recruitment already exist in the database
+      // delete the uploaded file that was just sent, doesn't affect the one that already exist
+      fs.unlinkSync(`./${imageUpload.path}`);
+      const error = new Error();
+      error.code = 303;
+      return next(error);
+    }
+    const result = await dataMapper.createOne(this.constructor.tableName, updatedData);
+    debug('Recruitment created successfully');
+    jsend.data = result;
+    return response.status(201).json(jsend);
   }
 
   /**
@@ -107,9 +109,9 @@ class RecruitmentController extends CoreController {
       error.code = 404;
       return next(error);
     }
-    if (findRecruitment.external_link.length) {
+    if (findRecruitment.cv.length) {
       // verification si il n'est pas vide
-      const fileToDelete = findRecruitment.external_link.split(API_URL);
+      const fileToDelete = findRecruitment.cv.split(API_URL);
       fs.unlinkSync(`./${fileToDelete[1]}`);
       debug('local file deleted');
     }

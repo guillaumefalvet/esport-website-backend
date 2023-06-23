@@ -1,4 +1,4 @@
--- Verify victoryzone:update_media on pg
+-- Verify victoryzone:player_home_view on pg
 
 BEGIN;
 

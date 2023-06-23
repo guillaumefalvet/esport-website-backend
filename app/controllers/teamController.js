@@ -1,4 +1,5 @@
 const debug = require('debug')('app:controllers:team');
+const dataMapper = require('../models/dataMapper');
 const CoreController = require('./CoreController');
 
 const jsend = {
@@ -49,6 +50,27 @@ class TeamController extends CoreController {
   constructor() {
     super();
     debug('TeamController created');
+  }
+
+  /**
+ * Retrieves all players.
+ * @param {Object} request - The request object.
+ * @param {Object} response - The response object.
+ * @returns {Array} 200 - Success message
+ */
+  async getAllPlayer(request, response) {
+    debug(`${this.constructor.name} getAllPlayer`);
+    if (request.query.home === 'true') {
+      debug('home');
+      const results = await dataMapper.getAll('player_home_view');
+      jsend.status = 'success';
+      jsend.data = results;
+      return response.status(200).json(jsend);
+    }
+    debug('all');
+    const results = await dataMapper.getAll(this.constructor.tableName);
+    jsend.data = results;
+    return response.status(200).json(jsend);
   }
 
   /**
