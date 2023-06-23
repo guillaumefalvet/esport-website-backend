@@ -1,10 +1,10 @@
 const debug = require('debug')('mail-service');
-const { request } = require('express');
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 // eslint-disable-next-line arrow-body-style
-const sendEmail = async () => {
-  const { email, firstName, lastName } = request.body;
+const sendEmail = async (data) => {
+  const { email, firstName, lastName, adminTemplate, applicantTemplate } = data;
+  // const { email, firstName, lastName } = request.body;
   return new Promise((resolve, reject) => {
     const transporter = nodemailer.createTransport({
       host: 'smtp-relay.sendinblue.com',
@@ -30,7 +30,7 @@ const sendEmail = async () => {
       <li><strong>Prenom :</strong> ${lastName}</li>
       <li><strong>Email :</strong> ${email}</li>
     <p>Si votre candidature répond à nos critères, nous vous contacterons prochainement.</p>
-    <p>Cordialement,La team victoryzone</p>
+    <p>Cordialement, La team victoryzone</p>
     <p>La Direction</p
     <img src="https://petite-hands-production.up.railway.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo.08d147ce.webp&w=128&q=75" alt="Logo VictoryZone">`
       ,
