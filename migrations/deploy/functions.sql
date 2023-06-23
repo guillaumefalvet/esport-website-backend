@@ -76,14 +76,15 @@ CREATE FUNCTION update_permission(json_data json) RETURNS "permission" AS $$
 $$ LANGUAGE sql;
 
 CREATE FUNCTION insert_recruitment(json_data json) RETURNS "recruitment" AS $$
-  INSERT INTO "recruitment"("user_name","email", "first_name", "last_name", "message", "external_link")
+  INSERT INTO "recruitment"("user_name","email", "first_name", "last_name", "message", "external_link", "cv")
     VALUES (
       (json_data->>'user_name')::text,
       (json_data->>'email')::text,
       (json_data->>'first_name')::text,
       (json_data->>'last_name')::text,
       (json_data->>'message')::text,
-      (json_data->>'external_link')::text
+      (json_data->>'external_link')::text,
+      (json_data->>'cv')::text
     ) RETURNING *;
   $$ LANGUAGE sql;
 
