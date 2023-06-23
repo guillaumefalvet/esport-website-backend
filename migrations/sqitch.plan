@@ -5,3 +5,4 @@ init 2023-06-16T14:19:02Z Guillaume Falvet <guillaume.falvet@gmail.com> # init
 domains 2023-06-16T14:25:53Z Guillaume Falvet <guillaume.falvet@gmail.com> # add constraint
 functions 2023-06-16T14:27:36Z Guillaume Falvet <guillaume.falvet@gmail.com> # functions_crud
 views 2023-06-16T14:33:02Z Guillaume Falvet <guillaume.falvet@gmail.com> # views for jointure
+player_home_view 2023-06-23T12:32:40Z Guillaume Falvet <guillaume.falvet@gmail.com> # player home view
