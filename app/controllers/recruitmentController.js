@@ -66,19 +66,19 @@ class RecruitmentController extends CoreController {
       return next(error);
     }
     updatedData.cv = `${API_URL}${imageUpload.path}`;
-    // const alradyExist = await dataMapper.getByColumnValue(
-    //   this.constructor.tableName,
-    //   this.constructor.columnName,
-    //   updatedData.user_name,
-    // );
-    // if (alradyExist) {
-    //   // if the recruitment already exist in the database
-    //   // delete the uploaded file that was just sent, doesn't affect the one that already exist
-    //   fs.unlinkSync(`./${imageUpload.path}`);
-    //   const error = new Error();
-    //   error.code = 303;
-    //   return next(error);
-    // }
+    const alradyExist = await dataMapper.getByColumnValue(
+      this.constructor.tableName,
+      this.constructor.columnName,
+      updatedData.user_name,
+    );
+    if (alradyExist) {
+      // if the recruitment already exist in the database
+      // delete the uploaded file that was just sent, doesn't affect the one that already exist
+      fs.unlinkSync(`./${imageUpload.path}`);
+      const error = new Error();
+      error.code = 303;
+      return next(error);
+    }
     const result = await dataMapper.createOne(this.constructor.tableName, updatedData);
     debug('Recruitment created successfully');
     jsend.data = result;
