@@ -111,7 +111,7 @@ CREATE TABLE "category" (
 -- table calendar
 CREATE TABLE "calendar" (
     "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "event_name" TEXT NOT NULL UNIQUE,
+    "event_name" TEXT NOT NULL,
     "event_date" TIMESTAMPTZ NOT NULL,
     "adversary_name" TEXT NOT NULL,
     "adversary_name_short" TEXT NOT NULL,
