@@ -1,36 +1,41 @@
+/* eslint-disable no-unused-vars */
 const debug = require('debug')('mail-service');
 const nodemailer = require('nodemailer');
+require('dotenv').config();
+// eslint-disable-next-line arrow-body-style
+const sendEmail = async (data, template) => {
+  const {
+    email, firstName, lastName, applicantTemplate,
+  } = data;
+  // const { email, firstName, lastName } = request.body;
+  return new Promise((resolve, reject) => {
+    const transporter = nodemailer.createTransport({
+      host: 'smtp-relay.sendinblue.com',
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.EMAIL_ADDRESS,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
 
-const mailService = async (req, res) => {
-  const testAccount = await nodemailer.createTestAccount();
+    const mailOptions = {
+      from: email,
+      to: process.env.EMAIL_ADDRESS,
+      subject: 'Réception de la candidature',
+      html: template,
 
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
-    secure: false,
-    auth: {
-      user: testAccount.user,
-      pass: testAccount.pass,
-    },
-  });
-
-  const message = {
-    from: '"victory zone" <info@victoryzone.com>',
-    to: 'contact@victoryzone.com',
-    subject: 'Hello',
-    text: 'Hello team victoryzone',
-    html: '<b>Hello team victoryzone</b>',
-  };
-
-  transporter.sendMail(message, (error, info) => {
-    if (error) {
-      debug('Error sending email:', error);
-      res.status(500).json({ error: 'An error occurred while sending the email.' });
-    } else {
-      debug('Email sent:', info.messageId);
-      res.status(201).json({ msg: 'You should receive an email.' });
-    }
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        debug('Error sending email:', error);
+        reject(error);
+      } else {
+        debug('Email sent:', info.messageId);
+        resolve(info);
+      }
+    });
   });
 };
 
-module.exports = mailService;
+module.exports = sendEmail;
