@@ -8,6 +8,6 @@
 	# registry = sqitch
 	# client = psql
 [target "railway"]
-	uri = db:pg://postgres:rTERHtf7TO1l0mJ8Yv8I@containers-us-west-168.railway.app:8032/railway
+	uri =
 [target "local"]
 	uri = db:pg:victoryzone

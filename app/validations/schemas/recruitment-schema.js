@@ -7,6 +7,7 @@ const createRecruitment = Joi.object({
   last_name: Joi.string().required(),
   message: Joi.string().required(),
   external_link: Joi.string().allow(null, ''),
+  cv: Joi.string().allow(null, ''),
 }).required();
 
 module.exports = { createRecruitment };
