@@ -1,10 +1,12 @@
 /* eslint-disable max-len */
 const debug = require('debug')('app:controllers:recruitment');
 const fs = require('fs');
+const handlebars = require('handlebars');
 const uploadHandler = require('../services/uploadService');
 const dataMapper = require('../models/dataMapper');
 const { createRecruitment } = require('../validations/schemas/recruitment-schema');
 const CoreController = require('./CoreController');
+const mailingService = require('../services/mailingService');
 
 const API_URL = process.env.API_URL ?? '';
 const tableName = 'recruitment';
@@ -54,7 +56,7 @@ class RecruitmentController extends CoreController {
  * @throws {Error} - If there is an error during the recruitment creation process.
  */
   async insertRecruitment(request, response, next) {
-    const imageUpload = await uploadHandler(request, 'private', 'pdf', 'cv', next, createRecruitment);
+    const imageUpload = await uploadHandler(request, 'private', 'pdf', 'cv', next, createRecruitment, 2);
     const updatedData = {
       ...request.body,
     };
@@ -82,6 +84,23 @@ class RecruitmentController extends CoreController {
     const result = await dataMapper.createOne(this.constructor.tableName, updatedData);
     debug('Recruitment created successfully');
     jsend.data = result;
+    const data = {
+      email: result.email,
+      firstName: result.first_name,
+      lastName: result.last_name,
+    };
+    const adminMail = process.env.EMAIL_ADDRESS;
+
+    const applicantTemplate = fs.readFileSync('./app/services/mailingService/templates/applicantTemplate.hbs', 'utf8');
+    const applicantHtmlTemplate = handlebars.compile(applicantTemplate);
+    const applicantHtml = applicantHtmlTemplate(data);
+
+    const adminTemplate = fs.readFileSync('./app/services/mailingService/templates/applicantTemplate.hbs', 'utf8');
+    const adminHtmlTemplate = handlebars.compile(adminTemplate);
+    const adminHtml = adminHtmlTemplate(data);
+
+    await mailingService(data, adminHtml, adminMail);
+    await mailingService(data, applicantHtml, data.email);
     return response.status(201).json(jsend);
   }
 
