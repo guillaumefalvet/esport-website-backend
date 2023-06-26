@@ -5,7 +5,8 @@ const uploadHandler = require('../services/uploadService');
 const dataMapper = require('../models/dataMapper');
 const { createRecruitment } = require('../validations/schemas/recruitment-schema');
 const CoreController = require('./CoreController');
-
+const sendEmail = require('../services/mailingService');
+const handlebars = require('handlebars');
 const API_URL = process.env.API_URL ?? '';
 const tableName = 'recruitment';
 const jsend = {
@@ -82,6 +83,23 @@ class RecruitmentController extends CoreController {
     const result = await dataMapper.createOne(this.constructor.tableName, updatedData);
     debug('Recruitment created successfully');
     jsend.data = result;
+    const data = {
+      email: result.email,
+      firstName: result.first_name,
+      lastName: result.last_name,
+    }
+    const adminMail = process.env.EMAIL_ADDRESS;
+
+    const applicantTemplate = fs.readFileSync('app/services/template/applicantTemplate.hbs', 'utf8');
+    const applicantHtmlTemplate = handlebars.compile(applicantTemplate);
+    const applicantHtml = applicantHtmlTemplate(data);
+
+    const adminTemplate = fs.readFileSync('app/services/template/adminTemplate.hbs', 'utf8');
+    const adminHtmlTemplate = handlebars.compile(adminTemplate);
+    const adminHtml = adminHtmlTemplate(data);
+
+    await sendEmail(data, adminHtml, adminMail);
+    await sendEmail(data, applicantHtml, data.email);
     return response.status(201).json(jsend);
   }
 
