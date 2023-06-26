@@ -31,7 +31,7 @@ router.post('/', controllerHandler(recruitController.insertRecruitment.bind(recr
  * @summary Get all recruitment applications
  * @tags Recruitment
  * @security BearerAuth
- * @returns {object} 200 - Array of recruitment applications
+ * @returns {Array<Recruitment>} 200 - Array of recruitment applications
  * @returns {object} 403 - Forbidden
  */
 router.get('/', authorizeAccess(1), controllerHandler(recruitController.getAll.bind(recruitController)));

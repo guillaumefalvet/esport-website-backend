@@ -10,6 +10,7 @@ const router = express.Router();
  * @property {string} email - User's email
  * @property {string} password - User's password
  */
+
 /**
  * @typedef {object} RefreshRequest
  * @property {string} refreshToken -User's refresh Token
@@ -21,8 +22,16 @@ const router = express.Router();
  * @group Auth - Authentication
  * @tags Authentication
  * @param {LoginRequest} request.body.required - User login credentials
- * @returns {Array} 200 - successful
- * @returns {Array} 401 - wrong credentials
+ * @returns {object} 200 - successful
+ * @example response - 200 - success response example
+ * {
+ *  "status": "success",
+ *  "data": {
+ *   "accessToken": "access token here",
+ *   "refreshToken": "refresh token here"
+ *  }
+ * }
+ * @returns {object} 401 - wrong credentials
  */
 router.post('/login', validate(loginValidation), controllerHandler(authController.handleLogin.bind(authController)));
 
@@ -31,9 +40,17 @@ router.post('/login', validate(loginValidation), controllerHandler(authControlle
  * @group Auth - Authentication
  * @tags Authentication
  * @param {RefreshRequest} request.body.required - Request body
- * @returns {Array} 200 - Successful
- * @returns {Array} 400 - bad request
- * @returns {Array} 400 - Unauthorized
+ * @returns {object} 200 - successful
+ * @example response - 200 - success response example
+ * {
+ *  "status": "success",
+ *  "data": {
+ *   "accessToken": "access token here",
+ *   "refreshToken": "refresh token here"
+ *  }
+ * }
+ * @returns {object} 400 - bad request
+ * @returns {object} 400 - Unauthorized
  */
 router.post('/refresh-token', validate(refreshToken), controllerHandler(authController.handleTokenRefresh.bind(authController)));
 
