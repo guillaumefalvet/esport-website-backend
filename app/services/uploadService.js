@@ -10,11 +10,10 @@ const fs = require('fs');
  * @param {string} fieldname - The name of the field in the request containing the file.
  * @param {Function} next - The next middleware function to pass the error to.
  * @param {Joi.Schema} schema - The Joi validation schema for the request body.
- * @param {number} maxSize - the maximum file size allowed for a file
  * @returns {Promise<Object>} A Promise that resolves to an object containing the uploaded file information.
  * @throws {Error} If there is an error during file upload or if the validation fails.
  */
-const uploadService = (request, mainFolder, subFolder, fieldname, next, schema, maxSize) => {
+const uploadService = (request, mainFolder, subFolder, fieldname, next, schema) => {
   const uploadFolder = `${mainFolder}/${subFolder}`;
 
   // Configure the storage settings for Multer
@@ -49,9 +48,6 @@ const uploadService = (request, mainFolder, subFolder, fieldname, next, schema, 
       } else {
         cb(new multer.MulterError('INVALID_FILE_EXTENSION', `Invalid file extension. Allowed extensions: ${allowedExtensions.join(', ')}`));
       }
-    },
-    limits: {
-      fileSize: maxSize * 1024 * 1024,
     },
   });
 

@@ -41,8 +41,8 @@ CREATE TABLE "user" (
 -- table recruitment
 CREATE TABLE "recruitment" (
     "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "user_name" TEXT NOT NULL UNIQUE,
-    "email" TEXT NOT NULL UNIQUE,
+    "user_name" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
     "first_name" TEXT NOT NULL,
     "last_name" TEXT NOT NULL,
     "message" TEXT NOT NULL,
@@ -111,7 +111,7 @@ CREATE TABLE "category" (
 -- table calendar
 CREATE TABLE "calendar" (
     "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "event_name" TEXT NOT NULL,
+    "event_name" TEXT NOT NULL UNIQUE,
     "event_date" TIMESTAMPTZ NOT NULL,
     "adversary_name" TEXT NOT NULL,
     "adversary_name_short" TEXT NOT NULL,

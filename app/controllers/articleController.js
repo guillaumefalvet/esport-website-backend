@@ -87,7 +87,7 @@ class ArticleController extends CoreController {
       return response.status(200).json(jsend);
     }
     debug(`get all public ${this.constructor.tableName}`);
-    const results = await dataMapper.getAll('article_categories_public');
+    const results = await dataMapper.getAll('article_events_categories_public');
     jsend.data = results;
     return response.status(200).json(jsend);
   }

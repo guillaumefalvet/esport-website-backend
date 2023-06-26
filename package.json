@@ -11,13 +11,13 @@
     "DBseedingLocal": "psql -d victoryzone -f ./data/seeding_MVP.sql",
 
 
-    "DBresetRailway": "sqitch revert -y railway",
-    "DBdeployRailway": "sqitch deploy railway",
+    "DBresetRailway": "sqitch revert -y local",
+    "DBdeployRailway": "sqitch deploy local",
     "DBseedingRailway": "PGPASSWORD=rTERHtf7TO1l0mJ8Yv8I psql -h containers-us-west-168.railway.app -U postgres -p 8032 -d railway -f ./data/seeding_MVP.sql",
 
 
     "DBLocal": "npm run DBresetLocal && npm run DBdeployLocal && npm run DBseedingLocal",
-    "DBRailway": "npm run DBresetRailway && npm run DBdeployRailway && npm run DBseedingRailway"
+    "DBRailway": "npm run DBresetRailway && npm run DBdeployRailway && DBseedingRailway"
   },
   "keywords": [],
   "author": "",
@@ -30,7 +30,6 @@
     "express": "^4.18.2",
     "express-jsdoc-swagger": "^1.8.0",
     "express-session": "^1.17.3",
-    "handlebars": "^4.7.7",
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.0",
     "multer": "^1.4.5-lts.1",

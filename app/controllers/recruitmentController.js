@@ -54,7 +54,7 @@ class RecruitmentController extends CoreController {
  * @throws {Error} - If there is an error during the recruitment creation process.
  */
   async insertRecruitment(request, response, next) {
-    const imageUpload = await uploadHandler(request, 'private', 'pdf', 'cv', next, createRecruitment, 2);
+    const imageUpload = await uploadHandler(request, 'private', 'pdf', 'cv', next, createRecruitment);
     const updatedData = {
       ...request.body,
     };
