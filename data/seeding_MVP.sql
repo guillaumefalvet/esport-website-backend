@@ -52,7 +52,7 @@ VALUES
 -- Seeding data for the "media" table
 INSERT INTO "media" ("link", "is_active")
 VALUES
-  ('https://www.youtube.com/@esportstvid', true),
+  ('https://www.youtube.com/watch?v=Pskemt2JYJA', true),
   ('https://projet-14-victory-zone-back-production.up.railway.app/public/image/carousel-1.jpg', false),
   ('https://projet-14-victory-zone-back-production.up.railway.app/public/image/carousel-2.jpg', false),
   ('https://projet-14-victory-zone-back-production.up.railway.app/public/image/carousel-3.jpg', false);
