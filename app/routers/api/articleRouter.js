@@ -26,7 +26,7 @@ const router = express.Router();
  *
  * @summary Get all articles
  * @tags Article
- * @returns {Array.<Article>} 200 - Array of article objects
+ * @returns {Array<Article>} 200 - Array of article objects
  * @returns {object} 500 - Internal server error
  */
 router.get('/', controllerHandler(articleController.getAllPublic.bind(articleController)));
@@ -49,7 +49,7 @@ router.get('/admin', authorizeAccess(1), controllerHandler(articleController.get
  * @summary Get a specific article by slug
  * @tags Article
  * @param {string} slug.path - The slug of the article to retrieve
- * @returns {Article} 200 - The article object
+ * @returns {Array<Article>} 200 - The article object
  * @returns {object} 500 - Internal server error
  */
 router.get('/:slug([a-z0-9-]+)', controllerHandler(articleController.getOne.bind(articleController)));
@@ -61,7 +61,7 @@ router.get('/:slug([a-z0-9-]+)', controllerHandler(articleController.getOne.bind
  * @tags Article
  * @security BearerAuth
  * @param {Article} request.body - The article object to create
- * @returns {Article} 201 - The created article object
+ * @returns {Array<Article>} 201 - The created article object
  * @returns {object} 403 - Forbidden
  * @returns {object} 500 - Internal server error
  */
@@ -103,7 +103,7 @@ router.post('/:slug([a-z0-9-]+)/calendar/:id(\\d+)', authorizeAccess(1), control
  * @security BearerAuth
  * @param {number} id.path - The id of the article to update
  * @param {Article} request.body - The updated article object
- * @returns {Article} 200 - The updated article object
+ * @returns {Array<Article>} 200 - The updated article object
  * @returns {object} 403 - Forbidden
  * @returns {object} 500 - Internal server error
  */
