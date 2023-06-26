@@ -44,7 +44,7 @@ GET {{ endpoint }}/articles/admin
 Authorization: Bearer {{accessToken}}
 
 ### Récupérer un article
-GET {{ endpoint }}/articles/nouvel-articleasasas
+GET {{ endpoint }}/articles/nouvel-article
 
 
 ### CREATION ARTICLE
