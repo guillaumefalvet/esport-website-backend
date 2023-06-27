@@ -22,7 +22,8 @@ CREATE VIEW article_public_view AS
 
 -- PRIVATE VIEW
 CREATE VIEW article_private_view AS
-  SELECT "article".id, "article".slug, concat(regexp_replace(article.content, '((\S+\s*){1,40})(.*)', '\1'), '...') AS content, concat("user".first_name, ' ',"user".last_name) AS author, "article".image, "article".figcaption, "article".created_at, "article".updated_at,
+  SELECT "article".id, "article".slug, concat(regexp_replace(article.content, '((\S+\s*){1,40})(.*)', '\1'), '...') AS content, concat("user".first_name, ' ',"user".last_name) AS author, "article".image, "article".figcaption,
+  "article".publication_date, "article".created_at, "article".updated_at,
     (SELECT CASE WHEN COUNT(category.id) = 0 THEN NULL
                   ELSE json_agg(json_build_object(
                           'id', category.id,
@@ -163,7 +164,6 @@ SELECT
         "calendar"."live_link",
         NULL AS "score",
         "calendar"."image",
-        "calendar"."publication_date",
         "calendar"."created_at",
         "calendar"."updated_at"
       FROM
@@ -183,7 +183,6 @@ SELECT
         "calendar"."replay_link",
         "calendar"."score",
         "calendar"."image",
-        "calendar"."publication_date",
         "calendar"."created_at",
         "calendar"."updated_at"
       FROM

@@ -105,7 +105,7 @@ CREATE FUNCTION insert_article(json_data json) RETURNS "article" AS $$
 --calendar
 
 CREATE FUNCTION insert_calendar(json_data json) RETURNS "calendar" AS $$
-  INSERT INTO "calendar"("event_name", "event_date", "adversary_name", "adversary_name_short", "replay_link", "live_link", "score", "image", "publication_date")
+  INSERT INTO "calendar"("event_name", "event_date", "adversary_name", "adversary_name_short", "replay_link", "live_link", "score", "image")
     VALUES(
       (json_data->>'event_name')::text,
       (json_data->>'event_date')::TIMESTAMPTZ,
@@ -114,8 +114,7 @@ CREATE FUNCTION insert_calendar(json_data json) RETURNS "calendar" AS $$
       (json_data->>'replay_link')::text,
       (json_data->>'live_link')::text,
       (json_data->>'score')::text,
-      (json_data->>'image')::text,
-      (json_data->>'publication_date')::TIMESTAMPTZ
+      (json_data->>'image')::text
     ) RETURNING *;
   $$ LANGUAGE sql;
 
@@ -129,11 +128,11 @@ CREATE FUNCTION update_calendar(json_data json) RETURNS "calendar" AS $$
       "live_link" = COALESCE((json_data->>'live_link')::text,"live_link"),
       "score" = COALESCE((json_data->>'score')::text,"score"),
       "image" = COALESCE((json_data->>'image')::text,"image"),
-      "publication_date" = COALESCE((json_data->>'publication_date')::TIMESTAMPTZ,"publication_date"),
       "updated_at" = now()
     WHERE "id" = (json_data->>'id')::int
     RETURNING *;
   $$ LANGUAGE sql;
+
    CREATE FUNCTION update_media(json_data json) RETURNS "media" AS $$
     UPDATE "media" SET
       "link" = COALESCE((json_data->>'link')::text, "link"),

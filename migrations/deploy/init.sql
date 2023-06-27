@@ -121,7 +121,6 @@ CREATE TABLE "calendar" (
     "live_link" TEXT,
     "score" TEXT,
     "image" TEXT NOT NULL,
-    "publication_date" TIMESTAMPTZ NOT NULL DEFAULT now(),
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
     "updated_at" TIMESTAMPTZ
 );
