@@ -36,7 +36,7 @@ router.get('/', controllerHandler(articleController.getAllPublic.bind(articleCon
  *
  * @summary Get all private articles (admin only)
  * @tags Article
- * @security BearerAuth
+
  * @returns {Array<Article>} 200 - Array of private article objects
  * @returns {object} 403 - Forbidden
  * @returns {object} 500 - Internal server error
@@ -53,6 +53,18 @@ router.get('/admin', authorizeAccess(1), controllerHandler(articleController.get
  * @returns {object} 500 - Internal server error
  */
 router.get('/:slug([a-z0-9-]+)', controllerHandler(articleController.getOne.bind(articleController)));
+
+/**
+ * GET /api/articles/admin/:slug
+ *
+ * @summary Get a specific article by slug private
+ * @tags Article
+ * @security BearerAuth
+ * @param {string} slug.path - The slug of the article to retrieve
+ * @returns {Array<Article>} 200 - The article object
+ * @returns {object} 500 - Internal server error
+ */
+router.get('/admin/:slug([a-z0-9-]+)', controllerHandler(articleController.getOnePrivate.bind(articleController)));
 
 /**
  * POST /api/articles
@@ -80,20 +92,6 @@ router.post('/', authorizeAccess(1), validate(createArticle), controllerHandler(
  * @returns {object} 500 - Internal server error
  */
 router.post('/:slug([a-z0-9-]+)/category/:id(\\d+)', authorizeAccess(1), controllerHandler(articleController.createCategoryRelation.bind(articleController)));
-
-/**
- * POST /api/articles/:slug/calendar/:id
- *
- * @summary Add a calendar event to an article
- * @tags Article
- * @security BearerAuth
- * @param {string} slug.path - The slug of the article
- * @param {number} id.path - The ID of the calendar event to add
- * @returns {object} 201 - Success message
- * @returns {object} 403 - Forbidden
- * @returns {object} 500 - Internal server error
- */
-router.post('/:slug([a-z0-9-]+)/calendar/:id(\\d+)', authorizeAccess(1), controllerHandler(articleController.createCalendarRelation.bind(articleController)));
 
 /**
  * PATCH /api/articles/:id
@@ -135,19 +133,5 @@ router.delete('/:slug([a-z0-9-]+)', authorizeAccess(1), controllerHandler(articl
  * @returns {object} 500 - Internal server error
  */
 router.delete('/:slug([a-z0-9-]+)/category/:id(\\d+)', authorizeAccess(1), controllerHandler(articleController.deleteCategoryRelation.bind(articleController)));
-
-/**
- * DELETE /api/articles/:slug/calendar/:id
- *
- * @summary Remove a calendar event from an article
- * @tags Article
- * @security BearerAuth
- * @param {string} slug.path - The slug of the article
- * @param {number} id.path - The ID of the calendar event to remove
- * @returns {object} 204 - Success message
- * @returns {object} 403 - Forbidden
- * @returns {object} 500 - Internal server error
- */
-router.delete('/:slug([a-z0-9-]+)/calendar/:id(\\d+)', authorizeAccess(1), controllerHandler(articleController.deleteCalendarRelation.bind(articleController)));
 
 module.exports = router;

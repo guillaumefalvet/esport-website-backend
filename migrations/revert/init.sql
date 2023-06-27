@@ -2,9 +2,6 @@
 
 BEGIN;
 
--- Revert table "article_has_calendar"
-DROP TABLE "article_has_calendar";
-
 -- Revert table "article_has_category"
 DROP TABLE "article_has_category";
 

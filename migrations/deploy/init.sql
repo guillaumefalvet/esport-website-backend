@@ -32,6 +32,8 @@ CREATE TABLE "user" (
     "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "user_name" TEXT NOT NULL UNIQUE,
     "email" TEXT NOT NULL UNIQUE,
+    "first_name" TEXT,
+    "last_name" TEXT,
     "password" TEXT NOT NULL,
     "refresh_token" TEXT,
     "user_permission" INT NOT NULL REFERENCES "permission"("id"),
@@ -94,7 +96,7 @@ CREATE TABLE "article" (
     "slug" TEXT NOT NULL UNIQUE,
     "title" TEXT NOT NULL UNIQUE,
     "content" TEXT NOT NULL,
-    "author" TEXT NOT NULL,
+    "author_id" INT NOT NULL REFERENCES "user"("id"),
     "image" TEXT NOT NULL,
     "figcaption" TEXT,
     "publication_date" TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -131,13 +133,6 @@ CREATE TABLE "article_has_category" (
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
     "updated_at" TIMESTAMPTZ
 );
--- table relationel entre article et calendar
-CREATE TABLE "article_has_calendar"(
-    "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "article_id" INT NOT NULL REFERENCES "article"("id") ON DELETE CASCADE,
-    "calendar_id" INT NOT NULL REFERENCES "calendar"("id") ON DELETE CASCADE,
-    "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
-    "updated_at" TIMESTAMPTZ
-);
+
 
 COMMIT;

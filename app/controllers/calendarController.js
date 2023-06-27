@@ -48,13 +48,13 @@ class CalendarController extends CoreController {
     const { home } = request.query;
     if (home === 'true') {
       debug(`get homepage ${this.constructor.name}`);
-      const results = await dataMapper.getAll('get_calendar_home');
+      const results = await dataMapper.getAll('calendar_home_view');
       jsend.data = results[0].data;
       jsend.status = 'success';
       return response.status(200).json(jsend);
     }
     debug(`get all ${this.constructor.name}`);
-    const results = await dataMapper.getAll('get_all_calendar');
+    const results = await dataMapper.getAll('calendar_view');
     jsend.status = 'success';
     jsend.data = results[0].data;
     return response.status(200).json(jsend);

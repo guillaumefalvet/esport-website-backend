@@ -37,27 +37,6 @@ CREATE FUNCTION update_player(json_data json) RETURNS "player" AS $$
   RETURNING *;
 $$ LANGUAGE sql;
 
-CREATE FUNCTION insert_user(json_data json) RETURNS "user" AS $$
-  INSERT INTO "user"("user_name", "email", "password", "user_permission")
-    VALUES (
-      (json_data->>'user_name')::text,
-      (json_data->>'email')::text,
-      (json_data->>'password')::text,
-      (json_data->>'user_permission')::int
-    ) RETURNING *;
-  $$ LANGUAGE sql;
-
-CREATE FUNCTION update_user(json_data json) RETURNS "user" AS $$
-  UPDATE "user" SET
-    "user_name" = COALESCE((json_data->>'user_name')::text, "user_name"),
-    "email" = COALESCE((json_data->>'email')::text, "email"),
-    "password" = COALESCE((json_data->>'password')::text, "password"),
-    "user_permission" = COALESCE((json_data->>'user_permission')::int, "user_permission"),
-    "updated_at" = now()
-  WHERE "user_name" = (json_data->>'user_name')::text
-  RETURNING *;
-$$ LANGUAGE sql;
-
 CREATE FUNCTION insert_permission(json_data json) RETURNS "permission" AS $$
   INSERT INTO "permission"("name", "level")
     VALUES (
@@ -98,12 +77,12 @@ CREATE FUNCTION insert_media(json_data json) RETURNS "media" AS $$
 
 --article
 CREATE FUNCTION insert_article(json_data json) RETURNS "article" AS $$
-  INSERT INTO "article"("slug", "title", "content", "author", "image", "figcaption", "publication_date")
+  INSERT INTO "article"("slug", "title", "content", "author_id", "image", "figcaption", "publication_date")
     VALUES(
       (json_data->>'slug')::text,
       (json_data->>'title')::text,
       (json_data->>'content')::text,
-      (json_data->>'author')::text,
+      (json_data->>'author_id')::int,
       (json_data->>'image')::text,
       (json_data->>'figcaption')::text,
       (json_data->>'publication_date')::TIMESTAMPTZ
@@ -115,7 +94,7 @@ CREATE FUNCTION insert_article(json_data json) RETURNS "article" AS $$
       "slug" = COALESCE((json_data->>'slug')::text, "slug"),
       "title" = COALESCE((json_data->>'title')::text, "title"),
       "content" = COALESCE((json_data->>'content')::text, "content"),
-      "author" = COALESCE((json_data->>'author')::text, "author"),
+      "author_id" = COALESCE((json_data->>'author_id')::int, "author_id"),
       "image" = COALESCE((json_data->>'image')::text, "image"),
       "figcaption" = COALESCE((json_data->>'figcaption')::text, "figcaption"),
       "publication_date" = COALESCE((json_data->>'publication_date')::TIMESTAMPTZ, "publication_date"),

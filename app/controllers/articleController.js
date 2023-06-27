@@ -33,7 +33,7 @@ class ArticleController extends CoreController {
    * Name of the view table for articles.
    * @type {string}
    */
-  static tableNameView = 'article_events_categories_public';
+  static tableNameView = 'article_public_view';
 
   /**
    * Name of the column used as a unique identifier for articles.
@@ -82,12 +82,12 @@ class ArticleController extends CoreController {
        * The SQL query SELECT regexp_replace(content, '((\S+\s*){1,14})(.*)', '\1') AS limited_text FROM your_table WHERE id = 1; can be used to apply the same extraction logic in a PostgreSQL database. It uses the regexp_replace function to capture the first 14 words and discard the rest.
        */
       debug(`get all public ${this.constructor.tableName} for homepage`);
-      const results = await dataMapper.getAll('get_article_home');
+      const results = await dataMapper.getAll('article_home_view');
       jsend.data = results;
       return response.status(200).json(jsend);
     }
     debug(`get all public ${this.constructor.tableName}`);
-    const results = await dataMapper.getAll('article_categories_public');
+    const results = await dataMapper.getAll('article_public_view');
     jsend.data = results;
     return response.status(200).json(jsend);
   }
@@ -101,23 +101,26 @@ class ArticleController extends CoreController {
    */
   async getAllPrivate(_, response) {
     debug(`get all private ${this.constructor.tableName}`);
-    const results = await dataMapper.getAll('article_events_categories_private_v2');
+    const results = await dataMapper.getAll('article_private_view');
     jsend.data = results;
     return response.status(200).json(jsend);
   }
 
-  /**
-   * Create a relation between an article and a calendar.
-   * @param {object} request - The request object.
-   * @param {object} response - The response object.
-   * @param {function} next - The next middleware function.
-   * @returns {Array} 201 - Success message if the relation is created successfully.
-   */
-  async createCalendarRelation(request, response, next) {
-    const createReference = await this.createReference(request, next, 'calendar', 'id');
-    if (createReference) {
-      response.status(201).json(jsend);
+  async getOnePrivate(request, response, next) {
+    debug(`${this.constructor.name} getOnePrivate`);
+
+    const result = await dataMapper.getByColumnValue(
+      'article_private_view',
+      this.constructor.columnName,
+      request.params[this.constructor.columnName],
+    );
+    if (!result) {
+      const error = new Error();
+      error.code = 404;
+      return next(error);
     }
+    jsend.data = result;
+    return response.status(200).json(jsend);
   }
 
   /**
@@ -132,18 +135,6 @@ class ArticleController extends CoreController {
     if (createReference) {
       response.status(201).json(jsend);
     }
-  }
-
-  /**
-   * Delete a relation between an article and a calendar.
-   * @param {object} request - The request object.
-   * @param {object} response - The response object.
-   * @param {function} next - The next middleware function.
-   * @returns {Array} 204 - Success message if the relation is deleted successfully.
-   */
-  async deleteCalendarRelation(request, response, next) {
-    await this.deleteReference(request, next, 'calendar', 'id');
-    return response.status(204).send();
   }
 
   /**

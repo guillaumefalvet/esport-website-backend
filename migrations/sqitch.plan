@@ -5,8 +5,3 @@ init 2023-06-16T14:19:02Z Guillaume Falvet <guillaume.falvet@gmail.com> # init
 domains 2023-06-16T14:25:53Z Guillaume Falvet <guillaume.falvet@gmail.com> # add constraint
 functions 2023-06-16T14:27:36Z Guillaume Falvet <guillaume.falvet@gmail.com> # functions_crud
 views 2023-06-16T14:33:02Z Guillaume Falvet <guillaume.falvet@gmail.com> # views for jointure
-player_home_view 2023-06-23T12:32:40Z Guillaume Falvet <guillaume.falvet@gmail.com> # player home view
-article_categories_public 2023-06-26T10:15:38Z Guillaume Falvet <guillaume.falvet@gmail.com> # articles short text content, categories public
-fix_alter_view_article 2023-06-27T11:26:39Z Guillaume Falvet <guillaume.falvet@gmail.com> # fixing the article view, missing title
-fix_alter_view_article_home 2023-06-27T12:48:20Z Guillaume Falvet <guillaume.falvet@gmail.com> # fixing the article home view, missing author and publication date
-fix_article_admin_view_less_content 2023-06-27T14:22:46Z Guillaume Falvet <guillaume.falvet@gmail.com> # article_admin_view_less_content
