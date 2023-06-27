@@ -77,7 +77,7 @@ router.get('/admin/:slug([a-z0-9-]+)', controllerHandler(articleController.getOn
  * @returns {object} 403 - Forbidden
  * @returns {object} 500 - Internal server error
  */
-router.post('/', authorizeAccess(1), validate(createArticle), controllerHandler(articleController.createOne.bind(articleController)));
+router.post('/', authorizeAccess(1), controllerHandler(articleController.uploadOne.bind(articleController)));
 
 /**
  * POST /api/articles/:slug/category/:id
@@ -105,7 +105,7 @@ router.post('/:slug([a-z0-9-]+)/category/:id(\\d+)', authorizeAccess(1), control
  * @returns {object} 403 - Forbidden
  * @returns {object} 500 - Internal server error
  */
-router.patch('/:id(\\d+)', authorizeAccess(1), validate(modifyArticle), controllerHandler(articleController.modifyOne.bind(articleController)));
+router.patch('/:id(\\d+)', authorizeAccess(1), controllerHandler(articleController.modifyUploadedOne.bind(articleController)));
 
 /**
  * DELETE /api/articles/:slug
@@ -118,7 +118,7 @@ router.patch('/:id(\\d+)', authorizeAccess(1), validate(modifyArticle), controll
  * @returns {object} 403 - Forbidden
  * @returns {object} 500 - Internal server error
  */
-router.delete('/:slug([a-z0-9-]+)', authorizeAccess(1), controllerHandler(articleController.deleteOne.bind(articleController)));
+router.delete('/:slug([a-z0-9-]+)', authorizeAccess(1), controllerHandler(articleController.deleteUploadedOne.bind(articleController)));
 
 /**
  * DELETE /api/articles/:slug/category/:id
