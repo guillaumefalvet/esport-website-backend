@@ -1,7 +1,15 @@
 /* eslint-disable max-len */
 const debug = require('debug')('app:controllers:article');
+const fs = require('fs');
+const jwt = require('jsonwebtoken');
 const dataMapper = require('../models/dataMapper');
 const CoreController = require('./CoreController');
+const { createArticle, modifyArticle } = require('../validations/schemas/article-schema');
+const uploadService = require('../services/uploadService');
+
+const { JWT_SECRET } = process.env;
+
+const API_URL = process.env.API_URL ?? '';
 
 const jsend = {
   status: 'success',
@@ -128,6 +136,67 @@ class ArticleController extends CoreController {
     }
     jsend.data = result;
     return response.status(200).json(jsend);
+  }
+
+  async uploadOne(request, response, next) {
+    // get the author id
+    const imageUpload = await uploadService(request, 'public', 'article', 'img', next, createArticle, 3);
+    const parsedData = {
+      ...request.body,
+    };
+    if (!imageUpload.path.length) {
+      const error = new Error();
+      debug('validation error missing file');
+      error.code = 422;
+      error.message = 'img';
+      return next(error);
+    }
+    const authHeader = request.headers.authorization;
+    const accessToken = authHeader.split('Bearer ')[1];
+    const decoded = jwt.verify(
+      accessToken,
+      JWT_SECRET,
+      { ignoreExpiration: true },
+    );
+    parsedData.author_id = decoded.data.id;
+    parsedData.image = `${API_URL}${imageUpload.path}`;
+    debug(parsedData);
+    const alradyExist = await dataMapper.getByColumnValue(
+      this.constructor.tableName,
+      this.constructor.columnName,
+      parsedData[this.constructor.columnName],
+    );
+    if (alradyExist) {
+      // delete staged file
+      fs.unlinkSync(`./${imageUpload.path}`);
+      const error = new Error();
+      error.code = 303;
+      return next(error);
+    }
+    const result = await dataMapper.createOne(this.constructor.tableName, parsedData);
+    jsend.data = result;
+    return response.status(201).json(jsend);
+  }
+
+  async modifyUploadedOne(request, response, next) {
+    // call uploadService to parse the data
+    // check if the article exist in the database (SEARCH BY ID=> secondaryColumnName) => 404
+    // if no article in database && if there was an image
+    //= > FS: delete the staged file if there is one
+    // if there is an image
+    // => FS: delete the old on from db
+    // store the new image in an object
+    // get the id based on the jwt header
+    // call modifyOne
+    // return response
+  }
+
+  async deleteUploadedOne(request, response, next) {
+    // check if the article exist in the database
+    // if no article in database
+    // => FS: delete the image from db
+    // call delete
+    // return response 204
   }
 
   /**
