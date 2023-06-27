@@ -106,6 +106,13 @@ class ArticleController extends CoreController {
     return response.status(200).json(jsend);
   }
 
+  /**
+   * Get one private articles.
+   * @param {object} request - The request object.
+   * @param {object} response - The response object.
+   * @returns {Array<Article>} 200 - Array of article objects
+   * @returns {object} 500 - Internal server error
+   */
   async getOnePrivate(request, response, next) {
     debug(`${this.constructor.name} getOnePrivate`);
 

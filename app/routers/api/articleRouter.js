@@ -34,9 +34,9 @@ router.get('/', controllerHandler(articleController.getAllPublic.bind(articleCon
 /**
  * GET /api/articles/admin
  *
- * @summary Get all private articles (admin only)
+ * @summary Get all private articles
  * @tags Article
-
+  * @security BearerAuth
  * @returns {Array<Article>} 200 - Array of private article objects
  * @returns {object} 403 - Forbidden
  * @returns {object} 500 - Internal server error
@@ -57,7 +57,7 @@ router.get('/:slug([a-z0-9-]+)', controllerHandler(articleController.getOne.bind
 /**
  * GET /api/articles/admin/:slug
  *
- * @summary Get a specific article by slug private
+ * @summary Get a specific article by slug
  * @tags Article
  * @security BearerAuth
  * @param {string} slug.path - The slug of the article to retrieve
