@@ -2,14 +2,14 @@
 const debug = require('debug')('app:controllers:recruitment');
 const fs = require('fs');
 const handlebars = require('handlebars');
-const uploadHandler = require('../services/uploadService');
+const uploadService = require('../services/uploadService');
 const dataMapper = require('../models/dataMapper');
 const { createRecruitment } = require('../validations/schemas/recruitment-schema');
 const CoreController = require('./CoreController');
 const mailingService = require('../services/mailingService');
 
 const API_URL = process.env.API_URL ?? '';
-const tableName = 'recruitment';
+
 const jsend = {
   status: 'success',
 };
@@ -56,7 +56,7 @@ class RecruitmentController extends CoreController {
  * @throws {Error} - If there is an error during the recruitment creation process.
  */
   async insertRecruitment(request, response, next) {
-    const imageUpload = await uploadHandler(request, 'private', 'pdf', 'cv', next, createRecruitment, 2);
+    const imageUpload = await uploadService(request, 'private', 'pdf', 'cv', next, createRecruitment, 2);
     const updatedData = {
       ...request.body,
     };
