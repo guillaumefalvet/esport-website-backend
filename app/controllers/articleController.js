@@ -101,7 +101,7 @@ class ArticleController extends CoreController {
    */
   async getAllPrivate(_, response) {
     debug(`get all private ${this.constructor.tableName}`);
-    const results = await dataMapper.getAll('article_events_categories_private');
+    const results = await dataMapper.getAll('article_events_categories_private_v2');
     jsend.data = results;
     return response.status(200).json(jsend);
   }
