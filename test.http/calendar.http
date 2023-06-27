@@ -40,8 +40,7 @@ Authorization: Bearer {{accessToken}}
   "adversary_name": "Team D",
   "adversary_name_short": "D",
   "image": "test",
-  "large_image": "test",
-  "publication_date":"2023-06-10 18:00:00"
+  "large_image": "test"
 }
 
 ### Récupérer un évent
