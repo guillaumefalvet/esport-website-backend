@@ -53,7 +53,7 @@ router.get('/:id(\\d+)', controllerHandler(calendarController.getOne.bind(calend
  * @returns {object} 403 - Forbidden
  * @returns {object} 303 - already exist
  */
-router.post('/', authorizeAccess(1), controllerHandler(calendarController.createOne.bind(calendarController)));
+router.post('/', authorizeAccess(1), controllerHandler(calendarController.uploadOne.bind(calendarController)));
 
 /**
  * PATCH /api/calendar/:id
@@ -67,7 +67,7 @@ router.post('/', authorizeAccess(1), controllerHandler(calendarController.create
  * @returns {object} 403 - Forbidden
  * @returns {object} 404 - not found
  */
-router.patch('/:id(\\d+)', authorizeAccess(1), controllerHandler(calendarController.modifyOne.bind(calendarController)));
+router.patch('/:id(\\d+)', authorizeAccess(1), controllerHandler(calendarController.modifyUploadedOne.bind(calendarController)));
 
 /**
  * DELETE /api/calendar/:id
@@ -80,6 +80,6 @@ router.patch('/:id(\\d+)', authorizeAccess(1), controllerHandler(calendarControl
  * @returns {object} 403 - Forbidden
  * @returns {object} 404 - not found
  */
-router.delete('/:id(\\d+)', authorizeAccess(1), controllerHandler(calendarController.deleteOne.bind(calendarController)));
+router.delete('/:id(\\d+)', authorizeAccess(1), controllerHandler(calendarController.deleteUploadedOne.bind(calendarController)));
 
 module.exports = router;

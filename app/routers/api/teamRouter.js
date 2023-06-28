@@ -59,7 +59,7 @@ router.get('/:user_name', controllerHandler(teamController.getOne.bind(teamContr
  * @returns {object} 403 - Forbidden
  * @returns {object} 500 - Internal server error
  */
-router.post('/', authorizeAccess(1), validate(createPlayerValidation), controllerHandler(teamController.createOne.bind(teamController)));
+router.post('/', authorizeAccess(1), controllerHandler(teamController.uploadOne.bind(teamController)));
 
 /**
  * POST /api/team/:user_name/setup/:id
@@ -101,7 +101,7 @@ router.post('/:user_name/media/:id(\\d+)', authorizeAccess(1), controllerHandler
  * @returns {object} 403 - Forbidden
  * @returns {object} 404 - not found
  */
-router.patch('/:id(\\d+)', authorizeAccess(1), validate(modifyPlayerValidation), controllerHandler(teamController.modifyOne.bind(teamController)));
+router.patch('/:id(\\d+)', authorizeAccess(1), controllerHandler(teamController.modifyUploadedOne.bind(teamController)));
 
 /**
  * DELETE /api/team/:user_name
@@ -114,7 +114,7 @@ router.patch('/:id(\\d+)', authorizeAccess(1), validate(modifyPlayerValidation),
  * @returns {object} 403 - Forbidden
  * @returns {object} 404 - not found
  */
-router.delete('/:user_name', authorizeAccess(1), controllerHandler(teamController.deleteOne.bind(teamController)));
+router.delete('/:user_name', authorizeAccess(1), controllerHandler(teamController.deleteUploadedOne.bind(teamController)));
 
 /**
  * DELETE /api/team/:user_name/setup/:id
