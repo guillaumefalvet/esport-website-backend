@@ -18,9 +18,11 @@ const jsend = {
  * @typedef {object} ArticleController
  * @property {function} getAllPublic - Get all public articles.
  * @property {function} getAllPrivate - Get all private articles.
- * @property {function} createCalendarRelation - Create a relation between an article and a calendar.
+ * @property {function} getOnePrivate - Get one private articles.
+ * @property {function} uploadOne - Uploads a single article with an image.
+ * @property {function} modifyUploadedOne - Modifies an uploaded article with an image.
+ * @property {function} deleteUploadedOne - Deletes an uploaded article with its associated image.
  * @property {function} createCategoryRelation - Create a relation between an article and a category.
- * @property {function} deleteCalendarRelation - Delete a relation between an article and a calendar.
  * @property {function} deleteCategoryRelation - Delete a relation between an article and a category.
  */
 
@@ -50,8 +52,8 @@ class ArticleController extends CoreController {
   static columnName = 'slug';
 
   /**
-   * Name of the secondary column used for modifying articles.
-   * @type {string}
+   * Name of the secondary column used for articles.
+   * @type {number}
    */
   static secondaryColumnName = 'id';
 
@@ -138,12 +140,21 @@ class ArticleController extends CoreController {
     return response.status(200).json(jsend);
   }
 
+  /**
+ * Uploads a single article with an image.
+ *
+ * @param {Object} request - The request object.
+ * @param {Object} response - The response object.
+ * @param {Function} next - The next middleware function.
+ * @returns {Object} The response object.
+ */
   async uploadOne(request, response, next) {
-    // get the author id
+    debug(`${this.constructor.name} uploadOne`);
     const imageUpload = await uploadService(request, 'public', 'article', 'img', next, createArticle, 3);
     const parsedData = {
       ...request.body,
     };
+    // if no image was uploaded
     if (!imageUpload.path.length) {
       const error = new Error();
       debug('validation error missing file');
@@ -151,16 +162,7 @@ class ArticleController extends CoreController {
       error.message = 'img';
       return next(error);
     }
-    const authHeader = request.headers.authorization;
-    const accessToken = authHeader.split('Bearer ')[1];
-    const decoded = jwt.verify(
-      accessToken,
-      JWT_SECRET,
-      { ignoreExpiration: true },
-    );
-    parsedData.author_id = decoded.data.id;
-    parsedData.image = `${API_URL}${imageUpload.path}`;
-    debug(parsedData);
+    // check if it doesn't exist in database
     const alradyExist = await dataMapper.getByColumnValue(
       this.constructor.tableName,
       this.constructor.columnName,
@@ -173,30 +175,106 @@ class ArticleController extends CoreController {
       error.code = 303;
       return next(error);
     }
+
+    // gettting the user id
+    const authHeader = request.headers.authorization;
+    const accessToken = authHeader.split('Bearer ')[1];
+    const decoded = jwt.verify(
+      accessToken,
+      JWT_SECRET,
+      { ignoreExpiration: true },
+    );
+    parsedData.author_id = decoded.data.id;
+    parsedData.image = `${API_URL}${imageUpload.path}`;
     const result = await dataMapper.createOne(this.constructor.tableName, parsedData);
     jsend.data = result;
     return response.status(201).json(jsend);
   }
 
+  /**
+ * Modifies an uploaded article with an image.
+ *
+ * @param {Object} request - The request object.
+ * @param {Object} response - The response object.
+ * @param {Function} next - The next middleware function.
+ * @returns {Object} The response object.
+ */
   async modifyUploadedOne(request, response, next) {
+    debug(`${this.constructor.name} modifyUploadedOne`);
     // call uploadService to parse the data
+    const imageUpload = await uploadService(request, 'public', 'article', 'img', next, modifyArticle, 3);
+    const parsedData = {
+      ...request.body,
+    };
     // check if the article exist in the database (SEARCH BY ID=> secondaryColumnName) => 404
-    // if no article in database && if there was an image
-    //= > FS: delete the staged file if there is one
-    // if there is an image
-    // => FS: delete the old on from db
-    // store the new image in an object
-    // get the id based on the jwt header
+    const doesExist = await dataMapper.getByColumnValue(
+      this.constructor.tableName,
+      this.constructor.secondaryColumnName,
+      request.params[this.constructor.secondaryColumnName],
+    );
+    // if no article in database
+    if (!doesExist) {
+      const error = new Error();
+      error.code = 404;
+      // if there was an image in the request
+      if (imageUpload.path.length) {
+        //= > FS: delete the staged file if there is one
+        fs.unlinkSync(`./${imageUpload.path}`);
+      }
+      // 404
+      return next(error);
+    }
+    if (imageUpload.path.length) {
+      // if there is an image
+      // => FS: delete the old on from db
+      const fileToDelete = doesExist.image.split(API_URL);
+      fs.unlinkSync(`./${fileToDelete[1]}`);
+      // store the new image in an object
+      parsedData.image = `${API_URL}${imageUpload.path}`;
+    }
+    // setting the id for the function sql to modify the article
+    parsedData.id = request.params[this.constructor.secondaryColumnName];
     // call modifyOne
+    const result = await dataMapper.modifyOne(this.constructor.tableName, parsedData);
+    jsend.data = result;
     // return response
+    return response.status(200).json(jsend);
   }
 
+  /**
+ * Deletes an uploaded article with its associated image.
+ *
+ * @param {Object} request - The request object.
+ * @param {Object} response - The response object.
+ * @param {Function} next - The next middleware function.
+ * @returns {Object} The response object.
+ */
   async deleteUploadedOne(request, response, next) {
+    debug(`${this.constructor.name} deleteUploadedOne`);
     // check if the article exist in the database
-    // if no article in database
+    const doesExist = await dataMapper.getByColumnValue(
+      this.constructor.tableName,
+      this.constructor.columnName,
+      request.params[this.constructor.columnName],
+    );
+
+    // if article in database
+    if (!doesExist) {
+      const error = new Error();
+      error.code = 404;
+      return next(error);
+    }
     // => FS: delete the image from db
+    const fileToDelete = doesExist.image.split(API_URL);
+    fs.unlinkSync(`./${fileToDelete[1]}`);
     // call delete
+    await dataMapper.deleteByColumnValue(
+      this.constructor.tableName,
+      this.constructor.columnName,
+      request.params[this.constructor.columnName],
+    );
     // return response 204
+    return response.status(204).send();
   }
 
   /**
@@ -207,6 +285,7 @@ class ArticleController extends CoreController {
    * @returns {Array} 201 - Success message if the relation is created successfully.
    */
   async createCategoryRelation(request, response, next) {
+    debug(`${this.constructor.name} createCategoryRelation`);
     const createReference = await this.createReference(request, next, 'category', 'id');
     if (createReference) {
       response.status(201).json(jsend);
@@ -221,6 +300,7 @@ class ArticleController extends CoreController {
    * @returns {Array} 204 - Success message if the relation is deleted successfully.
    */
   async deleteCategoryRelation(request, response, next) {
+    debug(`${this.constructor.name} deleteCategoryRelation`);
     await this.deleteReference(request, next, 'category', 'id');
     return response.status(204).send();
   }
