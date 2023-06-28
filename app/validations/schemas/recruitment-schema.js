@@ -1,7 +1,6 @@
 const Joi = require('joi');
 
 const createRecruitment = Joi.object({
-  user_name: Joi.string().required(),
   email: Joi.string().email().required(),
   first_name: Joi.string().required(),
   last_name: Joi.string().required(),
@@ -10,4 +9,10 @@ const createRecruitment = Joi.object({
   cv: Joi.string().allow(null, ''),
 }).required();
 
-module.exports = { createRecruitment };
+const reviewRecruitment = Joi.object({
+  is_accepted: Joi.boolean().required(),
+  reviewer_comment: Joi.string().required(),
+  reviewer_comment_private: Joi.string().required(),
+}).required();
+
+module.exports = { createRecruitment, reviewRecruitment };
