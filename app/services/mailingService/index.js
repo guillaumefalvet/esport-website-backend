@@ -1,11 +1,12 @@
+/* eslint-disable camelcase */
 /* eslint-disable no-unused-vars */
-const debug = require('debug')('mail-service');
+const debug = require('debug')('app:service:mailingService');
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 // eslint-disable-next-line arrow-body-style
-const mailingService = async (data, template, sendTO) => {
+const mailingService = async (data, template, sendTO, subject) => {
   const {
-    email, firstName, lastName, applicantTemplate,
+    email, first_name, last_name, reviewer_comment, message, path,
   } = data;
 
   // const { email, firstName, lastName } = request.body;
@@ -23,10 +24,17 @@ const mailingService = async (data, template, sendTO) => {
     const mailOptions = {
       from: process.env.EMAIL_ADDRESS,
       to: sendTO,
-      subject: 'Réception de la candidature',
+      subject,
       html: template,
-
     };
+    if (process.env.EMAIL_ADDRESS === sendTO) {
+      debug(`attaching....: ${path}`);
+      mailOptions.attachments = [{
+        filename: `application_${first_name}_${last_name}.pdf`,
+        path,
+        contentType: 'application/pdf',
+      }];
+    }
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         debug('Error sending email:', error);
