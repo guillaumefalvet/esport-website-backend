@@ -3,6 +3,8 @@ const express = require('express');
 const controllerHandler = require('../../middlewares/controllerHandler');
 const recruitController = require('../../controllers/recruitmentController');
 const { authorizeAccess } = require('../../middlewares/authHandler');
+const { reviewRecruitment } = require('../../validations/schemas/recruitment-schema');
+const validate = require('../../validations/validate');
 
 const router = express.Router();
 /**
@@ -36,7 +38,16 @@ router.post('/', controllerHandler(recruitController.insertRecruitment.bind(recr
  */
 router.get('/', authorizeAccess(1), controllerHandler(recruitController.getAll.bind(recruitController)));
 
-// Serve static files in the 'private' directory
+/**
+ * PATCH /api/recruitment/:id
+ * @summary review a recruitment applications
+ * @tags Recruitment
+ * @param {number} id.path - The ID of the person
+ * @security BearerAuth
+ * @returns {Array<Recruitment>} 200 - Array of recruitment applications
+ * @returns {object} 403 - Forbidden
+ */
+router.patch('/:id(\\d+)', authorizeAccess(1), validate(reviewRecruitment), controllerHandler(recruitController.reviewOne.bind(recruitController)));
 
 /**
  * DELETE /api/recruitment/:id

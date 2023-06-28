@@ -9,7 +9,7 @@ const CoreController = require('./CoreController');
 const mailingService = require('../services/mailingService');
 
 const API_URL = process.env.API_URL ?? '';
-
+const adminMail = process.env.EMAIL_ADDRESS;
 const jsend = {
   status: 'success',
 };
@@ -17,6 +17,7 @@ const jsend = {
  * @typedef {object} RecruitmentController
  * @property {function} insertRecruitment - Insert a recruitment entry.
  * @property {function} deleteRecruitment - Delete a recruitment entry.
+ * @property {function} reviewOne - Review one applicant.
  */
 
 /**
@@ -36,7 +37,13 @@ class RecruitmentController extends CoreController {
    * Name of the view table for recruitement.
    * @type {string}
    */
-  static columnName = 'user_name';
+  static columnName = 'email';
+
+  /**
+   * Name of the secondary column used for recruitment.
+   * @type {number}
+   */
+  static secondaryColumnName = 'id';
 
   /**
    * Create an instance of RecruitmentController.
@@ -56,7 +63,8 @@ class RecruitmentController extends CoreController {
  * @throws {Error} - If there is an error during the recruitment creation process.
  */
   async insertRecruitment(request, response, next) {
-    const imageUpload = await uploadService(request, 'private', 'pdf', 'cv', next, createRecruitment, 2);
+    debug(`${this.constructor.name} insertRecruitment`);
+    const imageUpload = await uploadService(request, 'private', 'recruitment', 'cv', next, createRecruitment, 2);
     const updatedData = {
       ...request.body,
     };
@@ -71,7 +79,7 @@ class RecruitmentController extends CoreController {
     const alradyExist = await dataMapper.getByColumnValue(
       this.constructor.tableName,
       this.constructor.columnName,
-      updatedData.user_name,
+      updatedData.email,
     );
     if (alradyExist) {
       // if the recruitment already exist in the database
@@ -85,23 +93,64 @@ class RecruitmentController extends CoreController {
     debug('Recruitment created successfully');
     jsend.data = result;
     const data = {
-      email: result.email,
-      firstName: result.first_name,
-      lastName: result.last_name,
+      ...updatedData,
+      path: imageUpload.path,
     };
-    const adminMail = process.env.EMAIL_ADDRESS;
 
-    const applicantTemplate = fs.readFileSync('./app/services/mailingService/templates/applicantTemplate.hbs', 'utf8');
-    const applicantHtmlTemplate = handlebars.compile(applicantTemplate);
-    const applicantHtml = applicantHtmlTemplate(data);
+    const applicantTemplate = fs.readFileSync('./app/services/mailingService/templates/applicantTemplateApplying.hbs', 'utf8');
+    const applicantHtml = handlebars.compile(applicantTemplate)(data);
 
     const adminTemplate = fs.readFileSync('./app/services/mailingService/templates/adminTemplate.hbs', 'utf8');
-    const adminHtmlTemplate = handlebars.compile(adminTemplate);
-    const adminHtml = adminHtmlTemplate(data);
+    const adminHtml = handlebars.compile(adminTemplate)(data);
 
-    await mailingService(data, adminHtml, adminMail);
-    await mailingService(data, applicantHtml, data.email);
+    await mailingService(data, adminHtml, adminMail, 'ADMIN: Nouvelle candidature');
+    await mailingService(data, applicantHtml, data.email, 'VictoryZone: Réception de votre candidature');
     return response.status(201).json(jsend);
+  }
+
+  /**
+ * Review one applicant
+ * @param {Object} request - The request object.
+ * @param {Object} response - The response object.
+ * @param {Function} next - The next function.
+ * @returns {Object} The response object.
+ */
+  async reviewOne(request, response, next) {
+    const findRecruitment = await dataMapper.getByColumnValue(
+      this.constructor.tableName,
+      this.constructor.secondaryColumnName,
+      request.params[this.constructor.secondaryColumnName],
+    );
+    if (!findRecruitment) {
+      const error = new Error();
+      error.code = 404;
+      return next(error);
+    }
+    request.body.id = request.params[this.constructor.secondaryColumnName];
+    const data = {
+      ...findRecruitment,
+      ...request.body,
+    };
+
+    if (request.body.is_accepted) {
+      debug('you passed !');
+      const applicantTemplate = fs.readFileSync('./app/services/mailingService/templates/applicantTemplateIsAccepted.hbs', 'utf8');
+      const applicantHtml = handlebars.compile(applicantTemplate)(data);
+      await mailingService(data, applicantHtml, data.email, 'VictoryZone: Félicitation !');
+      // send an email saying the person got accepted along message...
+    } else {
+      debug('you failed !');
+      const applicantTemplate = fs.readFileSync('./app/services/mailingService/templates/applicantTemplateIsNotAccepted.hbs', 'utf8');
+      const applicantHtml = handlebars.compile(applicantTemplate)(data);
+      await mailingService(data, applicantHtml, data.email, 'VictoryZone: Peut-être une autre fois !');
+      // send an email saying the person got rejected along message...
+    }
+    // request.body.is_reviewed = !request.body.is_reviewed;
+    request.body.is_reviewed = true;
+    const result = await dataMapper.modifyOne(this.constructor.tableName, request.body);
+    jsend.data = result;
+    // return response
+    return response.status(200).json(jsend);
   }
 
   /**
@@ -116,13 +165,12 @@ class RecruitmentController extends CoreController {
  * @throws {Error} - If the recruitment data to be deleted is not found or there is an error during deletion.
  */
   async deleteRecruitment(request, response, next) {
-    debug(`deleteOne: ${tableName}`);
+    debug(`${this.constructor.name} deleteRecruitment`);
     const findRecruitment = await dataMapper.getByColumnValue(
       this.constructor.tableName,
-      'id',
-      request.params.id,
+      this.constructor.secondaryColumnName,
+      request.params[this.constructor.secondaryColumnName],
     );
-    debug(request.params.id);
     if (!findRecruitment) {
       const error = new Error();
       error.code = 404;
@@ -136,8 +184,8 @@ class RecruitmentController extends CoreController {
     }
     await dataMapper.deleteByColumnValue(
       this.constructor.tableName,
-      'id',
-      request.params.id,
+      this.constructor.secondaryColumnName,
+      request.params[this.constructor.secondaryColumnName],
     );
     return response.status(204).send();
   }
