@@ -8,7 +8,7 @@ POST {{endpoint}}/auth/login
 content-type: application/json
 
 {
-    "email": "john@example.com",
+    "email": "axel@axel.com",
     "password": "secret"
 }
 
@@ -35,13 +35,9 @@ Content-Type: application/pdf
 
 @./test.pdf
 --boundary_value
-Content-Disposition: form-data; name="user_name"
-
-slayerssssss
---boundary_value
 Content-Disposition: form-data; name="email"
 
-slayer@sssssssexample.com
+guillaume.falvet@outlook.com
 --boundary_value
 Content-Disposition: form-data; name="first_name"
 
@@ -60,6 +56,17 @@ Content-Disposition: form-data; name="external_link"
 hhpassasa
 --boundary_value--
 
+### Faire un review d'une candidature
+PATCH {{endpoint}}/recruitment/1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "is_accepted": true,
+    "reviewer_comment": "t'es super mec !",
+    "reviewer_comment_private": "on l'accepte juste parce qu'il est gentil..."
+}
+
 ### Suppression d'un recrutement
-DELETE {{ endpoint }}/recruitment/19
+DELETE {{ endpoint }}/recruitment/2
 Authorization: Bearer {{accessToken}}

@@ -8,7 +8,7 @@ POST {{endpoint}}/auth/login
 content-type: application/json
 
 {
-    "email": "john@example.com",
+    "email": "axel@axel.com",
     "password": "secret"
 }
 
@@ -31,35 +31,69 @@ GET {{ endpoint }}/calendar?home=true
 ### Création d'un évent
 
 POST {{ endpoint }}/calendar
-Content-Type: application/json
+Content-Type: multipart/form-data; boundary=boundary_value
 Authorization: Bearer {{accessToken}}
 
-{
-  "event_name": "tournoi-world",
-  "event_date": "2023-06-10 18:00:00",
-  "adversary_name": "Team D",
-  "adversary_name_short": "D",
-  "image": "test",
-  "large_image": "test"
-}
+
+--boundary_value
+Content-Disposition: form-data; name="img"; filename="test.webp"
+Content-Type: image/webp
+
+@./test.pdf
+--boundary_value
+Content-Disposition: form-data; name="event_name"
+
+tournoi-world
+--boundary_value
+Content-Disposition: form-data; name="event_date"
+
+2023-06-10 18:00:00
+--boundary_value
+Content-Disposition: form-data; name="adversary_name"
+
+Team D
+--boundary_value
+Content-Disposition: form-data; name="adversary_name_short"
+
+TD
+--boundary_value--
 
 ### Récupérer un évent
 
-GET  {{ endpoint }}/calendar/1
+GET  {{ endpoint }}/calendar/6
 
 
 ### Modification d'un évent
-PATCH {{ endpoint }}/calendar/1
-Content-Type: application/json
+PATCH {{ endpoint }}/calendar/5
+Content-Type: multipart/form-data; boundary=boundary_value
 Authorization: Bearer {{accessToken}}
 
 
-{
-  "event_name": "event team wolrd"
-}
+--boundary_value
+Content-Disposition: form-data; name="img"; filename="test.webp"
+Content-Type: image/webp
+
+@./test.pdf
+--boundary_value
+Content-Disposition: form-data; name="event_name"
+
+tournoi-world
+--boundary_value
+Content-Disposition: form-data; name="event_date"
+
+2023-06-10 18:00:00
+--boundary_value
+Content-Disposition: form-data; name="adversary_name"
+
+Team D
+--boundary_value
+Content-Disposition: form-data; name="adversary_name_short"
+
+TD
+--boundary_value--
 
 ### Suppression d'un évent
 
-DELETE {{ endpoint }}/calendar/1
+DELETE {{ endpoint }}/calendar/5
 Authorization: Bearer {{accessToken}}
 

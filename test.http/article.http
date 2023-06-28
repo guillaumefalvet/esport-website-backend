@@ -44,49 +44,11 @@ GET {{ endpoint }}/articles/admin
 Authorization: Bearer {{accessToken}}
 
 ### Récupérer un article privé ADMIN
-GET {{ endpoint }}/articles/admin/article-title-test
+GET {{ endpoint }}/articles/admin/article-title-testssssssszzz
 Authorization: Bearer {{accessToken}}
 
 ### Récupérer un article
 GET {{ endpoint }}/articles/article-title-test
-
-
-### CREATION ARTICLE
-POST {{ endpoint }}/articles/
-content-type: application/json
-Authorization: Bearer {{accessToken}}
-
-{
-  "slug": "nouvel-article",
-  "title": "mon nouvel article",
-  "content": "Ceci est le contenu de mon nouvel article",
-  "author_id": 1,
-  "image": "https://projet-14-victory-zone-back-production.up.railway.app/image/carousel-3.webp",
-  "publication_date": "2024-06-21T08:00:00.581Z"
-}
-
-### MODIFICATION D'UN ARTICLE
-PATCH {{ endpoint }}/articles/15
-content-type: application/json
-Authorization: Bearer {{accessToken}}
-
-{
-  "slug": "nouvel-articleasasas",
-  "content": "essssasasas"
-}
-
-### SUPPRESSION D'UN ARTICLE
-DELETE {{endpoint}}/articles/nouvel-article
-Authorization: Bearer {{accessToken}}
-
-### CREATION D'un lien entre un article et une category
-POST {{ endpoint }}/articles/nouvel-article/category/1
-Authorization: Bearer {{accessToken}}
-
-
-### SUPPRESSION D'un lien entre un joueur et un category
-DELETE {{endpoint}}/articles/nouvel-article/category/1
-Authorization: Bearer {{accessToken}}
 
 ### CREATION ARTICLE
 POST {{ endpoint }}/articles/
@@ -119,3 +81,52 @@ Content-Disposition: form-data; name="figcaption"
 
 hhpassasa
 --boundary_value--
+
+
+### MODIFICATION D'UN ARTICLE
+PATCH {{ endpoint }}/articles/21
+Content-Type: multipart/form-data; boundary=boundary_value
+Authorization: Bearer {{accessToken}}
+
+# --boundary_value
+# Content-Disposition: form-data; name="img"; filename="test.webp"
+# Content-Type: image/webp
+
+# @./test.pdf
+--boundary_value
+Content-Disposition: form-data; name="slug"
+
+article-title-testssssssszzz
+--boundary_value
+Content-Disposition: form-data; name="title"
+
+article title testsss
+--boundary_value
+Content-Disposition: form-data; name="content"
+
+roberts
+--boundary_value
+Content-Disposition: form-data; name="publication_date"
+
+2023-06-21T08:00:00.581Z
+--boundary_value
+Content-Disposition: form-data; name="figcaption"
+
+hhpassasa
+--boundary_value--
+
+
+### SUPPRESSION D'UN ARTICLE
+DELETE {{endpoint}}/articles/article-title-testss
+Authorization: Bearer {{accessToken}}
+
+### CREATION D'un lien entre un article et une category
+POST {{ endpoint }}/articles/nouvel-article/category/1
+Authorization: Bearer {{accessToken}}
+
+
+### SUPPRESSION D'un lien entre un article et une category
+DELETE {{endpoint}}/articles/nouvel-article/category/1
+Authorization: Bearer {{accessToken}}
+
+
