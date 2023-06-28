@@ -55,9 +55,8 @@ CREATE FUNCTION update_permission(json_data json) RETURNS "permission" AS $$
 $$ LANGUAGE sql;
 
 CREATE FUNCTION insert_recruitment(json_data json) RETURNS "recruitment" AS $$
-  INSERT INTO "recruitment"("user_name","email", "first_name", "last_name", "message", "external_link", "cv")
+  INSERT INTO "recruitment"("email", "first_name", "last_name", "message", "external_link", "cv")
     VALUES (
-      (json_data->>'user_name')::text,
       (json_data->>'email')::text,
       (json_data->>'first_name')::text,
       (json_data->>'last_name')::text,
@@ -66,6 +65,18 @@ CREATE FUNCTION insert_recruitment(json_data json) RETURNS "recruitment" AS $$
       (json_data->>'cv')::text
     ) RETURNING *;
   $$ LANGUAGE sql;
+
+CREATE FUNCTION update_recruitment(json_data json) RETURNS "recruitment" AS $$
+  UPDATE "recruitment" SET
+    "is_reviewed" = COALESCE((json_data->>'is_reviewed')::bool,"is_reviewed"),
+    "is_accepted" = COALESCE((json_data->>'is_accepted')::bool, "is_accepted"),
+    "reviewer_comment" = COALESCE((json_data->>'reviewer_comment')::text, "reviewer_comment"),
+    "reviewer_comment_private" = COALESCE((json_data->>'reviewer_comment_private')::text, "reviewer_comment_private"),
+    "updated_at" = now()
+  WHERE "id" = (json_data->>'id')::int
+  RETURNING *;
+  $$ LANGUAGE sql;
+
 
 CREATE FUNCTION insert_media(json_data json) RETURNS "media" AS $$
   INSERT INTO "media"("link", "is_active")

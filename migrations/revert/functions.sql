@@ -7,6 +7,7 @@ DROP FUNCTION public.update_player;
 DROP FUNCTION public.insert_permission;
 DROP FUNCTION public.update_permission;
 DROP FUNCTION public.insert_recruitment;
+DROP FUNCTION public.update_recruitment;
 DROP FUNCTION public.insert_media;
 DROP FUNCTION public.insert_article;
 DROP FUNCTION public.update_article;
