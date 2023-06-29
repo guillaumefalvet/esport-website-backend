@@ -87,22 +87,33 @@ CREATE FUNCTION insert_media(json_data json) RETURNS "media" AS $$
   $$ LANGUAGE sql;
 
 --article
-CREATE FUNCTION insert_article(json_data json) RETURNS "article" AS $$
-  INSERT INTO "article"("slug", "title", "content", "author_id", "image", "figcaption", "publication_date")
-    VALUES(
-      (json_data->>'slug')::text,
+CREATE OR REPLACE FUNCTION insert_article(json_data json)
+  RETURNS "article" AS $$
+  DECLARE
+    new_article "article";
+  BEGIN
+    INSERT INTO "article"("slug", "title", "content", "author_id", "image", "figcaption", "publication_date")
+    VALUES (
+      REPLACE(LOWER(json_data->>'title'), ' ', '-')::text,
       (json_data->>'title')::text,
       (json_data->>'content')::text,
       (json_data->>'author_id')::int,
       (json_data->>'image')::text,
       (json_data->>'figcaption')::text,
       (json_data->>'publication_date')::TIMESTAMPTZ
-    ) RETURNING *;
-  $$ LANGUAGE sql;
+	) RETURNING * INTO new_article;
 
-  CREATE FUNCTION update_article(json_data json) RETURNS "article" AS $$
+    RETURN new_article;
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION update_article(json_data json)
+RETURNS "article" AS $$
+  DECLARE
+    updated_article "article";
+  BEGIN
     UPDATE "article" SET
-      "slug" = COALESCE((json_data->>'slug')::text, "slug"),
+      "slug" = COALESCE(REPLACE(LOWER(json_data->>'title'), ' ', '-'), "slug"),
       "title" = COALESCE((json_data->>'title')::text, "title"),
       "content" = COALESCE((json_data->>'content')::text, "content"),
       "author_id" = COALESCE((json_data->>'author_id')::int, "author_id"),
@@ -111,9 +122,12 @@ CREATE FUNCTION insert_article(json_data json) RETURNS "article" AS $$
       "publication_date" = COALESCE((json_data->>'publication_date')::TIMESTAMPTZ, "publication_date"),
       "updated_at" = now()
     WHERE "id" = (json_data->>'id')::int
-    RETURNING *;
-  $$ LANGUAGE sql;
+    RETURNING * INTO updated_article;
+    RETURN updated_article;
+  END;
+$$ LANGUAGE plpgsql;
 --calendar
+
 
 CREATE FUNCTION insert_calendar(json_data json) RETURNS "calendar" AS $$
   INSERT INTO "calendar"("event_name", "event_date", "adversary_name", "adversary_name_short", "replay_link", "live_link", "score", "image")

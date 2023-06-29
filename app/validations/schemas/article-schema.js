@@ -1,7 +1,6 @@
 const Joi = require('joi');
 
 const createArticle = Joi.object({
-  slug: Joi.string().required(),
   title: Joi.string().required(),
   content: Joi.string().required(),
   publication_date: Joi.string().required(),
@@ -9,7 +8,6 @@ const createArticle = Joi.object({
 }).required();
 
 const modifyArticle = Joi.object({
-  slug: Joi.string(),
   title: Joi.string(),
   content: Joi.string(),
   publication_date: Joi.string(),

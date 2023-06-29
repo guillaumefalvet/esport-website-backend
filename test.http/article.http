@@ -61,10 +61,6 @@ Content-Type: image/webp
 
 @./test.pdf
 --boundary_value
-Content-Disposition: form-data; name="slug"
-
-article-title-testss
---boundary_value
 Content-Disposition: form-data; name="title"
 
 article title testsss
@@ -84,23 +80,19 @@ hhpassasa
 
 
 ### MODIFICATION D'UN ARTICLE
-PATCH {{ endpoint }}/articles/21
+PATCH {{ endpoint }}/articles/12
 Content-Type: multipart/form-data; boundary=boundary_value
 Authorization: Bearer {{accessToken}}
 
-# --boundary_value
-# Content-Disposition: form-data; name="img"; filename="test.webp"
-# Content-Type: image/webp
-
-# @./test.pdf
 --boundary_value
-Content-Disposition: form-data; name="slug"
+Content-Disposition: form-data; name="img"; filename="test.webp"
+Content-Type: image/webp
 
-article-title-testssssssszzz
+@./test.pdf
 --boundary_value
 Content-Disposition: form-data; name="title"
 
-article title testsss
+1 article title testsss
 --boundary_value
 Content-Disposition: form-data; name="content"
 
@@ -117,7 +109,7 @@ hhpassasa
 
 
 ### SUPPRESSION D'UN ARTICLE
-DELETE {{endpoint}}/articles/article-title-testss
+DELETE {{endpoint}}/articles/article-title-testsss
 Authorization: Bearer {{accessToken}}
 
 ### CREATION D'un lien entre un article et une category

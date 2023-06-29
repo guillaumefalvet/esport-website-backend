@@ -165,9 +165,10 @@ class ArticleController extends CoreController {
     // check if it doesn't exist in database
     const alradyExist = await dataMapper.getByColumnValue(
       this.constructor.tableName,
-      this.constructor.columnName,
-      parsedData[this.constructor.columnName],
+      'title',
+      parsedData.title,
     );
+
     if (alradyExist) {
       // delete staged file
       fs.unlinkSync(`./${imageUpload.path}`);
