@@ -167,5 +167,19 @@ CREATE FUNCTION update_calendar(json_data json) RETURNS "calendar" AS $$
     RETURNING *;
   $$ LANGUAGE sql;
 
+  CREATE FUNCTION insert_category(json_data json) RETURNS "category" AS $$
+  INSERT INTO "category"("label")
+    VALUES (
+      (json_data->>'label')::text
+    ) RETURNING *;
+  $$ LANGUAGE sql;
+
+CREATE FUNCTION update_category(json_data json) RETURNS "category" AS $$
+  UPDATE "category" SET
+    "label" = COALESCE((json_data->>'label')::text, "label")
+  WHERE "id" = (json_data->>'id')::int
+  RETURNING *;
+$$ LANGUAGE sql;
+
 
 COMMIT;
