@@ -1,8 +1,7 @@
 const express = require('express');
 const controllerHandler = require('../../middlewares/controllerHandler');
 const { authorizeAccess } = require('../../middlewares/authHandler');
-// const { createCalendar, modifyCalendar } = require('../../validations/schemas');
-// const validate = require('../../validations');
+
 const calendarController = require('../../controllers/calendarController');
 
 const router = express.Router();
