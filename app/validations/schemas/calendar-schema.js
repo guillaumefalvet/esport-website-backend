@@ -8,7 +8,6 @@ const createCalendar = Joi.object({
   replay_link: Joi.string(),
   live_link: Joi.string(),
   score: Joi.string(),
-  publication_date: Joi.string(),
 }).required();
 
 const modifyCalendar = Joi.object({
@@ -19,7 +18,6 @@ const modifyCalendar = Joi.object({
   replay_link: Joi.string(),
   live_link: Joi.string(),
   score: Joi.string(),
-  publication_date: Joi.string(),
 }).required().min(1);
 
 module.exports = { createCalendar, modifyCalendar };
