@@ -30,9 +30,9 @@ const mailingService = async (data, template, sendTO, subject) => {
     if (process.env.EMAIL_ADDRESS === sendTO) {
       debug(`attaching....: ${path}`);
       mailOptions.attachments = [{
-        filename: `application_${first_name}_${last_name}.pdf`,
+        filename: `application_${first_name}_${last_name}.${path.toLowerCase().substring(path.lastIndexOf('.')).slice(1)}`,
         path,
-        contentType: 'application/pdf',
+        contentType: `application/${path.toLowerCase().substring(path.lastIndexOf('.')).slice(1)}`,
       }];
     }
     transporter.sendMail(mailOptions, (error, info) => {
