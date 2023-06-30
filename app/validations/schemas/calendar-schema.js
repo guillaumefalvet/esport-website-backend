@@ -5,9 +5,9 @@ const createCalendar = Joi.object({
   event_date: Joi.string().required(),
   adversary_name: Joi.string().required(),
   adversary_name_short: Joi.string().required(),
-  replay_link: Joi.string(),
-  live_link: Joi.string(),
-  score: Joi.string(),
+  replay_link: Joi.string().allow(null, ''),
+  live_link: Joi.string().allow(null, ''),
+  score: Joi.string().allow(null, ''),
 }).required();
 
 const modifyCalendar = Joi.object({

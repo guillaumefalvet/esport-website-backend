@@ -4,7 +4,7 @@ const createArticle = Joi.object({
   title: Joi.string().required(),
   content: Joi.string().required(),
   publication_date: Joi.string().required(),
-  figcaption: Joi.string(),
+  figcaption: Joi.string().allow(null, ''),
 }).required();
 
 const modifyArticle = Joi.object({
