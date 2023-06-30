@@ -4,6 +4,15 @@ const debug = require('debug')('app:service:mailingService');
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 // eslint-disable-next-line arrow-body-style
+/**
+ * Sends an email using Nodemailer.
+ *
+ * @param {object} data - Data for the email.
+ * @param {string} template - The HTML template for the email.
+ * @param {string} sendTO - The recipient's email address.
+ * @param {string} subject - The subject of the email.
+ * @returns {Promise<object>} A promise that resolves to the information about the sent email.
+ */
 const mailingService = async (data, template, sendTO, subject) => {
   const {
     email, first_name, last_name, reviewer_comment, message, path,
