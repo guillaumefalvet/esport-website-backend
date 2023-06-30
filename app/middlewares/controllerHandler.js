@@ -9,9 +9,7 @@ const debug = require('debug')('app:middlewares:controllerHandler');
 const controllerHandler = (controllerAction) => async (request, response, next) => {
   try {
     debug('Checking for error...');
-    console.time('time it took:');
     await controllerAction(request, response, next); // Execute the controller action
-    console.timeEnd('time it took:');
     debug('No error found');
   } catch (error) {
     debug('Error found');
