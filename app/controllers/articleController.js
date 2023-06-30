@@ -81,7 +81,7 @@ class ArticleController extends CoreController {
       let data = cachingService.getCache(cacheKey);
       if (!data) {
         data = await dataMapper.getAll(cacheKey);
-        cachingService.setCache(cacheKey, 300, data);
+        cachingService.setCache(cacheKey, data);
       }
       jsend.data = data;
       return response.status(200).json(jsend);
@@ -91,7 +91,7 @@ class ArticleController extends CoreController {
     let data = cachingService.getCache(cacheKey);
     if (!data) {
       data = await dataMapper.getAll(cacheKey);
-      cachingService.setCache(cacheKey, 300, data);
+      cachingService.setCache(cacheKey, data);
     }
     jsend.data = data;
     return response.status(200).json(jsend);
