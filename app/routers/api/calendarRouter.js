@@ -8,18 +8,16 @@ const calendarController = require('../../controllers/calendarController');
 const router = express.Router();
 /**
  * @typedef {object} Calendar
- * @property {number} id - a calendar id
- * @property {string} event_name - a calendar event name
- * @property {string} event_date - a calendar event date
- * @property {string} adversary_name - a calendar adversary name
- * @property {string} adversary_name_short - a calendar adversary name shorter
+ * @property {string} event_name.required - a calendar event name
+ * @property {string} event_date.required - a calendar event date
+ * @property {string} adversary_name.required - a calendar adversary name
+ * @property {string} adversary_name_short.required - a calendar adversary name shorter
+ * @property {string} img.required - The file of the event's image. - binary
  * @property {string} replay_link - a calendar replay_link
  * @property {string} live_link - a calendar live_link
  * @property {string} score - a calendar score
  * @property {string} image - a calendar image
- * @property {string} publication_date - a calendar publication date
- * @property {string} created_at - date of creation
- * @property {string} updated_at - date of last update
+
  */
 /**
  * GET /api/calendar
@@ -48,7 +46,7 @@ router.get('/:id(\\d+)', controllerHandler(calendarController.getOne.bind(calend
  * @summary Create a new calendar event
  * @tags Calendar
  * @security BearerAuth
- * @param {Calendar} request.body - The calendar event object to create
+ * @param {Calendar} request.body - The calendar event object to create  - multipart/form-data
  * @returns {Array<Calendar>} 201 - The created calendar event object
  * @returns {object} 403 - Forbidden
  * @returns {object} 303 - already exist
@@ -62,7 +60,7 @@ router.post('/', authorizeAccess(1), controllerHandler(calendarController.upload
  * @tags Calendar
  * @security BearerAuth
  * @param {number} id.path - The ID of the calendar event to update
- * @param {Calendar} request.body - The updated calendar event object
+ * @param {Calendar} request.body - The updated calendar event object  - multipart/form-data
  * @returns {Array<Calendar>} 200 - The updated calendar event object
  * @returns {object} 403 - Forbidden
  * @returns {object} 404 - not found

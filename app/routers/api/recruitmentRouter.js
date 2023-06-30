@@ -9,7 +9,6 @@ const validate = require('../../validations/validate');
 const router = express.Router();
 /**
  * @typedef {object} Recruitment - A recruitment type.
- * @property {string} user_name.required - The recruitment user name.
  * @property {string} email.required - The recruitment email.
  * @property {string} first_name.required - The recruitment first name.
  * @property {string} last_name.required - The recruitment last name.

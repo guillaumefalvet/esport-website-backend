@@ -9,16 +9,11 @@ const articleController = require('../../controllers/articleController');
 const router = express.Router();
 /**
  * @typedef {object} Article
- * @property {number} id - The article ID
- * @property {string} slug - The article slug
- * @property {string} title - The article title
- * @property {string} content - The article content
- * @property {string} author - The article author
- * @property {string} image - The URL of the article's image
+ * @property {string} title.required - The article title
+ * @property {string} content.required - The article content
+ * @property {string} img.required - The file of the article's image. - binary
  * @property {string} figcaption - The article figcaption
- * @property {string} publication_date - The article publication date
- * @property {string} created_at - The date of creation
- * @property {string} updated_at - The date of last update
+ * @property {string} publication_date.required - The article publication date
  */
 
 /**
@@ -36,7 +31,7 @@ router.get('/', controllerHandler(articleController.getAllPublic.bind(articleCon
  *
  * @summary Get all private articles
  * @tags Article
-  * @security BearerAuth
+* @security BearerAuth
  * @returns {Array<Article>} 200 - Array of private article objects
  * @returns {object} 403 - Forbidden
  * @returns {object} 500 - Internal server error
@@ -72,7 +67,7 @@ router.get('/admin/:slug([a-z0-9-]+)', controllerHandler(articleController.getOn
  * @summary Create a new article
  * @tags Article
  * @security BearerAuth
- * @param {Article} request.body - The article object to create
+ * @param {Article} request.body  - The article object to create - multipart/form-data
  * @returns {Array<Article>} 201 - The created article object
  * @returns {object} 403 - Forbidden
  * @returns {object} 500 - Internal server error
@@ -100,7 +95,7 @@ router.post('/:slug([a-z0-9-]+)/category/:id(\\d+)', authorizeAccess(1), control
  * @tags Article
  * @security BearerAuth
  * @param {number} id.path - The id of the article to update
- * @param {Article} request.body - The updated article object
+ * @param {Article} request.body - The article object to create - multipart/form-data
  * @returns {Array<Article>} 200 - The updated article object
  * @returns {object} 403 - Forbidden
  * @returns {object} 500 - Internal server error
