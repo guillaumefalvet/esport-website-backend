@@ -33,37 +33,3 @@ Authorization: Bearer {{accessToken}}
 {
     "refreshToken": "{{refreshToken}}"
 }
-
-### Récupérer tous les article
-GET {{ endpoint }}/articles
-
-### Récupérer un article
-GET {{ endpoint }}/articles/nouvel-article
-
-
-### CREATION ARTICLE
-POST {{ endpoint }}/articles/
-content-type: application/json
-Authorization: Bearer {{accessToken}}
-
-{
-  "slug": "nouvel-article",
-  "title": "mon nouvel article",
-  "content": "Ceci est le contenu de mon nouvel article",
-  "author": "jack",
-  "image": "test",
-  "publication_date": "2023-06-12 11:37:59.04144"
-}
-
-### MODIFICATION D'UN ARTICLE
-PATCH {{ endpoint }}/articles/nouvel-article
-content-type: application/json
-Authorization: Bearer {{accessToken}}
-
-{
-  "content": "esss"
-}
-
-### SUPPRESSION D'UN ARTICLE
-DELETE {{endpoint}}/articles/nouvel-article
-Authorization: Bearer {{accessToken}}
