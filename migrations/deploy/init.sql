@@ -36,7 +36,7 @@ CREATE TABLE "user" (
     "last_name" TEXT,
     "password" TEXT NOT NULL,
     "refresh_token" TEXT,
-    "user_permission" INT NOT NULL REFERENCES "permission"("id"),
+    "user_permission" INT NOT NULL REFERENCES "permission"("id") DEFAULT 2,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
     "updated_at" TIMESTAMPTZ
 );
@@ -59,7 +59,7 @@ CREATE TABLE "recruitment" (
 -- table setup
 CREATE TABLE "setup" (
     "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "name" TEXT NOT NULL,
+    "name" TEXT NOT NULL UNIQUE,
     "external_link" TEXT NOT NULL,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
     "updated_at" TIMESTAMPTZ
