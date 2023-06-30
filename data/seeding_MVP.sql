@@ -18,9 +18,18 @@ VALUES
 -- Seeding data for the "user" table
 INSERT INTO "user" ("user_name", "first_name", "last_name", "email", "password", "user_permission")
 VALUES
-  ('john', 'John', 'Roberts', 'john@example.com', '$2b$10$/by8W/BetZSETyF6OlSH4.CwX0szBcOMgENI1fLVcPYlK3x3crW7O', 1),
-  ('utilisateur1', 'Bob', 'Bobby', 'michael@example.com', '$2b$10$/by8W/BetZSETyF6OlSH4.CwX0szBcOMgENI1fLVcPYlK3x3crW7O', 2),
-  ('Axel', 'Axel', 'React', 'axel@axel.com', '$2b$10$/by8W/BetZSETyF6OlSH4.CwX0szBcOMgENI1fLVcPYlK3x3crW7O', 1);
+  ('quentin', 'Quentin', 'Joanon', 'john@example.com', '$2b$10$/by8W/BetZSETyF6OlSH4.CwX0szBcOMgENI1fLVcPYlK3x3crW7O', 1),
+  -- mdp quentin: secret
+  ('ali', 'Ali', ' Hadj Cherif', 'ali@ali.com', '$2a$10$TI1hJJD1Ns2XzWk0XShXaeQeu6ZxXig3K554a63x.18tFBKe8f6A.', 1),
+  -- mdp ali: passwordali
+  ('axel', 'Axel', 'Martin', 'axel@axel.com', '$2a$10$NFez/i/oG/GSgFPqfHYmQuDmJ7zgF/kbMhkMF50v7Rg7hfiyGzjlW', 1),
+  -- mdp axel: passwordaxel
+  ('manu', 'Manu', 'Chevalier', 'manu@manu.com', '$2a$10$FnUp1KOIuD0pbda3OdX0UOdxgXjXawRZDLigEtA.6CvTnRjT.5zpO', 1),
+  -- mdp manu: passwordmanu
+  ('guillaume', 'Guillaume', 'Falvet', 'gui@gui.com', '$2a$10$SPxaiJpYuBsz.rY2BRretOlTUeAv3Cazyx51aI1KVhNqmIB.3M.mi', 1),
+  -- mdp gui: passwordgui
+  ('brian', 'Where is', 'Brian', 'user@user.com', '$2a$10$5uL4rKX/J0/JXVkjTa979O9h8Ibvu11soBuK.XSd6gKAmv645dIAG', 2);
+  -- mdp user: user
 
 -- Seeding data for the "setup" table
 INSERT INTO "setup" ("name", "external_link")
