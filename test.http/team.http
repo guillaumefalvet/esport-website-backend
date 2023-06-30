@@ -44,11 +44,11 @@ Content-Type: image/webp
 --boundary_value
 Content-Disposition: form-data; name="user_name"
 
-article-title-testss
+noobDu34
 --boundary_value
 Content-Disposition: form-data; name="first_name"
 
-article title testsss
+Kevin
 --boundary_value
 Content-Disposition: form-data; name="last_name"
 
@@ -65,7 +65,7 @@ hhpassasa
 
 ### Récupérer un joueur
 
-GET {{ endpoint }}/team/theGardener
+GET {{ endpoint }}/team/noobDu34
 
 
 ### Modification d'un joueur
@@ -103,7 +103,7 @@ hhpassasa
 
 ### Suppression d'un joueur
 
-DELETE {{ endpoint }}/team/article-title-testsssss
+DELETE {{ endpoint }}/team/noobDu34
 Authorization: Bearer {{accessToken}}
 
 

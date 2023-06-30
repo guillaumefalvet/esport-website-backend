@@ -6,6 +6,7 @@ const dataMapper = require('../models/dataMapper');
 const CoreController = require('./CoreController');
 const { createArticle, modifyArticle } = require('../validations/schemas/article-schema');
 const uploadService = require('../services/uploadService');
+const cachingService = require('../services/cachingService');
 
 const { JWT_SECRET } = process.env;
 
@@ -75,30 +76,24 @@ class ArticleController extends CoreController {
   async getAllPublic(request, response) {
     const { home } = request.query;
     if (home === 'true') {
-      /**
-       * Extracts the first 14 words from a given text using a regular expression.
-       *
-       * @param {string} text - The input text from which to extract the words.
-       * @returns {string} The first 14 words extracted from the input text.
-       *
-       * @example
-       * Using the regular expression in JavaScript
-       * const regex = /((\S+\s*){1,14})(.*)/;
-       * const limitedText = text.match(regex)[1];
-       *
-       * In SQL query
-       * Explanation:
-       * The regular expression ((\S+\s*){1,14})(.*) is used to extract the first 14 words from the given text. It captures the words using groups and discards any remaining text.
-       * The SQL query SELECT regexp_replace(content, '((\S+\s*){1,14})(.*)', '\1') AS limited_text FROM your_table WHERE id = 1; can be used to apply the same extraction logic in a PostgreSQL database. It uses the regexp_replace function to capture the first 14 words and discard the rest.
-       */
       debug(`get all public ${this.constructor.tableName} for homepage`);
-      const results = await dataMapper.getAll('article_home_view');
-      jsend.data = results;
+      const cacheKey = 'article_home_view';
+      let data = cachingService.getCache(cacheKey);
+      if (!data) {
+        data = await dataMapper.getAll(cacheKey);
+        cachingService.setCache(cacheKey, 300, data);
+      }
+      jsend.data = data;
       return response.status(200).json(jsend);
     }
     debug(`get all public ${this.constructor.tableName}`);
-    const results = await dataMapper.getAll('article_public_view');
-    jsend.data = results;
+    const cacheKey = 'article_public_view';
+    let data = cachingService.getCache(cacheKey);
+    if (!data) {
+      data = await dataMapper.getAll(cacheKey);
+      cachingService.setCache(cacheKey, 300, data);
+    }
+    jsend.data = data;
     return response.status(200).json(jsend);
   }
 
@@ -189,6 +184,10 @@ class ArticleController extends CoreController {
     parsedData.image = `${API_URL}${imageUpload.path}`;
     const result = await dataMapper.createOne(this.constructor.tableName, parsedData);
     jsend.data = result;
+    // delete the cache for article public
+    cachingService.delCache('article_home_view');
+    // delete the cache for article home
+    cachingService.delCache('article_public_view');
     return response.status(201).json(jsend);
   }
 
@@ -238,6 +237,10 @@ class ArticleController extends CoreController {
     // call modifyOne
     const result = await dataMapper.modifyOne(this.constructor.tableName, parsedData);
     jsend.data = result;
+    // delete the cache for article public
+    cachingService.delCache('article_home_view');
+    // delete the cache for article home
+    cachingService.delCache('article_public_view');
     // return response
     return response.status(200).json(jsend);
   }
@@ -274,6 +277,10 @@ class ArticleController extends CoreController {
       this.constructor.columnName,
       request.params[this.constructor.columnName],
     );
+    // delete the cache for article public
+    cachingService.delCache('article_home_view');
+    // delete the cache for article home
+    cachingService.delCache('article_public_view');
     // return response 204
     return response.status(204).send();
   }
@@ -289,6 +296,10 @@ class ArticleController extends CoreController {
     debug(`${this.constructor.name} createCategoryRelation`);
     const createReference = await this.createReference(request, next, 'category', 'id');
     if (createReference) {
+      // delete the cache for article public
+      cachingService.delCache('player_view');
+      // delete the cache for article home
+      cachingService.delCache('player_home_view');
       response.status(201).json(jsend);
     }
   }
@@ -303,6 +314,10 @@ class ArticleController extends CoreController {
   async deleteCategoryRelation(request, response, next) {
     debug(`${this.constructor.name} deleteCategoryRelation`);
     await this.deleteReference(request, next, 'category', 'id');
+    // delete the cache for article public
+    cachingService.delCache('player_view');
+    // delete the cache for article home
+    cachingService.delCache('player_home_view');
     return response.status(204).send();
   }
 }

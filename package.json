@@ -30,9 +30,11 @@
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.0",
     "multer": "^1.4.5-lts.1",
+    "node-cache": "^5.1.2",
     "nodemailer": "^6.9.3",
     "pg": "^8.11.0",
-    "serve-index": "^1.9.1"
+    "serve-index": "^1.9.1",
+    "supports-color": "^9.4.0"
   },
   "devDependencies": {
     "clean-jsdoc-theme": "^4.2.7",
