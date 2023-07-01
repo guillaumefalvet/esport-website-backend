@@ -2,8 +2,6 @@
 const express = require('express');
 const controllerHandler = require('../../middlewares/controllerHandler');
 const { authorizeAccess } = require('../../middlewares/authHandler');
-const { createPlayerValidation, modifyPlayerValidation } = require('../../validations/schemas/team-schema');
-const validate = require('../../validations/validate');
 const teamController = require('../../controllers/teamController');
 
 const router = express.Router();

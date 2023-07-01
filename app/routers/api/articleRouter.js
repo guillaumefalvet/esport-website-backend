@@ -2,8 +2,6 @@
 const express = require('express');
 const controllerHandler = require('../../middlewares/controllerHandler');
 const { authorizeAccess } = require('../../middlewares/authHandler');
-const { createArticle, modifyArticle } = require('../../validations/schemas/article-schema');
-const validate = require('../../validations/validate');
 const articleController = require('../../controllers/articleController');
 
 const router = express.Router();
