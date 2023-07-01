@@ -27,7 +27,7 @@ const errorMiddleware = {
       return response.status(400).json({ status: 'error', message: 'Bad Request: You are trying to send that data that already exist' });
     }
     if (error.code === 404) {
-      return response.status(error.code).json({ status: 'error', message: 'Not Found: The requested resource could not be found.ssssss' });
+      return response.status(error.code).json({ status: 'error', message: 'Not Found: The requested resource could not be found.' });
     }
     if (error.code === 303) {
       return response.status(error.code).json({ status: 'error', message: 'See other: You are trying to send that data that already exist' });
