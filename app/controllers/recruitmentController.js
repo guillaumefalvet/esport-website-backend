@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 const debug = require('debug')('app:controllers:recruitment');
 const fs = require('fs');
-const handlebars = require('handlebars');
 const uploadService = require('../services/uploadService');
 const dataMapper = require('../models/dataMapper');
 const { createRecruitment } = require('../validations/schemas/recruitment-schema');
@@ -98,13 +97,10 @@ class RecruitmentController extends CoreController {
     };
 
     const applicantTemplate = fs.readFileSync('./app/services/mailingService/templates/applicantTemplateApplying.hbs', 'utf8');
-    const applicantHtml = handlebars.compile(applicantTemplate)(data);
-
     const adminTemplate = fs.readFileSync('./app/services/mailingService/templates/adminTemplate.hbs', 'utf8');
-    const adminHtml = handlebars.compile(adminTemplate)(data);
 
-    await mailingService(data, adminHtml, adminMail, 'ADMIN: Nouvelle candidature');
-    await mailingService(data, applicantHtml, data.email, 'VictoryZone: Réception de votre candidature');
+    await mailingService(data, adminTemplate, adminMail, `(ADMIN) Candidature: ${data.first_name} ${data.last_name}`);
+    await mailingService(data, applicantTemplate, data.email, 'VictoryZone: Réception de votre candidature');
     return response.status(201).json(jsend);
   }
 
@@ -135,14 +131,14 @@ class RecruitmentController extends CoreController {
     if (request.body.is_accepted) {
       debug('you passed !');
       const applicantTemplate = fs.readFileSync('./app/services/mailingService/templates/applicantTemplateIsAccepted.hbs', 'utf8');
-      const applicantHtml = handlebars.compile(applicantTemplate)(data);
-      await mailingService(data, applicantHtml, data.email, 'VictoryZone: Félicitation !');
+
+      await mailingService(data, applicantTemplate, data.email, 'VictoryZone: Félicitation!');
       // send an email saying the person got accepted along message...
     } else {
       debug('you failed !');
       const applicantTemplate = fs.readFileSync('./app/services/mailingService/templates/applicantTemplateIsNotAccepted.hbs', 'utf8');
-      const applicantHtml = handlebars.compile(applicantTemplate)(data);
-      await mailingService(data, applicantHtml, data.email, 'VictoryZone: Peut-être une autre fois !');
+
+      await mailingService(data, applicantTemplate, data.email, 'VictoryZone: Peut-être une autre fois!');
       // send an email saying the person got rejected along message...
     }
     // request.body.is_reviewed = !request.body.is_reviewed;
