@@ -4,6 +4,7 @@
   "description": "Le backend pour victory zone",
   "main": "index.js",
   "scripts": {
+    "test": "jest --verbose --forceExit",
     "start": "node index.js",
     "dev": "DEBUG=app:* npx nodemon index.js",
     "DBresetLocal": "sqitch revert -y local",
