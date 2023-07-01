@@ -129,10 +129,7 @@ class TeamController extends CoreController {
     parsedData.image = `${API_URL}${imageUpload.path}`;
     const result = await dataMapper.createOne(this.constructor.tableName, parsedData);
     jsend.data = result;
-    // delete the cache for article public
-    cachingService.delCache('player_view');
-    // delete the cache for article home
-    cachingService.delCache('player_home_view');
+    cachingService.delCache(['player_view', 'player_home_view']);
     return response.status(201).json(jsend);
   }
 
@@ -182,10 +179,7 @@ class TeamController extends CoreController {
     // call modifyOne
     const result = await dataMapper.modifyOne(this.constructor.tableName, parsedData);
     jsend.data = result;
-    // delete the cache for article public
-    cachingService.delCache('player_view');
-    // delete the cache for article home
-    cachingService.delCache('player_home_view');
+    cachingService.delCache(['player_view', 'player_home_view']);
     // return response
     return response.status(200).json(jsend);
   }
@@ -222,10 +216,8 @@ class TeamController extends CoreController {
       this.constructor.columnName,
       request.params[this.constructor.columnName],
     );
-    // delete the cache for article public
-    cachingService.delCache('player_view');
-    // delete the cache for article home
-    cachingService.delCache('player_home_view');
+
+    cachingService.delCache(['player_view', 'player_home_view']);
     // return response 204
     return response.status(204).send();
   }
@@ -239,14 +231,9 @@ class TeamController extends CoreController {
    */
   async createMediaRelation(request, response, next) {
     debug(`${this.constructor.name} createMediaRelation`);
-    const createReference = await this.createReference(request, next, 'media', 'id');
-    if (createReference) {
-      // delete the cache for article public
-      cachingService.delCache('player_view');
-      // delete the cache for article home
-      cachingService.delCache('player_home_view');
-      response.status(201).json(jsend);
-    }
+    await this.createReference(request, next, 'media', 'id');
+    cachingService.delCache(['player_view', 'player_home_view']);
+    response.status(201).json(jsend);
   }
 
   /**
@@ -258,14 +245,9 @@ class TeamController extends CoreController {
    */
   async createSetupRelation(request, response, next) {
     debug(`${this.constructor.name} createSetupRelation`);
-    const createReference = await this.createReference(request, next, 'setup', 'id');
-    if (createReference) {
-      // delete the cache for article public
-      cachingService.delCache('player_view');
-      // delete the cache for article home
-      cachingService.delCache('player_home_view');
-      response.status(201).json(jsend);
-    }
+    await this.createReference(request, next, 'setup', 'id');
+    cachingService.delCache(['player_view', 'player_home_view']);
+    response.status(201).json(jsend);
   }
 
   /**
@@ -278,9 +260,7 @@ class TeamController extends CoreController {
   async deleteMediaRelation(request, response, next) {
     debug(`${this.constructor.name} deleteMediaRelation`);
     await this.deleteReference(request, next, 'media', 'id');
-    // delete the cache for article public
     cachingService.delCache('player_view');
-    // delete the cache for article home
     cachingService.delCache('player_home_view');
     return response.status(204).send();
   }
@@ -295,10 +275,7 @@ class TeamController extends CoreController {
   async deleteSetupRelation(request, response, next) {
     debug(`${this.constructor.name} deleteSetupRelation`);
     await this.deleteReference(request, next, 'setup', 'id');
-    // delete the cache for article public
-    cachingService.delCache('player_view');
-    // delete the cache for article home
-    cachingService.delCache('player_home_view');
+    cachingService.delCache(['player_view', 'player_home_view']);
     return response.status(204).send();
   }
 }

@@ -185,9 +185,8 @@ class ArticleController extends CoreController {
     const result = await dataMapper.createOne(this.constructor.tableName, parsedData);
     jsend.data = result;
     // delete the cache for article public
-    cachingService.delCache('article_home_view');
     // delete the cache for article home
-    cachingService.delCache('article_public_view');
+    cachingService.delCache(['article_home_view', 'article_public_view']);
     return response.status(201).json(jsend);
   }
 
@@ -238,9 +237,8 @@ class ArticleController extends CoreController {
     const result = await dataMapper.modifyOne(this.constructor.tableName, parsedData);
     jsend.data = result;
     // delete the cache for article public
-    cachingService.delCache('article_home_view');
     // delete the cache for article home
-    cachingService.delCache('article_public_view');
+    cachingService.delCache(['article_home_view', 'article_public_view']);
     // return response
     return response.status(200).json(jsend);
   }
@@ -278,9 +276,8 @@ class ArticleController extends CoreController {
       request.params[this.constructor.columnName],
     );
     // delete the cache for article public
-    cachingService.delCache('article_home_view');
     // delete the cache for article home
-    cachingService.delCache('article_public_view');
+    cachingService.delCache(['article_home_view', 'article_public_view']);
     // return response 204
     return response.status(204).send();
   }
@@ -294,14 +291,11 @@ class ArticleController extends CoreController {
    */
   async createCategoryRelation(request, response, next) {
     debug(`${this.constructor.name} createCategoryRelation`);
-    const createReference = await this.createReference(request, next, 'category', 'id');
-    if (createReference) {
-      // delete the cache for article public
-      cachingService.delCache('player_view');
-      // delete the cache for article home
-      cachingService.delCache('player_home_view');
-      response.status(201).json(jsend);
-    }
+    await this.createReference(request, next, 'category', 'id');
+    // delete the cache for article public
+    // delete the cache for article home
+    cachingService.delCache(['article_home_view', 'article_public_view']);
+    response.status(201).json(jsend);
   }
 
   /**
@@ -315,9 +309,8 @@ class ArticleController extends CoreController {
     debug(`${this.constructor.name} deleteCategoryRelation`);
     await this.deleteReference(request, next, 'category', 'id');
     // delete the cache for article public
-    cachingService.delCache('player_view');
     // delete the cache for article home
-    cachingService.delCache('player_home_view');
+    cachingService.delCache(['article_home_view', 'article_public_view']);
     return response.status(204).send();
   }
 }
