@@ -3,7 +3,6 @@
 const debug = require('debug')('app:service:mailingService');
 const nodemailer = require('nodemailer');
 const handlebars = require('handlebars');
-require('dotenv').config();
 // eslint-disable-next-line arrow-body-style
 /**
  * Sends an email using Nodemailer.
