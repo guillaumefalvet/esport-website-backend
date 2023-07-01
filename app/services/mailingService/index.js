@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-vars */
 const debug = require('debug')('app:service:mailingService');
 const nodemailer = require('nodemailer');
+const handlebars = require('handlebars');
 require('dotenv').config();
 // eslint-disable-next-line arrow-body-style
 /**
@@ -17,7 +18,7 @@ const mailingService = async (data, template, sendTO, subject) => {
   const {
     email, first_name, last_name, reviewer_comment, message, path,
   } = data;
-
+  const compiledTemplate = handlebars.compile(template)(data);
   // const { email, firstName, lastName } = request.body;
   return new Promise((resolve, reject) => {
     const transporter = nodemailer.createTransport({
@@ -34,12 +35,12 @@ const mailingService = async (data, template, sendTO, subject) => {
       from: process.env.EMAIL_ADDRESS,
       to: sendTO,
       subject,
-      html: template,
+      html: compiledTemplate,
     };
     if (process.env.EMAIL_ADDRESS === sendTO) {
       debug(`attaching....: ${path}`);
       mailOptions.attachments = [{
-        filename: `application_${first_name}_${last_name}.${path.toLowerCase().substring(path.lastIndexOf('.')).slice(1)}`,
+        filename: `${path.split('/')[2]}`,
         path,
         contentType: `application/${path.toLowerCase().substring(path.lastIndexOf('.')).slice(1)}`,
       }];
