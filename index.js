@@ -19,7 +19,7 @@ const port = process.env.PORT || 3000;
  * @param {Object} options - Additional options for the cron scheduler.
  * @param {string} options.timezone - The timezone in which the task should run.
  */
-// EVERY SUNDAY AT 9:30 (Paris time), it will fun the function
+// EVERY SUNDAY AT 9:30 (Paris time), it will run the function that will send a backup of the database to the EMAIL_ADDRESS specified in the .env
 cron.schedule('30 9 * * SUN', () => {
   debug('sunday backup');
   backupService.dump();
