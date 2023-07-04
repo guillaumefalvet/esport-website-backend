@@ -9,11 +9,10 @@
     "dev": "DEBUG=app:* npx nodemon index.js",
     "DBresetLocal": "sqitch revert -y local",
     "DBdeployLocal": "sqitch deploy local",
-    "DBseedingLocal": "psql -d victoryzone -f ./data/seeding_MVP.sql",
-    "DBresetRailway": "sqitch revert -y railway",
-    "DBdeployRailway": "sqitch deploy railway",
+    "DBresetProd": "sqitch revert -y prod",
+    "DBdeployProd": "sqitch deploy prod",
     "DBLocal": "npm run DBresetLocal && npm run DBdeployLocal && npm run DBseedingLocal",
-    "DBRailway": "npm run DBresetRailway && npm run DBdeployRailway"
+    "DBProd": "npm run DBresetProd && npm run DBdeployProd"
   },
   "keywords": [],
   "author": "",
