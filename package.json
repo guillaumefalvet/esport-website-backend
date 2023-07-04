@@ -12,9 +12,8 @@
     "DBseedingLocal": "psql -d victoryzone -f ./data/seeding_MVP.sql",
     "DBresetRailway": "sqitch revert -y railway",
     "DBdeployRailway": "sqitch deploy railway",
-    "DBseedingRailway": "PGPASSWORD=rTERHtf7TO1l0mJ8Yv8I psql -h containers-us-west-168.railway.app -U postgres -p 8032 -d railway -f ./data/seeding_MVP.sql",
     "DBLocal": "npm run DBresetLocal && npm run DBdeployLocal && npm run DBseedingLocal",
-    "DBRailway": "npm run DBresetRailway && npm run DBdeployRailway && npm run DBseedingRailway"
+    "DBRailway": "npm run DBresetRailway && npm run DBdeployRailway"
   },
   "keywords": [],
   "author": "",
