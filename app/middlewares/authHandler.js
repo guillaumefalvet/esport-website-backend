@@ -2,9 +2,9 @@ const debug = require('debug')('app:middlewares:authHandler');
 const jwt = require('jsonwebtoken');
 const dataMapper = require('../models/dataMapper');
 
-const { JWT_SECRET, JWT_REFRESH_SECRET } = process.env;
-const ACCESS_TOKEN_EXPIRATION = process.env.ACCESS_TOKEN_EXPIRATION ?? '15m';
-const REFRESH_TOKEN_EXPIRATION = process.env.REFRESH_TOKEN_EXPIRATION ?? '7d';
+const {
+  JWT_SECRET, JWT_REFRESH_SECRET, ACCESS_TOKEN_EXPIRATION, REFRESH_TOKEN_EXPIRATION,
+} = process.env;
 /**
  * Auth Handler provides functions for handling authentication operations.
  * @namespace authHandler

@@ -2,23 +2,16 @@
 const express = require('express');
 const controllerHandler = require('../../middlewares/controllerHandler');
 const { authorizeAccess } = require('../../middlewares/authHandler');
-const { createArticle, modifyArticle } = require('../../validations/schemas/article-schema');
-const validate = require('../../validations/validate');
 const articleController = require('../../controllers/articleController');
 
 const router = express.Router();
 /**
  * @typedef {object} Article
- * @property {number} id - The article ID
- * @property {string} slug - The article slug
- * @property {string} title - The article title
- * @property {string} content - The article content
- * @property {string} author - The article author
- * @property {string} image - The URL of the article's image
+ * @property {string} title.required - The article title
+ * @property {string} content.required - The article content
+ * @property {string} img.required - The file of the article's image. - binary
  * @property {string} figcaption - The article figcaption
- * @property {string} publication_date - The article publication date
- * @property {string} created_at - The date of creation
- * @property {string} updated_at - The date of last update
+ * @property {string} publication_date.required - The article publication date
  */
 
 /**
@@ -34,9 +27,9 @@ router.get('/', controllerHandler(articleController.getAllPublic.bind(articleCon
 /**
  * GET /api/articles/admin
  *
- * @summary Get all private articles (admin only)
+ * @summary Get all private articles
  * @tags Article
- * @security BearerAuth
+* @security BearerAuth
  * @returns {Array<Article>} 200 - Array of private article objects
  * @returns {object} 403 - Forbidden
  * @returns {object} 500 - Internal server error
@@ -55,17 +48,29 @@ router.get('/admin', authorizeAccess(1), controllerHandler(articleController.get
 router.get('/:slug([a-z0-9-]+)', controllerHandler(articleController.getOne.bind(articleController)));
 
 /**
+ * GET /api/articles/admin/:slug
+ *
+ * @summary Get a specific article by slug
+ * @tags Article
+ * @security BearerAuth
+ * @param {string} slug.path - The slug of the article to retrieve
+ * @returns {Array<Article>} 200 - The article object
+ * @returns {object} 500 - Internal server error
+ */
+router.get('/admin/:slug([a-z0-9-]+)', controllerHandler(articleController.getOnePrivate.bind(articleController)));
+
+/**
  * POST /api/articles
  *
  * @summary Create a new article
  * @tags Article
  * @security BearerAuth
- * @param {Article} request.body - The article object to create
+ * @param {Article} request.body  - The article object to create - multipart/form-data
  * @returns {Array<Article>} 201 - The created article object
  * @returns {object} 403 - Forbidden
  * @returns {object} 500 - Internal server error
  */
-router.post('/', authorizeAccess(1), validate(createArticle), controllerHandler(articleController.createOne.bind(articleController)));
+router.post('/', authorizeAccess(1), controllerHandler(articleController.uploadOne.bind(articleController)));
 
 /**
  * POST /api/articles/:slug/category/:id
@@ -82,32 +87,18 @@ router.post('/', authorizeAccess(1), validate(createArticle), controllerHandler(
 router.post('/:slug([a-z0-9-]+)/category/:id(\\d+)', authorizeAccess(1), controllerHandler(articleController.createCategoryRelation.bind(articleController)));
 
 /**
- * POST /api/articles/:slug/calendar/:id
- *
- * @summary Add a calendar event to an article
- * @tags Article
- * @security BearerAuth
- * @param {string} slug.path - The slug of the article
- * @param {number} id.path - The ID of the calendar event to add
- * @returns {object} 201 - Success message
- * @returns {object} 403 - Forbidden
- * @returns {object} 500 - Internal server error
- */
-router.post('/:slug([a-z0-9-]+)/calendar/:id(\\d+)', authorizeAccess(1), controllerHandler(articleController.createCalendarRelation.bind(articleController)));
-
-/**
  * PATCH /api/articles/:id
  *
  * @summary Update an existing article by slug
  * @tags Article
  * @security BearerAuth
  * @param {number} id.path - The id of the article to update
- * @param {Article} request.body - The updated article object
+ * @param {Article} request.body - The article object to create - multipart/form-data
  * @returns {Array<Article>} 200 - The updated article object
  * @returns {object} 403 - Forbidden
  * @returns {object} 500 - Internal server error
  */
-router.patch('/:id(\\d+)', authorizeAccess(1), validate(modifyArticle), controllerHandler(articleController.modifyOne.bind(articleController)));
+router.patch('/:id(\\d+)', authorizeAccess(1), controllerHandler(articleController.modifyUploadedOne.bind(articleController)));
 
 /**
  * DELETE /api/articles/:slug
@@ -120,7 +111,7 @@ router.patch('/:id(\\d+)', authorizeAccess(1), validate(modifyArticle), controll
  * @returns {object} 403 - Forbidden
  * @returns {object} 500 - Internal server error
  */
-router.delete('/:slug([a-z0-9-]+)', authorizeAccess(1), controllerHandler(articleController.deleteOne.bind(articleController)));
+router.delete('/:slug([a-z0-9-]+)', authorizeAccess(1), controllerHandler(articleController.deleteUploadedOne.bind(articleController)));
 
 /**
  * DELETE /api/articles/:slug/category/:id
@@ -135,19 +126,5 @@ router.delete('/:slug([a-z0-9-]+)', authorizeAccess(1), controllerHandler(articl
  * @returns {object} 500 - Internal server error
  */
 router.delete('/:slug([a-z0-9-]+)/category/:id(\\d+)', authorizeAccess(1), controllerHandler(articleController.deleteCategoryRelation.bind(articleController)));
-
-/**
- * DELETE /api/articles/:slug/calendar/:id
- *
- * @summary Remove a calendar event from an article
- * @tags Article
- * @security BearerAuth
- * @param {string} slug.path - The slug of the article
- * @param {number} id.path - The ID of the calendar event to remove
- * @returns {object} 204 - Success message
- * @returns {object} 403 - Forbidden
- * @returns {object} 500 - Internal server error
- */
-router.delete('/:slug([a-z0-9-]+)/calendar/:id(\\d+)', authorizeAccess(1), controllerHandler(articleController.deleteCalendarRelation.bind(articleController)));
 
 module.exports = router;

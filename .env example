@@ -1,5 +1,5 @@
 PORT=3000
-API_URL='http://localhost:3000/'
+API_URL=url.com/
 # if http MODE
 # DEV=anything
 # if https MODE
@@ -9,12 +9,9 @@ PGHOST=localhost
 PGPORT=5432
 PGUSER=victoryzone
 PGPASSWORD=victoryzone
-JWT_SECRET=oclock
-JWT_REFRESH_SECRET=oclock
+JWT_SECRET=jwtsecret
+JWT_REFRESH_SECRET=jwtrefreshsecret
 ACCESS_TOKEN_EXPIRATION=15m
 REFRESH_TOKEN_EXPIRATION=7d
-EMAIL_ADDRESS=victoryzone2023@gmail.com
-# mot de passe pour API
-EMAIL_PASSWORD=VN2tRm60IvFqPWZX
-# mot de pass conexion admin
-# DevBack2023
+EMAIL_ADDRESS=emailadresshere
+EMAIL_PASSWORD=password

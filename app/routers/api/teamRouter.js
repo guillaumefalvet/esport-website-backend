@@ -2,8 +2,6 @@
 const express = require('express');
 const controllerHandler = require('../../middlewares/controllerHandler');
 const { authorizeAccess } = require('../../middlewares/authHandler');
-const { createPlayerValidation, modifyPlayerValidation } = require('../../validations/schemas/team-schema');
-const validate = require('../../validations/validate');
 const teamController = require('../../controllers/teamController');
 
 const router = express.Router();
@@ -11,20 +9,17 @@ const router = express.Router();
  * a team type
  *
  * @typedef {object} Team
- * @property {number} id - a player id
- * @property {string} user_name - a player user name
- * @property {string} first_name - a player first name
- * @property {string} last_name - a player last name
- * @property {string} description - a player description
+ * @property {string} user_name.required - a player user name
+ * @property {string} first_name.required - a player first name
+ * @property {string} last_name.required - a player last name
+ * @property {string} description.required - a player description
  * @property {string} role - a player role
- * @property {string} image - a player image
+ * @property {string} img.required - The file of the player's image. - binary
  * @property {string} statistics - a player statistic
  * @property {string} achievements - a player achievements
  * @property {string} youtube_link - a player youtube link
  * @property {string} twitch_link - a player twitch link
  * @property {string} twitter_link - a player twitter link
- * @property {string} created_at - date of creation
- * @property {string} updated_at - date of last update
 */
 /**
  * GET /api/team
@@ -54,12 +49,12 @@ router.get('/:user_name', controllerHandler(teamController.getOne.bind(teamContr
  * @summary Create a new player
  * @tags Team
  * @security BearerAuth
- * @param {Team} request.body - The player object to create
+ * @param {Team} request.body - The player object to create - multipart/form-data
  * @returns {Array<Team>} 200 - The created player object
  * @returns {object} 403 - Forbidden
  * @returns {object} 500 - Internal server error
  */
-router.post('/', authorizeAccess(1), validate(createPlayerValidation), controllerHandler(teamController.createOne.bind(teamController)));
+router.post('/', authorizeAccess(1), controllerHandler(teamController.uploadOne.bind(teamController)));
 
 /**
  * POST /api/team/:user_name/setup/:id
@@ -96,12 +91,12 @@ router.post('/:user_name/media/:id(\\d+)', authorizeAccess(1), controllerHandler
  * @tags Team
  * @security BearerAuth
  * @param {number} id.path - The if of the player to update
- * @param {Team} request.body - The updated player object
+ * @param {Team} request.body - The updated player object - multipart/form-data
  * @returns {Array<Team>} 200 - The updated player object
  * @returns {object} 403 - Forbidden
  * @returns {object} 404 - not found
  */
-router.patch('/:id(\\d+)', authorizeAccess(1), validate(modifyPlayerValidation), controllerHandler(teamController.modifyOne.bind(teamController)));
+router.patch('/:id(\\d+)', authorizeAccess(1), controllerHandler(teamController.modifyUploadedOne.bind(teamController)));
 
 /**
  * DELETE /api/team/:user_name
@@ -114,7 +109,7 @@ router.patch('/:id(\\d+)', authorizeAccess(1), validate(modifyPlayerValidation),
  * @returns {object} 403 - Forbidden
  * @returns {object} 404 - not found
  */
-router.delete('/:user_name', authorizeAccess(1), controllerHandler(teamController.deleteOne.bind(teamController)));
+router.delete('/:user_name', authorizeAccess(1), controllerHandler(teamController.deleteUploadedOne.bind(teamController)));
 
 /**
  * DELETE /api/team/:user_name/setup/:id

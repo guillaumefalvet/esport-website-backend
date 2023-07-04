@@ -32,16 +32,17 @@ CREATE TABLE "user" (
     "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "user_name" TEXT NOT NULL UNIQUE,
     "email" TEXT NOT NULL UNIQUE,
+    "first_name" TEXT,
+    "last_name" TEXT,
     "password" TEXT NOT NULL,
     "refresh_token" TEXT,
-    "user_permission" INT NOT NULL REFERENCES "permission"("id"),
+    "user_permission" INT NOT NULL REFERENCES "permission"("id") DEFAULT 2,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
     "updated_at" TIMESTAMPTZ
 );
 -- table recruitment
 CREATE TABLE "recruitment" (
     "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "user_name" TEXT NOT NULL UNIQUE,
     "email" TEXT NOT NULL UNIQUE,
     "first_name" TEXT NOT NULL,
     "last_name" TEXT NOT NULL,
@@ -58,7 +59,7 @@ CREATE TABLE "recruitment" (
 -- table setup
 CREATE TABLE "setup" (
     "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "name" TEXT NOT NULL,
+    "name" TEXT NOT NULL UNIQUE,
     "external_link" TEXT NOT NULL,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
     "updated_at" TIMESTAMPTZ
@@ -94,7 +95,7 @@ CREATE TABLE "article" (
     "slug" TEXT NOT NULL UNIQUE,
     "title" TEXT NOT NULL UNIQUE,
     "content" TEXT NOT NULL,
-    "author" TEXT NOT NULL,
+    "author_id" INT NOT NULL REFERENCES "user"("id"),
     "image" TEXT NOT NULL,
     "figcaption" TEXT,
     "publication_date" TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -111,7 +112,7 @@ CREATE TABLE "category" (
 -- table calendar
 CREATE TABLE "calendar" (
     "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "event_name" TEXT NOT NULL,
+    "event_name" TEXT NOT NULL UNIQUE,
     "event_date" TIMESTAMPTZ NOT NULL,
     "adversary_name" TEXT NOT NULL,
     "adversary_name_short" TEXT NOT NULL,
@@ -119,7 +120,6 @@ CREATE TABLE "calendar" (
     "live_link" TEXT,
     "score" TEXT,
     "image" TEXT NOT NULL,
-    "publication_date" TIMESTAMPTZ NOT NULL DEFAULT now(),
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
     "updated_at" TIMESTAMPTZ
 );
@@ -131,13 +131,6 @@ CREATE TABLE "article_has_category" (
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
     "updated_at" TIMESTAMPTZ
 );
--- table relationel entre article et calendar
-CREATE TABLE "article_has_calendar"(
-    "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "article_id" INT NOT NULL REFERENCES "article"("id") ON DELETE CASCADE,
-    "calendar_id" INT NOT NULL REFERENCES "calendar"("id") ON DELETE CASCADE,
-    "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
-    "updated_at" TIMESTAMPTZ
-);
+
 
 COMMIT;

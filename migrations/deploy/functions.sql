@@ -37,27 +37,6 @@ CREATE FUNCTION update_player(json_data json) RETURNS "player" AS $$
   RETURNING *;
 $$ LANGUAGE sql;
 
-CREATE FUNCTION insert_user(json_data json) RETURNS "user" AS $$
-  INSERT INTO "user"("user_name", "email", "password", "user_permission")
-    VALUES (
-      (json_data->>'user_name')::text,
-      (json_data->>'email')::text,
-      (json_data->>'password')::text,
-      (json_data->>'user_permission')::int
-    ) RETURNING *;
-  $$ LANGUAGE sql;
-
-CREATE FUNCTION update_user(json_data json) RETURNS "user" AS $$
-  UPDATE "user" SET
-    "user_name" = COALESCE((json_data->>'user_name')::text, "user_name"),
-    "email" = COALESCE((json_data->>'email')::text, "email"),
-    "password" = COALESCE((json_data->>'password')::text, "password"),
-    "user_permission" = COALESCE((json_data->>'user_permission')::int, "user_permission"),
-    "updated_at" = now()
-  WHERE "user_name" = (json_data->>'user_name')::text
-  RETURNING *;
-$$ LANGUAGE sql;
-
 CREATE FUNCTION insert_permission(json_data json) RETURNS "permission" AS $$
   INSERT INTO "permission"("name", "level")
     VALUES (
@@ -76,9 +55,8 @@ CREATE FUNCTION update_permission(json_data json) RETURNS "permission" AS $$
 $$ LANGUAGE sql;
 
 CREATE FUNCTION insert_recruitment(json_data json) RETURNS "recruitment" AS $$
-  INSERT INTO "recruitment"("user_name","email", "first_name", "last_name", "message", "external_link", "cv")
+  INSERT INTO "recruitment"("email", "first_name", "last_name", "message", "external_link", "cv")
     VALUES (
-      (json_data->>'user_name')::text,
       (json_data->>'email')::text,
       (json_data->>'first_name')::text,
       (json_data->>'last_name')::text,
@@ -87,6 +65,18 @@ CREATE FUNCTION insert_recruitment(json_data json) RETURNS "recruitment" AS $$
       (json_data->>'cv')::text
     ) RETURNING *;
   $$ LANGUAGE sql;
+
+CREATE FUNCTION update_recruitment(json_data json) RETURNS "recruitment" AS $$
+  UPDATE "recruitment" SET
+    "is_reviewed" = COALESCE((json_data->>'is_reviewed')::bool,"is_reviewed"),
+    "is_accepted" = COALESCE((json_data->>'is_accepted')::bool, "is_accepted"),
+    "reviewer_comment" = COALESCE((json_data->>'reviewer_comment')::text, "reviewer_comment"),
+    "reviewer_comment_private" = COALESCE((json_data->>'reviewer_comment_private')::text, "reviewer_comment_private"),
+    "updated_at" = now()
+  WHERE "id" = (json_data->>'id')::int
+  RETURNING *;
+  $$ LANGUAGE sql;
+
 
 CREATE FUNCTION insert_media(json_data json) RETURNS "media" AS $$
   INSERT INTO "media"("link", "is_active")
@@ -97,36 +87,50 @@ CREATE FUNCTION insert_media(json_data json) RETURNS "media" AS $$
   $$ LANGUAGE sql;
 
 --article
-CREATE FUNCTION insert_article(json_data json) RETURNS "article" AS $$
-  INSERT INTO "article"("slug", "title", "content", "author", "image", "figcaption", "publication_date")
-    VALUES(
-      (json_data->>'slug')::text,
+CREATE OR REPLACE FUNCTION insert_article(json_data json)
+  RETURNS "article" AS $$
+  DECLARE
+    new_article "article";
+  BEGIN
+    INSERT INTO "article"("slug", "title", "content", "author_id", "image", "figcaption", "publication_date")
+    VALUES (
+      REPLACE(LOWER(json_data->>'title'), ' ', '-')::text,
       (json_data->>'title')::text,
       (json_data->>'content')::text,
-      (json_data->>'author')::text,
+      (json_data->>'author_id')::int,
       (json_data->>'image')::text,
       (json_data->>'figcaption')::text,
       (json_data->>'publication_date')::TIMESTAMPTZ
-    ) RETURNING *;
-  $$ LANGUAGE sql;
+	) RETURNING * INTO new_article;
 
-  CREATE FUNCTION update_article(json_data json) RETURNS "article" AS $$
+    RETURN new_article;
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION update_article(json_data json)
+RETURNS "article" AS $$
+  DECLARE
+    updated_article "article";
+  BEGIN
     UPDATE "article" SET
-      "slug" = COALESCE((json_data->>'slug')::text, "slug"),
+      "slug" = COALESCE(REPLACE(LOWER(json_data->>'title'), ' ', '-'), "slug"),
       "title" = COALESCE((json_data->>'title')::text, "title"),
       "content" = COALESCE((json_data->>'content')::text, "content"),
-      "author" = COALESCE((json_data->>'author')::text, "author"),
+      "author_id" = COALESCE((json_data->>'author_id')::int, "author_id"),
       "image" = COALESCE((json_data->>'image')::text, "image"),
       "figcaption" = COALESCE((json_data->>'figcaption')::text, "figcaption"),
       "publication_date" = COALESCE((json_data->>'publication_date')::TIMESTAMPTZ, "publication_date"),
       "updated_at" = now()
     WHERE "id" = (json_data->>'id')::int
-    RETURNING *;
-  $$ LANGUAGE sql;
+    RETURNING * INTO updated_article;
+    RETURN updated_article;
+  END;
+$$ LANGUAGE plpgsql;
 --calendar
 
+
 CREATE FUNCTION insert_calendar(json_data json) RETURNS "calendar" AS $$
-  INSERT INTO "calendar"("event_name", "event_date", "adversary_name", "adversary_name_short", "replay_link", "live_link", "score", "image", "publication_date")
+  INSERT INTO "calendar"("event_name", "event_date", "adversary_name", "adversary_name_short", "replay_link", "live_link", "score", "image")
     VALUES(
       (json_data->>'event_name')::text,
       (json_data->>'event_date')::TIMESTAMPTZ,
@@ -135,8 +139,7 @@ CREATE FUNCTION insert_calendar(json_data json) RETURNS "calendar" AS $$
       (json_data->>'replay_link')::text,
       (json_data->>'live_link')::text,
       (json_data->>'score')::text,
-      (json_data->>'image')::text,
-      (json_data->>'publication_date')::TIMESTAMPTZ
+      (json_data->>'image')::text
     ) RETURNING *;
   $$ LANGUAGE sql;
 
@@ -150,11 +153,11 @@ CREATE FUNCTION update_calendar(json_data json) RETURNS "calendar" AS $$
       "live_link" = COALESCE((json_data->>'live_link')::text,"live_link"),
       "score" = COALESCE((json_data->>'score')::text,"score"),
       "image" = COALESCE((json_data->>'image')::text,"image"),
-      "publication_date" = COALESCE((json_data->>'publication_date')::TIMESTAMPTZ,"publication_date"),
       "updated_at" = now()
     WHERE "id" = (json_data->>'id')::int
     RETURNING *;
   $$ LANGUAGE sql;
+
    CREATE FUNCTION update_media(json_data json) RETURNS "media" AS $$
     UPDATE "media" SET
       "link" = COALESCE((json_data->>'link')::text, "link"),
@@ -163,6 +166,20 @@ CREATE FUNCTION update_calendar(json_data json) RETURNS "calendar" AS $$
     WHERE "id" = (json_data->>'id')::int
     RETURNING *;
   $$ LANGUAGE sql;
+
+  CREATE FUNCTION insert_category(json_data json) RETURNS "category" AS $$
+  INSERT INTO "category"("label")
+    VALUES (
+      (json_data->>'label')::text
+    ) RETURNING *;
+  $$ LANGUAGE sql;
+
+CREATE FUNCTION update_category(json_data json) RETURNS "category" AS $$
+  UPDATE "category" SET
+    "label" = COALESCE((json_data->>'label')::text, "label")
+  WHERE "id" = (json_data->>'id')::int
+  RETURNING *;
+$$ LANGUAGE sql;
 
 
 COMMIT;

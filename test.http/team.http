@@ -8,7 +8,7 @@ POST {{endpoint}}/auth/login
 content-type: application/json
 
 {
-    "email": "john@example.com",
+    "email": "axel@axel.com",
     "password": "secret"
 }
 
@@ -32,44 +32,78 @@ GET {{ endpoint }}/team
 GET {{ endpoint }}/team?home=true
 
 ### Création d'un joueur
-
 POST {{ endpoint }}/team/
-Content-Type: application/json
+Content-Type: multipart/form-data; boundary=boundary_value
 Authorization: Bearer {{accessToken}}
 
-{
-  "user_name": "slayer_back",
-  "first_name": "slayer",
-  "last_name": "back",
-  "description":"best player of the world",
-  "role": "lead team",
-  "image": "zdzdz"
+--boundary_value
+Content-Disposition: form-data; name="img"; filename="test.webp"
+Content-Type: image/webp
 
-}
+@./test.pdf
+--boundary_value
+Content-Disposition: form-data; name="user_name"
+
+noobDu34
+--boundary_value
+Content-Disposition: form-data; name="first_name"
+
+Kevin
+--boundary_value
+Content-Disposition: form-data; name="last_name"
+
+roberts
+--boundary_value
+Content-Disposition: form-data; name="description"
+
+sasasas
+--boundary_value
+Content-Disposition: form-data; name="role"
+
+hhpassasa
+--boundary_value--
 
 ### Récupérer un joueur
 
-GET {{ endpoint }}/team/theGardener
+GET {{ endpoint }}/team/noobDu34
 
 
 ### Modification d'un joueur
 
 PATCH  {{endpoint}}/team/6
-Content-Type: application/json
+Content-Type: multipart/form-data; boundary=boundary_value
 Authorization: Bearer {{accessToken}}
 
-{
-  "user_name": "jack_doe",
-  "first_name": "j",
-  "last_name": "does",
-  "description":"best player of the world",
-  "role": "lead team"
+--boundary_value
+Content-Disposition: form-data; name="img"; filename="test.webp"
+Content-Type: image/webp
 
-}
+@./test.pdf
+--boundary_value
+Content-Disposition: form-data; name="user_name"
+
+article-title-testsssss
+--boundary_value
+Content-Disposition: form-data; name="first_name"
+
+article title testsss
+--boundary_value
+Content-Disposition: form-data; name="last_name"
+
+roberts
+--boundary_value
+Content-Disposition: form-data; name="description"
+
+sasasas
+--boundary_value
+Content-Disposition: form-data; name="role"
+
+hhpassasa
+--boundary_value--
 
 ### Suppression d'un joueur
 
-DELETE {{ endpoint }}/team/slayer_back
+DELETE {{ endpoint }}/team/noobDu34
 Authorization: Bearer {{accessToken}}
 
 

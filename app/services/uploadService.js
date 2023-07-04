@@ -1,6 +1,9 @@
 /* eslint-disable max-len */
 const multer = require('multer');
 const fs = require('fs');
+const dayjs = require('dayjs');
+require('dayjs/locale/fr');
+
 /**
  * Handles file upload using Multer middleware.
  *
@@ -10,7 +13,7 @@ const fs = require('fs');
  * @param {string} fieldname - The name of the field in the request containing the file.
  * @param {Function} next - The next middleware function to pass the error to.
  * @param {Joi.Schema} schema - The Joi validation schema for the request body.
- * @param {number} maxSize - the maximum file size allowed for a file
+ * @param {number} maxSize - the maximum file size allowed for a file in megabites
  * @returns {Promise<Object>} A Promise that resolves to an object containing the uploaded file information.
  * @throws {Error} If there is an error during file upload or if the validation fails.
  */
@@ -25,7 +28,7 @@ const uploadService = (request, mainFolder, subFolder, fieldname, next, schema, 
     filename(_, file, cb) {
       const extArray = file.mimetype.split('/');
       const extension = extArray[extArray.length - 1];
-      cb(null, `${fieldname}-${Date.now()}.${extension}`);
+      cb(null, `${subFolder}-${dayjs().locale('fr').format('dddd-D-MMMM-YYYY-HH:mm_ss:SSS')}.${extension}`);
     },
   });
 

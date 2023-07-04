@@ -23,6 +23,10 @@
 
 ![](./shapes.png)
 
+### ARCHITECTURE OF THE DATABASE
+
+![](./mcd/mcd.png)
+
 ### ARCHITECTURE OF THE BACKEND
 ```
 projet-14-victory-zone-back/

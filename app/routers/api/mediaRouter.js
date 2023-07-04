@@ -3,6 +3,8 @@ const express = require('express');
 const controllerHandler = require('../../middlewares/controllerHandler');
 const { authorizeAccess } = require('../../middlewares/authHandler');
 const mediaController = require('../../controllers/mediaController');
+const { createMedia } = require('../../validations/schemas/media-schema');
+const validate = require('../../validations/validate');
 
 const router = express.Router();
 /**
@@ -30,7 +32,7 @@ router.get('/', controllerHandler(mediaController.getAllMedia.bind(mediaControll
  * @returns {object} 403 - Forbidden
  * @returns {object} 400 - Bad request
  */
-router.post('/', authorizeAccess(1), controllerHandler(mediaController.insertMedia.bind(mediaController)));
+router.post('/', authorizeAccess(1), validate(createMedia), controllerHandler(mediaController.insertMedia.bind(mediaController)));
 /**
  * DELETE /api/media/:id
 

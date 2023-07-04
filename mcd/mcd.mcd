@@ -1,0 +1,23 @@
+UTILISATEUR: email, pseudo, nom, prénom, mot de passe, clé de rafraîchissement
+POSSÈDE, 11 UTILISATEUR, 0N PERMISSION
+PERMISSION: nom, niveau
+
+
+
+CRÉE, 11 ARTICLE, 0N UTILISATEUR
+ARTICLE: slug, titre, contenu, date de publication, lien image, légende image
+POSSÈDE1, 0N ARTICLE, 0N CATÉGORIE
+CATÉGORIE: nom
+
+
+
+SETUP: nom, lien produit
+POSSÈDE2, 0N JOUEUR, 0N SETUP
+MEDIA: code média, lien, est active
+
+JOUEUR: pseudo, nom, prénom, description, rôle, lien image, statistique, palmarès, lien youtube, lien twitch, lien twitter
+ASSOCIÉ, 0N JOUEUR, 0N MEDIA
+
+RECRUTEMENT: email, nom, prénom, message, cv, lien externe, est accepté, est revu, message examiné, message examiné privé
+
+CALENDRIER: nom de l’événement, date de l’événement, nom de l’équipe, abréviation équipe, lien replay, lien live, résultat, lien image

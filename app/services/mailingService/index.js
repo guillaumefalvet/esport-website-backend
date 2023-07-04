@@ -1,13 +1,23 @@
+/* eslint-disable camelcase */
 /* eslint-disable no-unused-vars */
-const debug = require('debug')('mail-service');
+const debug = require('debug')('app:service:mailingService');
 const nodemailer = require('nodemailer');
-require('dotenv').config();
+const handlebars = require('handlebars');
 // eslint-disable-next-line arrow-body-style
-const mailingService = async (data, template, sendTO) => {
+/**
+ * Sends an email using Nodemailer.
+ *
+ * @param {object} data - Data for the email.
+ * @param {string} template - The HTML template for the email.
+ * @param {string} sendTO - The recipient's email address.
+ * @param {string} subject - The subject of the email.
+ * @returns {Promise<object>} A promise that resolves to the information about the sent email.
+ */
+const mailingService = async (data, template, sendTO, subject) => {
   const {
-    email, firstName, lastName, applicantTemplate,
+    email, first_name, last_name, reviewer_comment, message, path,
   } = data;
-
+  const compiledTemplate = handlebars.compile(template)(data);
   // const { email, firstName, lastName } = request.body;
   return new Promise((resolve, reject) => {
     const transporter = nodemailer.createTransport({
@@ -23,10 +33,17 @@ const mailingService = async (data, template, sendTO) => {
     const mailOptions = {
       from: process.env.EMAIL_ADDRESS,
       to: sendTO,
-      subject: 'Réception de la candidature',
-      html: template,
-
+      subject,
+      html: compiledTemplate,
     };
+    if (process.env.EMAIL_ADDRESS === sendTO) {
+      debug(`attaching....: ${path}`);
+      mailOptions.attachments = [{
+        filename: `${path.split('/')[2]}`,
+        path,
+        contentType: `application/${path.toLowerCase().substring(path.lastIndexOf('.')).slice(1)}`,
+      }];
+    }
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         debug('Error sending email:', error);

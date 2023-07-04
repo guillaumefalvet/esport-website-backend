@@ -1,87 +1,71 @@
 -- Deploy victoryzone:views to pg
 
 BEGIN;
-CREATE VIEW article_events_categories_public AS
-SELECT article.*,
- (SELECT CASE WHEN COUNT(calendar.id) = 0 THEN NULL
-                 ELSE json_agg(json_build_object(
-                         'event_id', calendar.id,
-                         'event_name', calendar.event_name,
-                         'event_date', calendar.event_date,
-                         'adversary_name', calendar.adversary_name,
-                         'adversary_name_short', calendar.adversary_name_short,
-                         'replay_link', calendar.replay_link,
-                         'live_link', calendar.live_link,
-                         'score', calendar.score,
-                         'image', calendar.image,
-                         'publication_date', calendar.publication_date,
-                         'created_at', calendar.created_at,
-                         'updated_at', calendar.updated_at
-                     ))
-        END
-    FROM article_has_calendar
-    JOIN calendar ON article_has_calendar.calendar_id = calendar.id
-    WHERE article_has_calendar.article_id = article.id
-    ) AS events,
-    (SELECT CASE WHEN COUNT(category.id) = 0 THEN NULL
-                 ELSE json_agg(json_build_object(
-                         'id', category.id,
-                         'label', category.label
-                     ))
-        END
-    FROM article_has_category
-    JOIN category ON article_has_category.category_id = category.id
-    WHERE article_has_category.article_id = article.id
-    ) AS categories
-FROM article
-LEFT JOIN article_has_calendar ON article.id = article_has_calendar.article_id
-LEFT JOIN article_has_category ON article.id = article_has_category.article_id
-WHERE article.publication_date <= now()
-GROUP BY article.id
-ORDER BY article.publication_date DESC;
+-- PUBLIC VIEW
+CREATE VIEW article_public_view AS
+  SELECT "article".id, "article".slug, concat(regexp_replace(article.content, '((\S+\s*){1,40})(.*)', '\1'), '...') AS content, concat("user".first_name, ' ',"user".last_name) AS author, "article".image, "article".figcaption, "article".publication_date, "article".created_at, "article".updated_at,
+      (SELECT CASE WHEN COUNT(category.id) = 0 THEN NULL
+                  ELSE json_agg(json_build_object(
+                          'id', category.id,
+                          'label', category.label
+                      ))
+          END
+      FROM article_has_category
+      JOIN category ON article_has_category.category_id = category.id
+      WHERE article_has_category.article_id = article.id
+      ) AS categories, "article".title
+  FROM article
+  LEFT JOIN article_has_category ON article.id = article_has_category.article_id
+  LEFT JOIN "user" ON "user".id = article.author_id
+  WHERE article.publication_date <= now()
+  ORDER BY article.publication_date DESC;
 
-CREATE VIEW article_events_categories_private AS
-SELECT article.*,
-    (SELECT CASE WHEN COUNT(calendar.id) = 0 THEN NULL
-                 ELSE json_agg(json_build_object(
-                         'event_id', calendar.id,
-                         'event_name', calendar.event_name,
-                         'event_date', calendar.event_date,
-                         'adversary_name', calendar.adversary_name,
-                         'adversary_name_short', calendar.adversary_name_short,
-                         'replay_link', calendar.replay_link,
-                         'live_link', calendar.live_link,
-                         'score', calendar.score,
-                         'image', calendar.image,
-                         'publication_date', calendar.publication_date,
-                         'created_at', calendar.created_at,
-                         'updated_at', calendar.updated_at
-                     ))
-        END
-    FROM article_has_calendar
-    JOIN calendar ON article_has_calendar.calendar_id = calendar.id
-    WHERE article_has_calendar.article_id = article.id
-    ) AS events,
+-- PRIVATE VIEW
+CREATE VIEW article_private_view AS
+  SELECT "article".id, "article".slug, concat(regexp_replace(article.content, '((\S+\s*){1,40})(.*)', '\1'), '...') AS content, concat("user".first_name, ' ',"user".last_name) AS author, "article".image, "article".figcaption,
+  "article".publication_date, "article".created_at, "article".updated_at,
     (SELECT CASE WHEN COUNT(category.id) = 0 THEN NULL
-                 ELSE json_agg(json_build_object(
-                         'id', category.id,
-                         'label', category.label
-                     ))
+                  ELSE json_agg(json_build_object(
+                          'id', category.id,
+                          'label', category.label
+                      ))
         END
     FROM article_has_category
     JOIN category ON article_has_category.category_id = category.id
     WHERE article_has_category.article_id = article.id
     ) AS categories
-FROM article
-LEFT JOIN article_has_calendar ON article.id = article_has_calendar.article_id
-LEFT JOIN article_has_category ON article.id = article_has_category.article_id
-GROUP BY article.id
-ORDER BY article.publication_date DESC;
+  FROM article
+  LEFT JOIN article_has_category ON article.id = article_has_category.article_id
+  LEFT JOIN "user" ON "user".id = article.author_id
+  ORDER BY article.publication_date DESC;
+-- HOME VIEW
+CREATE VIEW article_home_view AS
+    SELECT "article"."id",
+    "article"."slug",
+    "article"."title",
+    "article"."image",
+    "article"."figcaption",
+    "article"."publication_date",
+    concat("user".first_name, ' ',"user".last_name) AS author,
+    concat(regexp_replace(article.content, '((\S+\s*){1,14})(.*)', '\1'), '...') AS content,
+        (SELECT CASE WHEN COUNT(category.id) = 0 THEN NULL
+                    ELSE json_agg(json_build_object(
+                            'id', category.id,
+                            'label', category.label
+                        ))
+            END
+        FROM article_has_category
+        JOIN category ON article_has_category.category_id = category.id
+        WHERE article_has_category.article_id = article.id
+        ) AS categories
+    FROM "article"
+    LEFT JOIN article_has_category ON article.id = article_has_category.article_id
+    LEFT JOIN "user" ON "user".id = article.author_id
+    WHERE "article"."publication_date" <= now() ORDER BY "article"."publication_date" DESC limit 3;
 
 
 CREATE VIEW player_view AS
-SELECT
-  player.*,
+SELECT player.*,
   (SELECT CASE WHEN COUNT(DISTINCT setup.id) = 0 THEN NULL
                ELSE json_agg(json_build_object(
                         'id', setup.id,
@@ -116,16 +100,15 @@ SELECT
 FROM player
 ORDER BY player.id;
 
+CREATE VIEW player_home_view AS
+  SELECT "player"."user_name", "player"."first_name","player"."last_name", "player"."role", "player"."image" FROM "player" ORDER BY "player"."id" DESC;
 
-
-CREATE VIEW get_article_home AS
-SELECT "article"."id", "article"."slug", "article"."title", "article"."image", "article"."figcaption", concat(regexp_replace(article.content, '((\S+\s*){1,14})(.*)', '\1'), '...') AS content FROM "article" WHERE "article"."publication_date" <= now() ORDER BY "article"."publication_date" DESC limit 3;
 
 CREATE VIEW get_user_view AS
-SELECT "user"."id", "user"."user_name", "user"."email", "user"."password", "user"."refresh_token", "permission"."name" AS permission_name, "permission"."level" AS permission_level ,"user"."created_at", "user"."updated_at" FROM "user" JOIN "permission" ON "permission"."id" = "user"."user_permission";
+SELECT "user"."id", "user"."user_name", "user"."first_name", "user"."last_name", "user"."email", "user"."password", "user"."refresh_token", "permission"."name" AS permission_name, "permission"."level" AS permission_level ,"user"."created_at", "user"."updated_at" FROM "user" JOIN "permission" ON "permission"."id" = "user"."user_permission";
 
 
-CREATE VIEW get_calendar_home AS
+CREATE VIEW calendar_home_view AS
 (
   SELECT
   json_build_object(
@@ -134,6 +117,7 @@ CREATE VIEW get_calendar_home AS
         "calendar"."id",
         "calendar"."event_name",
         "calendar"."event_date",
+        "calendar"."adversary_name",
         "calendar"."adversary_name_short",
         "calendar"."live_link",
         NULL AS "score",
@@ -151,6 +135,7 @@ CREATE VIEW get_calendar_home AS
         "calendar"."id",
         "calendar"."event_name",
         "calendar"."event_date",
+        "calendar"."adversary_name",
         "calendar"."adversary_name_short",
         "calendar"."replay_link",
         "calendar"."score",
@@ -166,7 +151,7 @@ CREATE VIEW get_calendar_home AS
   ) AS "data"
 );
 
- CREATE VIEW get_all_calendar AS
+CREATE VIEW calendar_view AS
 SELECT
   json_build_object(
     'future_event', (SELECT json_agg(calendar_event) FROM (
@@ -174,11 +159,11 @@ SELECT
         "calendar"."id",
         "calendar"."event_name",
         "calendar"."event_date",
+        "calendar"."adversary_name",
         "calendar"."adversary_name_short",
         "calendar"."live_link",
         NULL AS "score",
         "calendar"."image",
-        "calendar"."publication_date",
         "calendar"."created_at",
         "calendar"."updated_at"
       FROM
@@ -193,11 +178,11 @@ SELECT
         "calendar"."id",
         "calendar"."event_name",
         "calendar"."event_date",
+        "calendar"."adversary_name",
         "calendar"."adversary_name_short",
         "calendar"."replay_link",
         "calendar"."score",
         "calendar"."image",
-        "calendar"."publication_date",
         "calendar"."created_at",
         "calendar"."updated_at"
       FROM
@@ -208,4 +193,6 @@ SELECT
         "calendar"."event_date" DESC
     ) AS calendar_event)
   ) AS "data";
+
+
 COMMIT;
