@@ -10,7 +10,7 @@ const router = express.Router();
 /**
  * @typedef {object} Media - a media type
  * @property {string} link - The media optional link
- * @property {string} img - the media optional file - binary
+ * @property {string} image - the media optional file - binary
  */
 /**
  * GET /api/media
