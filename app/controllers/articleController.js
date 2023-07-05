@@ -145,7 +145,7 @@ class ArticleController extends CoreController {
  */
   async uploadOne(request, response, next) {
     debug(`${this.constructor.name} uploadOne`);
-    const imageUpload = await uploadService(request, 'public', 'article', 'img', next, createArticle, 3);
+    const imageUpload = await uploadService(request, 'public', 'article', 'image', next, createArticle, 3);
     const parsedData = {
       ...request.body,
     };
@@ -154,7 +154,7 @@ class ArticleController extends CoreController {
       const error = new Error();
       debug('validation error missing file');
       error.code = 422;
-      error.message = 'img';
+      error.message = 'image';
       return next(error);
     }
     // check if it doesn't exist in database
@@ -201,7 +201,7 @@ class ArticleController extends CoreController {
   async modifyUploadedOne(request, response, next) {
     debug(`${this.constructor.name} modifyUploadedOne`);
     // call uploadService to parse the data
-    const imageUpload = await uploadService(request, 'public', 'article', 'img', next, modifyArticle, 3);
+    const imageUpload = await uploadService(request, 'public', 'article', 'image', next, modifyArticle, 3);
     const parsedData = {
       ...request.body,
     };

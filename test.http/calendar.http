@@ -36,7 +36,7 @@ Authorization: Bearer {{accessToken}}
 
 
 --boundary_value
-Content-Disposition: form-data; name="img"; filename="test.webp"
+Content-Disposition: form-data; name="image"; filename="test.webp"
 Content-Type: image/webp
 
 @./test.pdf
@@ -70,7 +70,7 @@ Authorization: Bearer {{accessToken}}
 
 
 --boundary_value
-Content-Disposition: form-data; name="img"; filename="test.webp"
+Content-Disposition: form-data; name="image"; filename="test.webp"
 Content-Type: image/webp
 
 @./test.pdf

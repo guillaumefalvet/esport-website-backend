@@ -85,7 +85,7 @@ class MediaController extends CoreController {
       debug(`${this.constructor.name} insertMedia`);
 
       // Upload the image using the uploadService
-      const imageUpload = await uploadService(request, 'public', 'image', 'img', next, createMedia, 2);
+      const imageUpload = await uploadService(request, 'public', 'image', 'image', next, createMedia, 2);
 
       // Prepare the updated data for media insertion
       const updatedData = { ...request.body };

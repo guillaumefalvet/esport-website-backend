@@ -101,7 +101,7 @@ class TeamController extends CoreController {
  */
   async uploadOne(request, response, next) {
     debug(`${this.constructor.name} uploadOne`);
-    const imageUpload = await uploadService(request, 'public', 'team', 'img', next, createPlayer, 3);
+    const imageUpload = await uploadService(request, 'public', 'team', 'image', next, createPlayer, 3);
     const parsedData = {
       ...request.body,
     };
@@ -110,7 +110,7 @@ class TeamController extends CoreController {
       const error = new Error();
       debug('validation error missing file');
       error.code = 422;
-      error.message = 'img';
+      error.message = 'image';
       return next(error);
     }
     // check if it doesn't exist in database
@@ -144,7 +144,7 @@ class TeamController extends CoreController {
   async modifyUploadedOne(request, response, next) {
     debug(`${this.constructor.name} modifyUploadedOne`);
     // call uploadService to parse the data
-    const imageUpload = await uploadService(request, 'public', 'team', 'img', next, modifyPlayer, 3);
+    const imageUpload = await uploadService(request, 'public', 'team', 'image', next, modifyPlayer, 3);
     const parsedData = {
       ...request.body,
     };
