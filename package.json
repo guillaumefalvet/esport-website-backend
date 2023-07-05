@@ -11,7 +11,7 @@
     "DBdeployLocal": "sqitch deploy local",
     "DBresetProd": "sqitch revert -y prod",
     "DBdeployProd": "sqitch deploy prod",
-    "DBLocal": "npm run DBresetLocal && npm run DBdeployLocal && npm run DBseedingLocal",
+    "DBLocal": "npm run DBresetLocal && npm run DBdeployLocal",
     "DBProd": "npm run DBresetProd && npm run DBdeployProd"
   },
   "keywords": [],
