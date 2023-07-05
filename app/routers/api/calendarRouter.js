@@ -11,7 +11,7 @@ const router = express.Router();
  * @property {string} event_date.required - a calendar event date
  * @property {string} adversary_name.required - a calendar adversary name
  * @property {string} adversary_name_short.required - a calendar adversary name shorter
- * @property {string} img.required - The file of the event's image. - binary
+ * @property {string} image.required - The file of the event's image. - binary
  * @property {string} replay_link - a calendar replay_link
  * @property {string} live_link - a calendar live_link
  * @property {string} score - a calendar score

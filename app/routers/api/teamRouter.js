@@ -14,7 +14,7 @@ const router = express.Router();
  * @property {string} last_name.required - a player last name
  * @property {string} description.required - a player description
  * @property {string} role - a player role
- * @property {string} img.required - The file of the player's image. - binary
+ * @property {string} image.required - The file of the player's image. - binary
  * @property {string} statistics - a player statistic
  * @property {string} achievements - a player achievements
  * @property {string} youtube_link - a player youtube link

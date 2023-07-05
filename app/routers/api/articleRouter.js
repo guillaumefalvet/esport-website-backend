@@ -9,7 +9,7 @@ const router = express.Router();
  * @typedef {object} Article
  * @property {string} title.required - The article title
  * @property {string} content.required - The article content
- * @property {string} img.required - The file of the article's image. - binary
+ * @property {string} image.required - The file of the article's image. - binary
  * @property {string} figcaption - The article figcaption
  * @property {string} publication_date.required - The article publication date
  */
