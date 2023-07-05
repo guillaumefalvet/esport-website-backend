@@ -38,7 +38,7 @@ const uploadService = (request, mainFolder, subFolder, fieldname, next, schema, 
     async fileFilter(req, file, cb) {
       // Perform file extension validation
       const allowedExtensions = [];
-      if (fieldname === 'img') {
+      if (fieldname === 'image') {
         allowedExtensions.push('.webp', '.jpg', '.jpeg', '.png');
       } else {
         allowedExtensions.push('.pdf', '.doc', '.docx');
