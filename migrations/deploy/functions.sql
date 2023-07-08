@@ -94,7 +94,7 @@ CREATE OR REPLACE FUNCTION insert_article(json_data json)
   BEGIN
     INSERT INTO "article"("slug", "title", "content", "author_id", "image", "figcaption", "publication_date")
     VALUES (
-      REPLACE(LOWER(json_data->>'title'), ' ', '-')::text,
+      REPLACE(REPLACE(LOWER(json_data->>'title'), ' ', '-'), '''', '')::text,
       (json_data->>'title')::text,
       (json_data->>'content')::text,
       (json_data->>'author_id')::int,
@@ -113,7 +113,7 @@ RETURNS "article" AS $$
     updated_article "article";
   BEGIN
     UPDATE "article" SET
-      "slug" = COALESCE(REPLACE(LOWER(json_data->>'title'), ' ', '-'), "slug"),
+      "slug" = COALESCE(REPLACE(REPLACE(LOWER(json_data->>'title'), ' ', '-'), '''', ''), "slug"),
       "title" = COALESCE((json_data->>'title')::text, "title"),
       "content" = COALESCE((json_data->>'content')::text, "content"),
       "author_id" = COALESCE((json_data->>'author_id')::int, "author_id"),
