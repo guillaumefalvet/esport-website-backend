@@ -14,5 +14,4 @@ const modifyArticle = Joi.object({
   figcaption: Joi.string(),
 }).required().min(1);
 
-// .regex(/^[a-zA-Z0-9']+$/)
 module.exports = { createArticle, modifyArticle };
