@@ -45,7 +45,7 @@ router.get('/admin', authorizeAccess(1), controllerHandler(articleController.get
  * @returns {Array<Article>} 200 - The article object
  * @returns {object} 500 - Internal server error
  */
-router.get('/:slug([a-z0-9-]+)', controllerHandler(articleController.getOne.bind(articleController)));
+router.get('/:slug([a-z0-9-’\']+)', controllerHandler(articleController.getOne.bind(articleController)));
 
 /**
  * GET /api/articles/admin/:slug
@@ -57,7 +57,7 @@ router.get('/:slug([a-z0-9-]+)', controllerHandler(articleController.getOne.bind
  * @returns {Array<Article>} 200 - The article object
  * @returns {object} 500 - Internal server error
  */
-router.get('/admin/:slug([a-z0-9-]+)', controllerHandler(articleController.getOnePrivate.bind(articleController)));
+router.get('/admin/:slug([a-z0-9-’\']+)', controllerHandler(articleController.getOnePrivate.bind(articleController)));
 
 /**
  * POST /api/articles
@@ -84,7 +84,7 @@ router.post('/', authorizeAccess(1), controllerHandler(articleController.uploadO
  * @returns {object} 403 - Forbidden
  * @returns {object} 500 - Internal server error
  */
-router.post('/:slug([a-z0-9-]+)/category/:id(\\d+)', authorizeAccess(1), controllerHandler(articleController.createCategoryRelation.bind(articleController)));
+router.post('/:slug([a-z0-9-’\']+)/category/:id(\\d+)', authorizeAccess(1), controllerHandler(articleController.createCategoryRelation.bind(articleController)));
 
 /**
  * PATCH /api/articles/:id
@@ -111,7 +111,7 @@ router.patch('/:id(\\d+)', authorizeAccess(1), controllerHandler(articleControll
  * @returns {object} 403 - Forbidden
  * @returns {object} 500 - Internal server error
  */
-router.delete('/:slug([a-z0-9-]+)', authorizeAccess(1), controllerHandler(articleController.deleteUploadedOne.bind(articleController)));
+router.delete('/:slug([a-z0-9-’\']+)', authorizeAccess(1), controllerHandler(articleController.deleteUploadedOne.bind(articleController)));
 
 /**
  * DELETE /api/articles/:slug/category/:id
@@ -125,6 +125,6 @@ router.delete('/:slug([a-z0-9-]+)', authorizeAccess(1), controllerHandler(articl
  * @returns {object} 403 - Forbidden
  * @returns {object} 500 - Internal server error
  */
-router.delete('/:slug([a-z0-9-]+)/category/:id(\\d+)', authorizeAccess(1), controllerHandler(articleController.deleteCategoryRelation.bind(articleController)));
+router.delete('/:slug([a-z0-9-’\']+)/category/:id(\\d+)', authorizeAccess(1), controllerHandler(articleController.deleteCategoryRelation.bind(articleController)));
 
 module.exports = router;
