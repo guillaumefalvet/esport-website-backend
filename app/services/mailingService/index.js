@@ -18,18 +18,25 @@ const mailingService = async (data, template, sendTO, subject) => {
     email, first_name, last_name, reviewer_comment, message, path,
   } = data;
   const compiledTemplate = handlebars.compile(template)(data);
-  // const { email, firstName, lastName } = request.body;
+  function envStringToBoolean() {
+    if (process.env.EMAIL_IS_SECURE === 'true') {
+      process.env.EMAIL_IS_SECURE = true;
+    } if (process.env.EMAIL_IS_SECURE === 'false') {
+      process.env.EMAIL_IS_SECURE = false;
+    }
+  }
+  envStringToBoolean();
+
   return new Promise((resolve, reject) => {
     const transporter = nodemailer.createTransport({
-      host: 'smtp-relay.sendinblue.com',
-      port: 587,
-      secure: false,
+      host: process.env.EMAIL_HOST,
+      port: process.env.EMAIL_PORT,
+      secure: process.env.EMAIL_IS_SECURE,
       auth: {
         user: process.env.EMAIL_ADDRESS,
         pass: process.env.EMAIL_PASSWORD,
       },
     });
-
     const mailOptions = {
       from: process.env.EMAIL_ADDRESS,
       to: sendTO,
