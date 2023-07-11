@@ -5,6 +5,7 @@ const recruitController = require('../../controllers/recruitmentController');
 const { authorizeAccess } = require('../../middlewares/authHandler');
 const { reviewRecruitment } = require('../../validations/schemas/recruitment-schema');
 const validate = require('../../validations/validate');
+const rateLimitHander = require('../../middlewares/rateLimitHandler');
 
 const router = express.Router();
 /**
@@ -25,7 +26,7 @@ const router = express.Router();
  * @returns {object} 201 - Success message
  * @returns {object} 400 - Bad request
  */
-router.post('/', controllerHandler(recruitController.insertRecruitment.bind(recruitController)));
+router.post('/', rateLimitHander, controllerHandler(recruitController.insertRecruitment.bind(recruitController)));
 
 /**
  * GET /api/recruitment
