@@ -141,8 +141,6 @@ class RecruitmentController extends CoreController {
       await mailingService(data, applicantTemplate, data.email, 'VictoryZone: Peut-être une autre fois!');
       // send an email saying the person got rejected along message...
     }
-    // request.body.is_reviewed = !request.body.is_reviewed;
-    request.body.is_reviewed = true;
     const result = await dataMapper.modifyOne(this.constructor.tableName, request.body);
     jsend.data = result;
     // return response
