@@ -3,6 +3,7 @@ const controllerHandler = require('../../middlewares/controllerHandler');
 const { loginValidation, refreshToken } = require('../../validations/schemas/login-schema');
 const validate = require('../../validations/validate');
 const authController = require('../../controllers/authController');
+const rateLimitHander = require('../../middlewares/rateLimitHandler');
 
 const router = express.Router();
 /**
@@ -33,7 +34,7 @@ const router = express.Router();
  * }
  * @returns {object} 401 - wrong credentials
  */
-router.post('/login', validate(loginValidation), controllerHandler(authController.handleLogin.bind(authController)));
+router.post('/login', rateLimitHander, validate(loginValidation), controllerHandler(authController.handleLogin.bind(authController)));
 
 /**
  * POST /api/auth/refresh-token
