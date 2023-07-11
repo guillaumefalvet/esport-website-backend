@@ -68,7 +68,7 @@ CREATE FUNCTION insert_recruitment(json_data json) RETURNS "recruitment" AS $$
 
 CREATE FUNCTION update_recruitment(json_data json) RETURNS "recruitment" AS $$
   UPDATE "recruitment" SET
-    "is_reviewed" = COALESCE((json_data->>'is_reviewed')::bool,"is_reviewed"),
+    "is_reviewed" = true,
     "is_accepted" = COALESCE((json_data->>'is_accepted')::bool, "is_accepted"),
     "reviewer_comment" = COALESCE((json_data->>'reviewer_comment')::text, "reviewer_comment"),
     "reviewer_comment_private" = COALESCE((json_data->>'reviewer_comment_private')::text, "reviewer_comment_private"),
