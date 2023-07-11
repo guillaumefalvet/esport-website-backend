@@ -91,6 +91,7 @@ class RecruitmentController extends CoreController {
     const result = await dataMapper.createOne(this.constructor.tableName, updatedData);
     debug('Recruitment created successfully');
     jsend.data = result;
+    response.status(201).json(jsend);
     const data = {
       ...updatedData,
       path: imageUpload.path,
@@ -101,7 +102,6 @@ class RecruitmentController extends CoreController {
 
     await mailingService(data, adminTemplate, adminMail, `(ADMIN) Candidature: ${data.first_name} ${data.last_name}`);
     await mailingService(data, applicantTemplate, data.email, 'VictoryZone: Réception de votre candidature');
-    return response.status(201).json(jsend);
   }
 
   /**
