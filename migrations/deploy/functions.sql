@@ -68,7 +68,7 @@ CREATE FUNCTION insert_recruitment(json_data json) RETURNS "recruitment" AS $$
 
 CREATE FUNCTION update_recruitment(json_data json) RETURNS "recruitment" AS $$
   UPDATE "recruitment" SET
-    "is_reviewed" = COALESCE((json_data->>'is_reviewed')::bool,"is_reviewed"),
+    "is_reviewed" = true,
     "is_accepted" = COALESCE((json_data->>'is_accepted')::bool, "is_accepted"),
     "reviewer_comment" = COALESCE((json_data->>'reviewer_comment')::text, "reviewer_comment"),
     "reviewer_comment_private" = COALESCE((json_data->>'reviewer_comment_private')::text, "reviewer_comment_private"),
@@ -91,17 +91,22 @@ CREATE OR REPLACE FUNCTION insert_article(json_data json)
   RETURNS "article" AS $$
   DECLARE
     new_article "article";
+    converted_title text;
   BEGIN
-    INSERT INTO "article"("slug", "title", "content", "author_id", "image", "figcaption", "publication_date")
+    converted_title := LOWER(json_data->>'title');
+    converted_title := regexp_replace(converted_title, ' ', '-', 'g');
+    converted_title := regexp_replace(converted_title, '[^[:alnum:]-]+', '', 'g');
+
+    INSERT INTO "article" ("slug", "title", "content", "author_id", "image", "figcaption", "publication_date")
     VALUES (
-      REPLACE(LOWER(json_data->>'title'), ' ', '-')::text,
+      converted_title,
       (json_data->>'title')::text,
       (json_data->>'content')::text,
       (json_data->>'author_id')::int,
       (json_data->>'image')::text,
       (json_data->>'figcaption')::text,
       (json_data->>'publication_date')::TIMESTAMPTZ
-	) RETURNING * INTO new_article;
+    ) RETURNING * INTO new_article;
 
     RETURN new_article;
   END;
@@ -111,9 +116,13 @@ CREATE OR REPLACE FUNCTION update_article(json_data json)
 RETURNS "article" AS $$
   DECLARE
     updated_article "article";
+    converted_title text;
   BEGIN
+    converted_title := LOWER(json_data->>'title')::text;
+    converted_title := regexp_replace(converted_title, ' ', '-', 'g');
+    converted_title := regexp_replace(converted_title, '[^[:alnum:]-]+', '', 'g');
     UPDATE "article" SET
-      "slug" = COALESCE(REPLACE(LOWER(json_data->>'title'), ' ', '-'), "slug"),
+      "slug" = COALESCE(converted_title, "slug"),
       "title" = COALESCE((json_data->>'title')::text, "title"),
       "content" = COALESCE((json_data->>'content')::text, "content"),
       "author_id" = COALESCE((json_data->>'author_id')::int, "author_id"),

@@ -5,7 +5,14 @@ const debug = require('debug')('app:service:backupService');
 const fs = require('fs');
 const mailingService = require('./mailingService');
 
-const { PGUSER, PGDATABASE, EMAIL_ADDRESS } = process.env;
+const {
+  PGUSER,
+  EMAIL_ADDRESS,
+  PGPASSWORD,
+  PGPORT,
+  PGDATABASE,
+} = process.env;
+const PG_URL = `postgresql://${PGUSER}:${PGPASSWORD}@${PGPORT}:${PGPORT}/${PGDATABASE}`;
 const currentDate = dayjs().locale('fr').format('dddd-D-MMMM-YYYY-HH:mm');
 const fileName = `database-backup-${currentDate}.tar`;
 /**
@@ -21,7 +28,7 @@ module.exports = {
    * @returns {Promise<void>} - A promise that resolves when the backup is completed.
    */
   async dump() {
-    execute(`pg_dump -U ${PGUSER} -d ${PGDATABASE} -f ./private/backup/${fileName} -F t`).then(async () => {
+    execute(`pg_dump --no-owner --dbname=${PG_URL} > ./private/backup/${fileName} -F t`).then(async () => {
       // optional uncomment to compress
       // const compress = require('gzipme');
       // await compress(fileName);
