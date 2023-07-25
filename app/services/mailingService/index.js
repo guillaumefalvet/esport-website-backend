@@ -13,7 +13,7 @@ const handlebars = require('handlebars');
  * @param {string} subject - The subject of the email.
  * @returns {Promise<object>} A promise that resolves to the information about the sent email.
  */
-const mailingService = async (data, template, sendTO, subjectParam) => {
+const mailingService = async (data, template, sendTO, subject) => {
   const { email, first_name, last_name, reviewer_comment, message, path, subject_contact } = data;
   const compiledTemplate = handlebars.compile(template)(data);
   function envStringToBoolean() {
