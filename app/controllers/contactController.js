@@ -14,7 +14,7 @@ const contactController = {
 
     await mailingService(request.body, adminTemplateContact, adminMail, 'Contact');
     await mailingService(request.body, contactTemplate, request.body.email, 'Contact VictoryZone');
-    return response.status(200).send();
+    return response.status(201).send();
   },
 };
 
