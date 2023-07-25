@@ -6,6 +6,6 @@ const controllerHandler = require('../../middlewares/controllerHandler');
 const contactController = require('../../controllers/contactController');
 
 const router = express.Router();
-router.post('/', validate(createContact), controllerHandler(contactController.createOne));
+router.post('/', rateLimitHander, validate(createContact), controllerHandler(contactController.createOne));
 
 module.exports = router;
