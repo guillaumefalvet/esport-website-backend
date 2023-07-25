@@ -1,8 +1,8 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-unused-vars */
-const debug = require("debug")("app:service:mailingService");
-const nodemailer = require("nodemailer");
-const handlebars = require("handlebars");
+const debug = require('debug')('app:service:mailingService');
+const nodemailer = require('nodemailer');
+const handlebars = require('handlebars');
 // eslint-disable-next-line arrow-body-style
 /**
  * Sends an email using Nodemailer.
@@ -17,10 +17,10 @@ const mailingService = async (data, template, sendTO, subject) => {
   const { email, first_name, last_name, reviewer_comment, message, path } = data;
   const compiledTemplate = handlebars.compile(template)(data);
   function envStringToBoolean() {
-    if (process.env.EMAIL_IS_SECURE === "true") {
+    if (process.env.EMAIL_IS_SECURE === 'true') {
       process.env.EMAIL_IS_SECURE = true;
     }
-    if (process.env.EMAIL_IS_SECURE === "false") {
+    if (process.env.EMAIL_IS_SECURE === 'false') {
       process.env.EMAIL_IS_SECURE = false;
     }
   }
@@ -42,22 +42,22 @@ const mailingService = async (data, template, sendTO, subject) => {
       subject,
       html: compiledTemplate,
     };
-    if (process.env.EMAIL_ADDRESS === sendTO && subject !== "Contact") {
+    if (process.env.EMAIL_ADDRESS === sendTO && subject !== 'Contact') {
       debug(`attaching....: ${path}`);
       mailOptions.attachments = [
         {
-          filename: `${path.split("/")[2]}`,
+          filename: `${path.split('/')[2]}`,
           path,
-          contentType: `application/${path.toLowerCase().substring(path.lastIndexOf(".")).slice(1)}`,
+          contentType: `application/${path.toLowerCase().substring(path.lastIndexOf('.')).slice(1)}`,
         },
       ];
     }
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        debug("Error sending email:", error);
+        debug('Error sending email:', error);
         reject(error);
       } else {
-        debug("Email sent:", info.messageId);
+        debug('Email sent:', info.messageId);
         resolve(info);
       }
     });
