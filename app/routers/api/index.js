@@ -5,12 +5,14 @@ const calendarRouter = require('./calendarRouter');
 const teamRouter = require('./teamRouter');
 const recruitmentRouter = require('./recruitmentRouter');
 const categoryRouter = require('./categoryRouter');
+const contactRouter = require('./contactRouter');
 const authRouter = require('./authRouter');
 const { error404, errorHandler } = require('../../middlewares/errorHandler');
 
 const router = express.Router();
 
 router.use('/media', mediaRouter);
+router.use('/contact', contactRouter);
 router.use('/articles', articleRouter);
 router.use('/calendar', calendarRouter);
 router.use('/team', teamRouter);
