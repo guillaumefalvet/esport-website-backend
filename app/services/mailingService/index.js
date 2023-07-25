@@ -13,8 +13,8 @@ const handlebars = require('handlebars');
  * @param {string} subject - The subject of the email.
  * @returns {Promise<object>} A promise that resolves to the information about the sent email.
  */
-const mailingService = async (data, template, sendTO, subject) => {
-  const { email, first_name, last_name, reviewer_comment, message, path } = data;
+const mailingService = async (data, template, sendTO, subjectParam) => {
+  const { email, first_name, last_name, reviewer_comment, message, path, subject } = data;
   const compiledTemplate = handlebars.compile(template)(data);
   function envStringToBoolean() {
     if (process.env.EMAIL_IS_SECURE === 'true') {
@@ -39,10 +39,10 @@ const mailingService = async (data, template, sendTO, subject) => {
     const mailOptions = {
       from: process.env.EMAIL_ADDRESS,
       to: sendTO,
-      subject,
+      subjectParam,
       html: compiledTemplate,
     };
-    if (process.env.EMAIL_ADDRESS === sendTO && subject !== 'Contact') {
+    if (process.env.EMAIL_ADDRESS === sendTO && subjectParam !== 'Contact') {
       debug(`attaching....: ${path}`);
       mailOptions.attachments = [
         {
