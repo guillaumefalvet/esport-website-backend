@@ -9,11 +9,12 @@ const jsend = {
 const contactController = {
   async createOne(request, response) {
     debug('createOne Contact');
-    const contactTemplate = fs.readFileSync('./app/services/mailingService/templates/contactTemplate.hbs', 'utf8');
     const adminTemplateContact = fs.readFileSync('./app/services/mailingService/templates/adminTemplateContact.hbs', 'utf8');
-
     await mailingService(request.body, adminTemplateContact, adminMail, 'Contact');
-    await mailingService(request.body, contactTemplate, request.body.email, 'Contact VictoryZone');
+    if (request.body.copy) {
+      const contactTemplate = fs.readFileSync('./app/services/mailingService/templates/contactTemplate.hbs', 'utf8');
+      await mailingService(request.body, contactTemplate, request.body.email, 'Contact VictoryZone');
+    }
     return response.status(201).send();
   },
 };
