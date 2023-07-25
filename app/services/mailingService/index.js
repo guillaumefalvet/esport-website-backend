@@ -14,14 +14,13 @@ const handlebars = require('handlebars');
  * @returns {Promise<object>} A promise that resolves to the information about the sent email.
  */
 const mailingService = async (data, template, sendTO, subject) => {
-  const {
-    email, first_name, last_name, reviewer_comment, message, path,
-  } = data;
+  const { email, first_name, last_name, reviewer_comment, message, path } = data;
   const compiledTemplate = handlebars.compile(template)(data);
   function envStringToBoolean() {
     if (process.env.EMAIL_IS_SECURE === 'true') {
       process.env.EMAIL_IS_SECURE = true;
-    } if (process.env.EMAIL_IS_SECURE === 'false') {
+    }
+    if (process.env.EMAIL_IS_SECURE === 'false') {
       process.env.EMAIL_IS_SECURE = false;
     }
   }
@@ -43,13 +42,15 @@ const mailingService = async (data, template, sendTO, subject) => {
       subject,
       html: compiledTemplate,
     };
-    if (process.env.EMAIL_ADDRESS === sendTO) {
+    if (process.env.EMAIL_ADDRESS === sendTO && subject !== 'Contact') {
       debug(`attaching....: ${path}`);
-      mailOptions.attachments = [{
-        filename: `${path.split('/')[2]}`,
-        path,
-        contentType: `application/${path.toLowerCase().substring(path.lastIndexOf('.')).slice(1)}`,
-      }];
+      mailOptions.attachments = [
+        {
+          filename: `${path.split('/')[2]}`,
+          path,
+          contentType: `application/${path.toLowerCase().substring(path.lastIndexOf('.')).slice(1)}`,
+        },
+      ];
     }
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
