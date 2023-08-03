@@ -6,6 +6,6 @@
 	# registry = sqitch
 	# client = psql
 [target "prod"]
-	uri = db:pg:victoryzone
+  uri = db:pg://victoryzone:victoryzone@localhost:5432/victoryzone
 [target "local"]
-	uri = db:pg:victoryzone
+  uri = db:pg://victoryzone:victoryzone@localhost:5432/victoryzone
