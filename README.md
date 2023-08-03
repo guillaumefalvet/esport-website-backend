@@ -1,25 +1,27 @@
 ### GET STARTED: DEV MODE
+
 1. Create a psql user and psql database
 
-   user:`victoryzone` => `CREATE ROLE victoryzone WITH LOGIN PASSWORD 'victoryzone;'`
+   user:`victoryzone` => `CREATE ROLE victoryzone WITH LOGIN PASSWORD 'victoryzone';`
 
    database: `victoryzone` => `CREATE DATABASE victoryzone OWNER victoryzone;`
+
 2. setup the sqitch conf file `cp sqitch.conf\ example sqitch.conf`
 
-3. Do a first deployement with sqitch:
-   -`sqitch deploy local`
-   ***note**: if you don't have sqitch installed, [go there](https://sqitch.org/download/)*
+3. Do a first deployement with sqitch: -`sqitch deploy local`
+   **\*note**: if you don't have sqitch installed, [go there](https://sqitch.org/download/)\*
 
 4. Do your own seeding.
-  *don't forget to asign admin to the user you want to create, also generate a passsword with [bcrypt](https://bcrypt-generator.com/)*
+   _don't forget to asign admin to the user you want to create, also generate a passsword with [bcrypt](https://bcrypt-generator.com/)_
 
-1. `npm i` to install the dependencies.
+5. `npm i` to install the dependencies.
 
-2. setting up the .env `cp .env\ example .env` (fill with the correct information)
+6. setting up the .env `cp .env\ example .env` (fill with the correct information)
 
-3. `npm run dev`
+7. `npm run dev`
 
 ### TYPICAL PATCH / POST REQUEST
+
 [link](https://www.tldraw.com/r/v2D9rhIZWkk2TkVAMoco_32?viewport=-570%2C-956%2C4476%2C3586&page=page%3A1VJK9HJJQwed-H5qkpveL)
 
 ![](./shapes.png)
@@ -29,6 +31,7 @@
 ![](./mcd/mcd.png)
 
 ### ARCHITECTURE OF THE BACKEND
+
 ```
 esport-website-backend/
 ┣ app/
