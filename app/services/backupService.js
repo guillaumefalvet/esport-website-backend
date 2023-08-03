@@ -10,9 +10,10 @@ const {
   EMAIL_ADDRESS,
   PGPASSWORD,
   PGPORT,
+  PGHOST,
   PGDATABASE,
 } = process.env;
-const PG_URL = `postgresql://${PGUSER}:${PGPASSWORD}@${PGPORT}:${PGPORT}/${PGDATABASE}`;
+const PG_URL = `postgresql://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}`;
 const currentDate = dayjs().locale('fr').format('dddd-D-MMMM-YYYY-HH:mm');
 const fileName = `database-backup-${currentDate}.tar`;
 /**
