@@ -2,13 +2,13 @@ module.exports = {
   env: {
     commonjs: true,
     es2021: true,
+    es6: true,
     node: true,
     'jest/globals': true,
   },
   plugins: ['jest'],
-  extends: 'airbnb-base',
-  overrides: [
-  ],
+  extends: ['airbnb-base', 'prettier', 'plugin:node/recommended'],
+  overrides: [],
   parserOptions: {
     ecmaVersion: 'latest',
   },
@@ -18,5 +18,12 @@ module.exports = {
     'jest/no-identical-title': 'error',
     'jest/prefer-to-have-length': 'warn',
     'jest/valid-expect': 'error',
+    'prettier/prettier': 'error',
+    'no-unused-vars': 'warn',
+    'no-console': 'off',
+    'func-names': 'off',
+    'no-plusplus': 'off',
+    'no-process-exit': 'off',
+    'class-methods-use-this': 'off',
   },
 };
