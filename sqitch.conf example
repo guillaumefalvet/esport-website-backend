@@ -1,4 +1,4 @@
-prod[core]
+[core]
 	engine = pg
 	top_dir = migrations
 	# plan_file = migrations/sqitch.plan
@@ -6,6 +6,6 @@ prod[core]
 	# registry = sqitch
 	# client = psql
 [target "prod"]
-	uri = db:pg://prodUrlHere
+	uri = db:pg:victoryzone
 [target "local"]
 	uri = db:pg:victoryzone
