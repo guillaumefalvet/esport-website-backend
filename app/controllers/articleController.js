@@ -44,7 +44,7 @@ class ArticleController extends CoreController {
    * Name of the view table for articles.
    * @type {string}
    */
-  static tableNameView = 'article_public_view';
+  static tableNameView = 'article_public_noconcat_view';
 
   /**
    * Name of the column used as a unique identifier for articles.
@@ -121,11 +121,7 @@ class ArticleController extends CoreController {
   async getOnePrivate(request, response, next) {
     debug(`${this.constructor.name} getOnePrivate`);
 
-    const result = await dataMapper.getByColumnValue(
-      'article_private_view',
-      this.constructor.columnName,
-      request.params[this.constructor.columnName],
-    );
+    const result = await dataMapper.getByColumnValue('article_private_view', this.constructor.columnName, request.params[this.constructor.columnName]);
     if (!result) {
       const error = new Error();
       error.code = 404;
@@ -136,13 +132,13 @@ class ArticleController extends CoreController {
   }
 
   /**
- * Uploads a single article with an image.
- *
- * @param {Object} request - The request object.
- * @param {Object} response - The response object.
- * @param {Function} next - The next middleware function.
- * @returns {Object} The response object.
- */
+   * Uploads a single article with an image.
+   *
+   * @param {Object} request - The request object.
+   * @param {Object} response - The response object.
+   * @param {Function} next - The next middleware function.
+   * @returns {Object} The response object.
+   */
   async uploadOne(request, response, next) {
     debug(`${this.constructor.name} uploadOne`);
     const imageUpload = await uploadService(request, 'public', 'article', 'image', next, createArticle, 3);
@@ -158,11 +154,7 @@ class ArticleController extends CoreController {
       return next(error);
     }
     // check if it doesn't exist in database
-    const alradyExist = await dataMapper.getByColumnValue(
-      this.constructor.tableName,
-      'title',
-      parsedData.title,
-    );
+    const alradyExist = await dataMapper.getByColumnValue(this.constructor.tableName, 'title', parsedData.title);
 
     if (alradyExist) {
       // delete staged file
@@ -175,11 +167,7 @@ class ArticleController extends CoreController {
     // gettting the user id
     const authHeader = request.headers.authorization;
     const accessToken = authHeader.split('Bearer ')[1];
-    const decoded = jwt.verify(
-      accessToken,
-      JWT_SECRET,
-      { ignoreExpiration: true },
-    );
+    const decoded = jwt.verify(accessToken, JWT_SECRET, { ignoreExpiration: true });
     parsedData.author_id = decoded.data.id;
     parsedData.image = `${API_URL}${imageUpload.path}`;
     const result = await dataMapper.createOne(this.constructor.tableName, parsedData);
@@ -191,13 +179,13 @@ class ArticleController extends CoreController {
   }
 
   /**
- * Modifies an uploaded article with an image.
- *
- * @param {Object} request - The request object.
- * @param {Object} response - The response object.
- * @param {Function} next - The next middleware function.
- * @returns {Object} The response object.
- */
+   * Modifies an uploaded article with an image.
+   *
+   * @param {Object} request - The request object.
+   * @param {Object} response - The response object.
+   * @param {Function} next - The next middleware function.
+   * @returns {Object} The response object.
+   */
   async modifyUploadedOne(request, response, next) {
     debug(`${this.constructor.name} modifyUploadedOne`);
     // call uploadService to parse the data
@@ -206,11 +194,7 @@ class ArticleController extends CoreController {
       ...request.body,
     };
     // check if the article exist in the database (SEARCH BY ID=> secondaryColumnName) => 404
-    const doesExist = await dataMapper.getByColumnValue(
-      this.constructor.tableName,
-      this.constructor.secondaryColumnName,
-      request.params[this.constructor.secondaryColumnName],
-    );
+    const doesExist = await dataMapper.getByColumnValue(this.constructor.tableName, this.constructor.secondaryColumnName, request.params[this.constructor.secondaryColumnName]);
     // if no article in database
     if (!doesExist) {
       const error = new Error();
@@ -244,21 +228,17 @@ class ArticleController extends CoreController {
   }
 
   /**
- * Deletes an uploaded article with its associated image.
- *
- * @param {Object} request - The request object.
- * @param {Object} response - The response object.
- * @param {Function} next - The next middleware function.
- * @returns {Object} The response object.
- */
+   * Deletes an uploaded article with its associated image.
+   *
+   * @param {Object} request - The request object.
+   * @param {Object} response - The response object.
+   * @param {Function} next - The next middleware function.
+   * @returns {Object} The response object.
+   */
   async deleteUploadedOne(request, response, next) {
     debug(`${this.constructor.name} deleteUploadedOne`);
     // check if the article exist in the database
-    const doesExist = await dataMapper.getByColumnValue(
-      this.constructor.tableName,
-      this.constructor.columnName,
-      request.params[this.constructor.columnName],
-    );
+    const doesExist = await dataMapper.getByColumnValue(this.constructor.tableName, this.constructor.columnName, request.params[this.constructor.columnName]);
 
     // if article in database
     if (!doesExist) {
@@ -270,11 +250,7 @@ class ArticleController extends CoreController {
     const fileToDelete = doesExist.image.split(API_URL);
     fs.unlinkSync(`./${fileToDelete[1]}`);
     // call delete
-    await dataMapper.deleteByColumnValue(
-      this.constructor.tableName,
-      this.constructor.columnName,
-      request.params[this.constructor.columnName],
-    );
+    await dataMapper.deleteByColumnValue(this.constructor.tableName, this.constructor.columnName, request.params[this.constructor.columnName]);
     // delete the cache for article public
     // delete the cache for article home
     cachingService.delCache(['article_home_view', 'article_public_view']);
