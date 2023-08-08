@@ -1,4 +1,5 @@
 BEGIN;
+DROP VIEW article_public_noconcat_view;
 DROP VIEW article_public_view;
 DROP VIEW article_private_view;
 DROP VIEW article_home_view;
