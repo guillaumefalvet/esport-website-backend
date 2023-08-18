@@ -1,7 +1,9 @@
 const expressSwagger = require('express-jsdoc-swagger');
+const debug = require('debug')('app:test');
 require('dotenv').config();
 
 const swaggerOptions = {
+  baseDir: `${__dirname}/../../app/routers`,
   info: {
     version: '1.0.0',
     title: 'victoryzone',
@@ -18,9 +20,6 @@ const swaggerOptions = {
   exposeSwaggerUI: true,
 };
 
-function swaggerService(app, baseDir) {
-  swaggerOptions.baseDir = baseDir;
+module.exports = (app) => {
   expressSwagger(app)(swaggerOptions);
-}
-
-module.exports = swaggerService;
+};
