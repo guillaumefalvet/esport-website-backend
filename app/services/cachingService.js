@@ -15,13 +15,14 @@ const cache = new NodeCache();
  * @returns {*} The data associated with the key, or false if no cache found.
  */
 function getCache(key) {
-  debug(`getting cache with key: ${key}`);
-  const cacheData = cache.get(key);
-  if (cacheData) {
-    debug(`data found in the cache ${key}`);
-    return cacheData;
-  }
-  debug('no cache found');
+  // NOTE: i commented this part below to save resources on railway
+  // debug(`getting cache with key: ${key}`);
+  // const cacheData = cache.get(key);
+  // if (cacheData) {
+  //   debug(`data found in the cache ${key}`);
+  //   return cacheData;
+  // }
+  debug('no cache found', key);
   return false;
 }
 
@@ -48,8 +49,10 @@ function setCache(key, value) {
  * @returns {boolean} True if the cache is deleted successfully, false otherwise.
  */
 function delCache(key) {
+  // NOTE: i commented this part below to save resources on railway
   debug(`cache deleted with key: ${key}`);
-  return cache.del(key);
+  // return cache.del(key);
+  return console.log('cache deleted');
 }
 
 module.exports = {
